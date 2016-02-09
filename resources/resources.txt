@@ -3,3 +3,8 @@
 ./resources/cat/user/currentUser.js
 ./resources/wild/oauth/auth.js
 ./resources/wild/oauth/callBack.js
+./resources/wild/pages/home.js
+./resources/wild/pages/match.js
+./resources/wild/pages/schedule.js
+./resources/wild/pages/survey1.js
+./resources/wild/pages/survey2.js

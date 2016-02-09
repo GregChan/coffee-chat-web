@@ -1,13 +1,13 @@
-var exports = module.exports = {};
+var exports = module.exports = {},
     oauth2 = require('simple-oauth2'),
-    path = require('path');
-    auth = require('./auth.js')
+    path = require('path'),
+    auth = require('./auth.js');
 
-exports.path='callback';
+exports.path = 'callback';
 
 
-exports.getHandle=function (req,res) {
-	var code = req.query.code,
+exports.getHandle = function(req, res) {
+    var code = req.query.code,
         state = req.query.state;
     console.log('/wild/oauth/callback');
     console.log(code);
@@ -29,30 +29,29 @@ exports.getHandle=function (req,res) {
 
         // this is where we need to do something with their token...
         console.log(token);
-        createOAuthUser(token.token.access_token,res)
+        createOAuthUser(token.token.access_token, res)
 
-        
+
     }
 }
 
-function createOAuthUser(token,res)
-{
+function createOAuthUser(token, res) {
     console.log('createOAuthUser token', token);
-    var http = require('http'); 
+    var http = require('http');
 
     var bodyString = JSON.stringify({
         accessToken: token
     });
 
     var options = {
-      host: 'localhost',
-      port: 1337,
-      path: '/cat/oauth/getUserID',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': bodyString.length
-      },
+        host: 'localhost',
+        port: 1337,
+        path: '/cat/oauth/getUserID',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': bodyString.length
+        },
     };
 
     console.log('createOAuthUser body', bodyString);
@@ -60,17 +59,20 @@ function createOAuthUser(token,res)
     callback = function(response) {
         var userID = '';
         response.on('data', function(d) {
-            userID= JSON.parse(d).user;
+            userID = JSON.parse(d).user;
         });
         response.on('end', function() {
-            console.log('server.js: got userID '+ userID);
-            res.cookie('userID' , userID,{ maxAge: 900000, httpOnly: false });
+            console.log('server.js: got userID ' + userID);
+            res.cookie('userID', userID, {
+                maxAge: 900000,
+                httpOnly: false
+            });
             res.redirect('/');
-            
+
         });
 
         req.on('error', function(e) {
-            console.log('server.js: createOAuthUser met error '+ e);
+            console.log('server.js: createOAuthUser met error ' + e);
             res.redirect('/');
         });
     }
@@ -79,6 +81,3 @@ function createOAuthUser(token,res)
     req.write(bodyString);
     req.end();
 }
-
-
-

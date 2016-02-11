@@ -13,13 +13,14 @@
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.1",
     "express": "^4.13.3",
-    "log4js": "^0.6.30",
     "jade": "^1.11.0",
+    "log4js": "^0.6.30",
     "mysql": "^2.10.2",
     "nib": "^1.1.0",
     "node-mysql": "^0.4.2",
     "promise": "^7.1.1",
     "request": "^2.67.0",
+    "sendgrid": "^2.0.0",
     "simple-oauth2": "^0.3.0",
     "stylus": "^0.53.0"
   }

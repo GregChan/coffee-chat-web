@@ -14,32 +14,37 @@ var express = require('express'),
         logger.debug('myLogger - new request: ' + req.path);
         next();
     },
-//     myAutheticator = function(req, res, next) {
-//         logger.debug('myLogger - new request: ' + req.cookies.userID);
-//         if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
-//             authenticationFailed(req, res, next);
-//         } else {
-//             var userID = req.cookies.userID;
-//             var p1 = dbConn.getUserName(userID);
-//             return p1.then(
-//                 function(val) {
-//                     var obj = JSON.parse(val);
-//                     console.log("serverjs: validated user: " + obj.id);
-//                     req.loginUserID = obj.id;
-//                     next();
-//                     return;
-//                 }
-//             ).catch(
-//                 function(reason) {
-//                     authenticationFailed(req, res, next);
-//                 }
-//             );
-//         }
-// 
-//     },
+    myAutheticator = function(req, res, next) {
+        logger.debug('myLogger - new request: ' + req.cookies.userID);
+        if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
+        {
+              next();
+              return;
+        }
+        if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
+            authenticationFailed(req, res, next);
+        } else {
+            var userID = req.cookies.userID;
+            var p1 = dbConn.getUserName(userID);
+            return p1.then(
+                function(val) {
+                    var obj = JSON.parse(val);
+                    console.log("serverjs: validated user: " + obj.id);
+                    req.loginUserID = obj.id;
+                    next();
+                    return;
+                }
+            ).catch(
+                function(reason) {
+                    authenticationFailed(req, res, next);
+                }
+            );
+        }
+
+    },
     authenticationFailed = function(req, res, next) {
         var path = req.path;
-        if (path == "/" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID") {
+        if (path == "/wild/pages/homepage" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID") {
             logger.debug("authenticationFailed : path matched ");
             next();
             return;
@@ -78,8 +83,12 @@ app.use(bodyParser.urlencoded({
 
 app.use(myLogger);
 app.use(cookieParser());
-//app.use(myAutheticator);
+app.use(myAutheticator);
 app.use(interalServerError);
+
+app.get('/', function(req, res) {
+    res.redirect("/wild/pages/homepage");
+});
 
 
 var resource = null;

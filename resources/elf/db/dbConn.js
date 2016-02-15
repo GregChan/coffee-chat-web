@@ -20,6 +20,199 @@ exports.clearup = function(){
     });
 }
 
+exports.getJobFeatureList = function()
+{
+    return new Promise(function(resolve, reject) {
+           pool.getConnection(function(err, connection) {
+            if (err) {
+                connection.release();
+                logger.debug('Error in connection database');
+
+                reject('Error in connection database');
+            }
+            logger.debug('connected as id ' + connection.threadId);
+
+            var sql = "SELECT id, name From jobfeature_desc";
+
+            logger.debug("getJobFeatureList: going to query jobfeature list: "+ sql);
+            connection.query(sql,function(err, rows) {
+                if(!err)
+                {
+                    if(rows.length > 0 ) {
+                         var result='{"total":"'+rows.length +'","values":[';
+                         var first=true;
+                         for(i=0; i<rows.length;i++)
+                         {
+                            if(!first)
+                            {
+                                result+=",";
+                            }
+                            first=false;
+                            result +='{"id":"'+rows[i].id+'","name":"'+rows[i].name+'"}';        
+                         }
+                         result+="]}"
+                    connection.release();
+                    resolve(result);
+                
+                    }
+                    else
+                    {
+                        logger.debug("dbConn: unable to find jobfeature list.");
+                        connection.release();
+                        reject('{"error":"500", "errorMsg":"DB Error"}');
+                                    
+                    }
+                }
+                else
+                {
+                     logger.debug('Error in connection database');
+                     connection.release();
+                     reject('{"error":"500","errorMsg": '+err+'}');
+                }
+               
+            });
+            connection.on('error',function(err) {
+                logger.debug('Error in connection database');
+                connection.release();
+                reject('{"error":"500","errorMsg": "Error in connection database"}');
+
+            });
+        });
+       });
+}
+
+exports.getHobbyList = function()
+{
+    return new Promise(function(resolve, reject) {
+           pool.getConnection(function(err, connection) {
+            if (err) {
+                connection.release();
+                logger.debug('Error in connection database');
+
+                reject('Error in connection database');
+            }
+            logger.debug('connected as id ' + connection.threadId);
+
+            var sql = "SELECT * From hobby_desc";
+
+            logger.debug("getIndustryList: going to query hobby list: "+ sql);
+            connection.query(sql,function(err, rows) {
+                if(!err)
+                {
+                    if(rows.length > 0 ) {                   
+                         var dict= {};
+                         for(i=0; i<rows.length;i++)
+                         {
+                            var hobby='';
+                            if(rows[i].group in dict)
+                            {
+                                hobby=dict[rows[i].group]+',';
+                            }
+                           
+                            dict[rows[i].group] = hobby+'{"id":"'+rows[i].id+'","name":"'+rows[i].name+'"}';
+                         }
+                         var result='{"total":"'+rows.length +'","values":[';
+                         var first=true;
+                         for (var group in dict) {
+                            if(!first)
+                            {
+                                result+=",";
+                            }
+                            first=false;
+                            result +='{"group":"'+group+'","values":['+dict[group]+']}';     
+                         }
+                         result+="]}"
+                    connection.release();
+                    resolve(result);
+                
+                    }
+                    else
+                    {
+                        logger.debug("dbConn: unable to find hobby list.");
+                        connection.release();
+                        reject('{"error":"500", "errorMsg":"DB Error"}');
+                                    
+                    }
+                }
+                else
+                {
+                     logger.debug('Error in connection database');
+                     connection.release();
+                     reject('{"error":"500","errorMsg": '+err+'}');
+                }
+               
+            });
+            connection.on('error',function(err) {
+                logger.debug('Error in connection database');
+                connection.release();
+                reject('{"error":"500","errorMsg": "Error in connection database"}');
+
+            });
+        });
+       });
+}
+
+
+exports.getIndustryList = function()
+{
+    return new Promise(function(resolve, reject) {
+           pool.getConnection(function(err, connection) {
+            if (err) {
+                connection.release();
+                logger.debug('Error in connection database');
+
+                reject('Error in connection database');
+            }
+            logger.debug('connected as id ' + connection.threadId);
+
+            var sql = "SELECT id, name From industry_desc";
+
+            logger.debug("getIndustryList: going to query industry list: "+ sql);
+            connection.query(sql,function(err, rows) {
+                if(!err)
+                {
+                    if(rows.length > 0 ) {
+                         var result='{"total":"'+rows.length +'","values":[';
+                         var first=true;
+                         for(i=0; i<rows.length;i++)
+                         {
+                            if(!first)
+                            {
+                                result+=",";
+                            }
+                            first=false;
+                            result +='{"id":"'+rows[i].id+'","name":"'+rows[i].name+'"}';        
+                         }
+                         result+="]}"
+                    connection.release();
+                    resolve(result);
+                
+                    }
+                    else
+                    {
+                        logger.debug("dbConn: unable to find industry list.");
+                        connection.release();
+                        reject('{"error":"500", "errorMsg":"DB Error"}');
+                                    
+                    }
+                }
+                else
+                {
+                     logger.debug('Error in connection database');
+                     connection.release();
+                     reject('{"error":"500","errorMsg": '+err+'}');
+                }
+               
+            });
+            connection.on('error',function(err) {
+                logger.debug('Error in connection database');
+                connection.release();
+                reject('{"error":"500","errorMsg": "Error in connection database"}');
+
+            });
+        });
+       });
+}
 
 exports.getUserInfo = function(userId){
 
@@ -302,108 +495,4 @@ function addPositions(userId,positions, connection)
     connection.release();
 }
 
-// exports.createUserIfNotExist = function(firstName, headline, id, lastName, accessToken,res) {
-//     console.log('dbConn.createUserIfNotExist called ');
 
-
-//           pool.getConnection(function(err, connection) {
-//             if (err) {
-//                 connection.release();
-//                 console.log('Error in connection database');
-
-//                 res.status(500)
-
-//                 return;
-//             }
-
-//             console.log('connected as id ' + connection.threadId);
-
-//             var sql = "SELECT * FROM ?? WHERE ?? = ?";
-//             var inserts = ['users', 'linkedInID', id];
-//             sql = mysql.format(sql, inserts);
-
-//             connection.query(sql, function(err, rows) {
-//                 var userId = '';
-//                 if (!err) {
-//                     if(rows.length > 0 ) {
-//                          userId += rows[0].id;
-//                          console.log("dbConn: found user: "+ userId);
-//                          res.json({user:userId});
-//                     }
-//                     else
-//                     {
-//                         console.log("dbConn: didnt find user: "+ id);
-//                         var post = {
-//                             firstName: firstName,
-//                             lastName: lastName,
-//                             linkedInHeadline: headline,
-//                             linkedInID: id,
-//                             linkedInAT: accessToken
-//                          };
-
-//                         connection.query("INSERT INTO users SET ?", post, function(err, result) {
-//                             connection.release();
-                                
-//                             if (!err) {
-//                                 userId = result.insertId;
-//                                 console.log("dbConn: created user: "+ userId);
-//                                 res.json({user:userId});
-//                              }
-//                         });
-//                     }
-                           
-//                 }
-
-//             });
-
-//             connection.on('error', function(err) {
-//                 console.log('Error in connection database');
-
-//                 res.status(500).json({error:'Error in connection database'});
-//                 return;
-
-//             });
-//         });
- 
-
-   
-// }
-
-exports.test_query = function(res) {
-
-
-    pool.getConnection(function(err, connection) {
-        if (err) {
-            connection.release();
-            console.log('Error in connection database');
-
-            res.send('Error in connection database\n');
-            return;
-        }
-
-        console.log('connected as id ' + connection.threadId);
-
-        connection.query("SELECT id, first, last, age FROM TESTTABLE", function(err, rows) {
-            connection.release();
-            var str = '';
-            if (!err) {
-
-                for (var i = 0; i < rows.length; i++) {
-                    str += rows[i].id + ',' + rows[i].first + ',' + rows[i].last + ',' + rows[i].age + '\n';
-                };
-                console.log(str);
-
-                res.send(str);
-            }
-        });
-
-        connection.on('error', function(err) {
-            console.log('Error in connection database');
-
-            res.send('Error in connection database\n');
-            return;
-
-        });
-    });
-
-}

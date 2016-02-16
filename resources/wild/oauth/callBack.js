@@ -64,7 +64,7 @@ function createOAuthUser(token, res) {
         response.on('end', function() {
             console.log('server.js: got userID ' + userID);
             res.cookie('userID', userID, {
-                maxAge: 900000,
+                maxAge: 9000000,
                 httpOnly: false
             });
             res.redirect('/');

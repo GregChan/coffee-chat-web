@@ -7,5 +7,8 @@ nav(class="white z-depth-0")
 				a(class="grey-text text-darken-3") Team
 			//- li
 				a(class="grey-text text-darken-3") Contact
-			li
-				a(class="grey-text text-darken-3") Login
+			if (curUser)
+				li
+					img(class="brand-logo coffe-chat-logo" src=curUser.profilePicSmall)
+				li
+					a(class="grey-text text-darken-3")=curUser.firstName

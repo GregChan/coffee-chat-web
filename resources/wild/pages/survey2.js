@@ -1,7 +1,7 @@
 var exports = module.exports = {},
     fs = require('fs');
 
-exports.path = 'survey2';
+exports.path = 'wild/pages/survey2';
 
 exports.getHandle = function(req, res) {
     fs.readFile('./public/browse.json', function(err, data) {

@@ -16,7 +16,10 @@ html
 				h5(class="center coffee-chat-grey") Networking Redefined.
 				h5(class="center coffee-chat-grey") The fastest-growing network for professional millenials.
 				div(class="center")
-					a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
+					if(!curUser)
+						a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
+					else
+						a(class="btn-flat modal-close modal-action" href="/wild/pages/survey2" title="We'd like to know more about you.") We'd like to know more about you.
 		div(class="section white")
 			div(class="row container")
 				h3(class="center header") Expert of the Week

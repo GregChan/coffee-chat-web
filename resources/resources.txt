@@ -1,6 +1,7 @@
 ./resources/cat/oauth/getUserID.js
 ./resources/cat/user/getUserName.js
 ./resources/cat/user/currentUser.js
+./resources/cat/user/addInterests.js
 ./resources/cat/info/getIndustryList.js
 ./resources/cat/info/getHobbyList.js
 ./resources/cat/info/getJobFeatureList.js

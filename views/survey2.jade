@@ -17,14 +17,13 @@ html
 								input(id=item type="checkbox")
 								label(for=item)=item
 			div(class="row")
-				form(class="col s12")
+				form(class="col s4")
 					p 2. School
-							div(class="input-field col s12")
-							input(placeholder="School Name" type="text")
-			div(class="row")
-				div(class="col s12")
+					div(class="input-field col s12")
+						input(placeholder="School Name" type="text")
+				div(class="col s4")
 					p 3. Graduation Year 
-					div(class="col s4")
+					div(class="col s12")
 						select
 							option(value="" disabled selected) Select a Year
 							-for(var x=2019; x>1939; --x)
@@ -36,14 +35,14 @@ html
 						li()
 							for key in Object.keys(hobbies)
 								div(class="collapsible-header")=key
-								div(class="collapsible-body")
+								div(class="collapsible-body active")
+									form(action="#")
 									for sport in hobbies[key]
-										form(action="#")
-											input(id=sport type="checkbox")
-											label(for=sport)=sport
+										input(id=sport type="checkbox")
+										label(for=sport)=sport
 			div(class="row")
 				div(class="col s12")
-					p 5. Job features most important to you (Choose 3)
+					p 5. What would you like to get out of CoffeeChats? (Choose up to 3)
 					form(action="#")
 						for feat in jobFeatures	
 							div(class="col s4")

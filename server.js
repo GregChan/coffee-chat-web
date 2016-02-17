@@ -44,7 +44,7 @@ var express = require('express'),
     },
     authenticationFailed = function(req, res, next) {
         var path = req.path;
-        if (path == "/wild/pages/homepage" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID") {
+        if (path == "/wild/pages/homepage" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID" || path == "/survey") {
             logger.debug("authenticationFailed : path matched ");
             next();
             return;

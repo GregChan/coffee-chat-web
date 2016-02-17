@@ -1,7 +1,7 @@
 var exports = module.exports = {},
     fs = require('fs');
 
-exports.path = 'survey-prospective-student';
+exports.path = 'feedback';
 
 exports.getHandle = function(req, res) {
     res.redirect('http://goo.gl/forms/Q9jQoJqu0g');

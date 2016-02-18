@@ -12,7 +12,7 @@ exports.sendEMail = function(to, from, subject, body, callback) {
 
 exports.sendTemplate = function(to, from, subject, templateId, substitutions, callback) {
 	var email = new sendgrid.Email();
-	email.setTos([to]);
+	email.setTos(to);
 	email.setFrom(from);
 	email.setSubject(subject);
 	email.setHtml('<p></p>');

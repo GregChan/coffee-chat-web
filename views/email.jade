@@ -8,30 +8,71 @@ html
 		include ./includes/header.jade
 		div(class="container")
 			h3(class="center text-orange") Coffee Chat Email Tool
-			div(class="row")
-				form(class="col s12" method="post" action="/cat/mail/email")
-					p This is a simple email tool to help send signup, match, and feedback emails.
+			p This is a simple email tool to help send signup, match, and feedback emails.
+			div(class="input-field col s12 m4")
+				select(data-template-select id="template" name="template")
+					option(value="" disabled selected) Choose a template
+					option(value="match")  Match
+					option(value="feedback") Feedback
+				label Template
+			div(class="row" data-match)
+				form(class="col s12" data-match-form)
 					div(class="row")
+						h5 Program and Interests
+						div(class="input-field col s12 m6")
+							input(name="substitutions[program]" placeholder="Common Interest" id="program" type="text")
+							label(for="name") Program
+						div(class="input-field col s12 m6")
+							input(name="substitutions[interest]" placeholder="Common Interest" id="interest" type="text")
+							label(for="name") Common Interest
+					div(class="row")
+						h5 Kellog Student
 						div(class="input-field col s12 m4")
-							input(name="name" placeholder="Name" id="name" type="text")
-							label(for="name") Name
+							input(name="substitutions[KelloggFirst]" placeholder="First Name" id="name" type="text")
+							label(for="name") First Name
 						div(class="input-field col s12 m4")
-							input(name="email" placeholder="Email" id="email" type="text")
+							input(name="substitutions[KelloggLast]" placeholder="Last Name" id="name" type="text")
+							label(for="name") Last Name
+						div(class="input-field col s12 m4")
+							input(name="emails[0]" placeholder="Email" id="kelloggEmail" type="text")
 							label(for="email") Email
-						div(class="input-field col s12 m4")
-							select(name="template")
-								option(value="" disabled selected) Choose a template
-								option(value="685e3647-5f99-4819-a373-99a80566199a")  Match
-								option(value="def5c045-1306-4bb1-9238-5eaf6aca8887") Feedback
-								option(value="208552c8-634f-427b-ae17-7a1dcad3447b") Signup
-							label Template
-					p Note: If you chose "Match" as a template, you must also fill out the details section.
-					div(class="row")
 						div(class="input-field col s12")
-							textarea(name="substitutions[details]" class="materialize-textarea" id="details" type="text")
-							label(for="details") Details
+							input(name="substitutions[KelloggLI]" placeholder="LinkedIn" id="linkedin" type="text")
+							label(for="linkedin") LinkedIn
+						input(data-kellogg hidden name="substitutions[KelloggEmail]")
+						input(hidden value="685e3647-5f99-4819-a373-99a80566199a")
+					div(class="row")
+						h5 Prospective Student
+						div(class="input-field col s12 m4")
+							input(name="substitutions[ProspFirst]" placeholder="First Name" id="ProspFirst" type="text")
+							label(for="name") First Name
+						div(class="input-field col s12 m4")
+							input(name="substitutions[ProspLast]" placeholder="Last Name" id="ProspLast" type="text")
+							label(for="name") Last Name
+						div(class="input-field col s12 m4")
+							input(name="emails[1]" placeholder="Email" id="prospEmail" type="text")
+							label(for="email") Email
+						div(class="input-field col s12")
+							input(name="substitutions[ProspLI]" placeholder="LinkedIn" id="linkedin" type="text")
+							label(for="linkedin") LinkedIn
+						input(data-prosp hidden name="substitutions[ProspEmail]")
+						input(hidden name="template" value="685e3647-5f99-4819-a373-99a80566199a")
+					button(class="coffee-chat-orange btn" type="submit") Submit
+			div(class="row" data-feedback)
+				form(class="col s12" data-feedback-form)
+					div(class="row")
+						div(class="input-field col s12 m4")
+							input(name="firstname" placeholder="First Name" id="fisrtName" type="text")
+							label(for="name") First Name
+						div(class="input-field col s12 m4")
+							input(name="lastname" placeholder="Last Name" id="lastName" type="text")
+							label(for="name") Last Name
+						div(class="input-field col s12 m4")
+							input(name="emails[0]" placeholder="Email" id="email" type="text")
+							label(for="email") Email
+						input(hidden name="template" value="def5c045-1306-4bb1-9238-5eaf6aca8887")
 					button(class="coffee-chat-orange btn") Submit
 
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
-	script(src="/public/js/survey.js")
+	script(src="/public/js/email.js")

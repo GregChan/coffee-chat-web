@@ -20,40 +20,40 @@ html
 					div(class="row")
 						h5 Program and Interests
 						div(class="input-field col s12 m6")
-							input(name="substitutions[program]" placeholder="Common Interest" id="program" type="text")
+							input(class="validate" name="substitutions[program]" placeholder="Program" id="program" type="text" required="")
 							label(for="name") Program
 						div(class="input-field col s12 m6")
-							input(name="substitutions[interest]" placeholder="Common Interest" id="interest" type="text")
+							input(class="validate" name="substitutions[interest]" placeholder="Common Interest" id="interest" type="text" required="")
 							label(for="name") Common Interest
 					div(class="row")
 						h5 Kellog Student
 						div(class="input-field col s12 m4")
-							input(name="substitutions[KelloggFirst]" placeholder="First Name" id="name" type="text")
+							input(class="validate" name="substitutions[KelloggFirst]" placeholder="First Name" id="kelloggFirst" type="text" required="")
 							label(for="name") First Name
 						div(class="input-field col s12 m4")
-							input(name="substitutions[KelloggLast]" placeholder="Last Name" id="name" type="text")
+							input(class="validate" name="substitutions[KelloggLast]" placeholder="Last Name" id="kelloggLast" type="text" required="")
 							label(for="name") Last Name
 						div(class="input-field col s12 m4")
-							input(name="emails[0]" placeholder="Email" id="kelloggEmail" type="text")
+							input(class="validate" name="emails[0]" placeholder="Email" id="kelloggEmail" type="email" required="")
 							label(for="email") Email
 						div(class="input-field col s12")
-							input(name="substitutions[KelloggLI]" placeholder="LinkedIn" id="linkedin" type="text")
+							input(class="validate" name="substitutions[KelloggLI]" placeholder="LinkedIn" id="kelloggLinkedIn" type="text" required="")
 							label(for="linkedin") LinkedIn
 						input(data-kellogg hidden name="substitutions[KelloggEmail]")
 						input(hidden value="685e3647-5f99-4819-a373-99a80566199a")
 					div(class="row")
 						h5 Prospective Student
 						div(class="input-field col s12 m4")
-							input(name="substitutions[ProspFirst]" placeholder="First Name" id="ProspFirst" type="text")
+							input(class="validate" name="substitutions[ProspFirst]" placeholder="First Name" id="prospFirst" type="text" required="")
 							label(for="name") First Name
 						div(class="input-field col s12 m4")
-							input(name="substitutions[ProspLast]" placeholder="Last Name" id="ProspLast" type="text")
+							input(class="validate" name="substitutions[ProspLast]" placeholder="Last Name" id="prospLast" type="text" required="")
 							label(for="name") Last Name
 						div(class="input-field col s12 m4")
-							input(name="emails[1]" placeholder="Email" id="prospEmail" type="text")
+							input(class="validate" name="emails[1]" placeholder="Email" id="prospEmail" type="email" required="")
 							label(for="email") Email
 						div(class="input-field col s12")
-							input(name="substitutions[ProspLI]" placeholder="LinkedIn" id="linkedin" type="text")
+							input(class="validate" name="substitutions[ProspLI]" placeholder="LinkedIn" id="propsLinkedIn" type="text" required="")
 							label(for="linkedin") LinkedIn
 						input(data-prosp hidden name="substitutions[ProspEmail]")
 						input(hidden name="template" value="685e3647-5f99-4819-a373-99a80566199a")
@@ -62,17 +62,17 @@ html
 				form(class="col s12" data-feedback-form)
 					div(class="row")
 						div(class="input-field col s12 m4")
-							input(name="firstname" placeholder="First Name" id="fisrtName" type="text")
+							input(name="firstname" placeholder="First Name" id="fisrtName" type="text" required="")
 							label(for="name") First Name
 						div(class="input-field col s12 m4")
-							input(name="lastname" placeholder="Last Name" id="lastName" type="text")
+							input(name="lastname" placeholder="Last Name" id="lastName" type="text" required="")
 							label(for="name") Last Name
 						div(class="input-field col s12 m4")
-							input(name="emails[0]" placeholder="Email" id="email" type="text")
+							input(name="emails[0]" placeholder="Email" id="email" type="text" required="")
 							label(for="email") Email
 						input(hidden name="template" value="def5c045-1306-4bb1-9238-5eaf6aca8887")
 					button(class="coffee-chat-orange btn") Submit
 
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js")
 	script(src="/public/js/email.js")

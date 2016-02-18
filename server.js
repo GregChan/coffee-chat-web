@@ -83,7 +83,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(myLogger);
 app.use(cookieParser());
-app.use(myAutheticator);
+//app.use(myAutheticator);
 app.use(interalServerError);
 
 var resource = null;

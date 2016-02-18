@@ -14,3 +14,5 @@
 ./resources/wild/pages/survey1.js
 ./resources/wild/pages/survey2.js
 ./resources/wild/pages/team.js
+./resources/wild/pages/kellogg_survey.js
+./resources/wild/pages/kellogg_feedback.js

@@ -44,7 +44,7 @@ var express = require('express'),
     },
     authenticationFailed = function(req, res, next) {
         var path = req.path;
-        if (path == "/wild/pages/homepage" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID") {
+        if (path == "/" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID") {
             logger.debug("authenticationFailed : path matched ");
             next();
             return;
@@ -85,11 +85,6 @@ app.use(myLogger);
 app.use(cookieParser());
 app.use(myAutheticator);
 app.use(interalServerError);
-
-app.get('/', function(req, res) {
-    res.redirect("/wild/pages/homepage");
-});
-
 
 var resource = null;
 fs.readFile('./resources/resources.txt', function(err, data) {

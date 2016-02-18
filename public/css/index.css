@@ -22,11 +22,19 @@
 }
 
 .parallax-container {
-  height: 400px;
+  height: 600px;
 }
 
 .text-orange {
   color: #EC6445;
+}
+
+.spacer-30 {
+  margin-top: 30px;
+}
+
+.spacer-75 {
+  margin-top: 75px;
 }
 
 .text-grey {
@@ -75,6 +83,37 @@ textarea {
   vertical-align: middle;
   border-bottom: 1px solid;
 }
+
+.clear {
+  background: none !important;
+}
+
+.btn-outline {
+  border: 1px solid !important;
+  border-color: #ff7050 !important;
+  background: none;
+  color: #ff7050;
+}
+
+.nav-absolute {
+  position: absolute;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Firefox 3.6 to 15 */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important;
+}
+
+.nav-btn {
+  margin-top: 13px !important;
+}
+
+.btn-outline:hover {
+  border: 1px solid !important;
+  border-color: #ff7050 !important;
+  background: none;
+  co
 
 .coffee-chat-divider:after {
   margin: 0 -55% 0 .5em;

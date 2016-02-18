@@ -8,88 +8,121 @@ html
 		include ./includes/header.jade
 		div(class="parallax-container valign-wrapper")
 			div(class="parallax")
-				img(src="/public/images/coffee-chat-third.jpg")
+				img(src="/public/images/background.png")
+			
+			//- include ./includes/header.jade				
 			div(class="row container valign" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)")
-				h3(class="center header text-orange") Real Advice from Real Industry Leaders
+				h3(class="center header white-text") Real Professional Conversations Made Simple
 				//- h3(class="center header text-orange") Real Advice from
 				//- h3(class="center header text-orange") Real Industry Leaders
-				h5(class="center coffee-chat-grey") Networking Redefined.
-				h5(class="center coffee-chat-grey") The fastest-growing network for professional millenials.
+				h5(class="center white-text") Take your online connections back into the coffee shop
+				p(class="spacer-75")
+				h5(class="center white-text") Start connecting today
+				//- h5(class="center white-text") The fastest-growing network for professional millenials.
 				div(class="center")
-					if(!curUser)
+					if (!curUser)
 						a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
 					else
 						a(class="btn-flat modal-close modal-action" href="/wild/pages/survey2" title="We'd like to know more about you.") We'd like to know more about you.
-		div(class="section white")
-			div(class="row container")
-				h3(class="center header") Expert of the Week
-				div(class="col s12 m6 l4")
-					include ./includes/card.jade
-				div(class="col s12 m6 l4")
-					h5 About
-					div(class="text-grey")
-						h6 Work
-						each work in person.work
-							div=work
-						h6 Education
-						each education in person.education
-							div=education
-					//- h5 Interested in connecting?
-					//- div(class="text-grey")
-					//- 	h6 Sign up now for a chance to connect!
-					//- div(class="center")
-					//- 	a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
-					p
-					each tag in person.tags
-						div(class="chip") ##{tag}
-				div(class="col s12 m6 l4")
-					div(class="row")
-						from(class="col s12 m12 l12")
-							div(class="row")
-								div What would you like you like your intro message to be?
-								div(class="input-field col s12")
-									textarea(class="fill")
-								p(class="tiny-text") One person will be chosen each week, if you are not chose, you are eligible to setup additional coffee chats below.
-								div(class="input-field col s12 m12 l12")
-									button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill") Request to Meet
-								div(class="input-field col s12 m12 l12")
-									button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill modal-trigger" href="#modal") Send to a Friend
 		div(class="section coffee-chat-grey-background")
-			div(class="row container")
-				h3(class="center header") Schedule a Coffee Chat
-				h6(class="center") Based on your interests, the industry leaders below are eager to coffee chat with you. 
-				h6(class="center") Select the people that you would like to be paired with.
-				each person, index in people
-					div(class="col s12 m6 l3" data-schedule-cc)
-						include ./includes/card.jade
-						input(type="checkbox" hidden value="off")
-				from(class="col offset-m3 offset-l3 s12 m6 l12 row")
-					div(class="input-field col s12 m12 l3")
-						button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill schedule-meet") Request to Meet
-					div(class="input-field col s12 m12 l3")
-						button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill modal-trigger" href="#modal") Send to a Friend
-		div(id="modal" class="modal")
-			div(class="modal-content")
-				h4 Refer a Friend
-				div(class="input-field col s12 m4 l4")
-					input(type="text" id="first_name")
-					label(for="first_name") First Name
-				div(class="input-field col s12 m4 l4")
-					input(type="text" id="last_name")
-					label(for="last_name") Last Name
-				div(class="input-field col s12 m4 l4")
-					input(type="text" id="email")
-					label(for="email") Email
-				div(class="input-field col s12 m12 l12")
-					textarea(class="fill")
-			div(class="modal-footer")
-				a(href="#!" class="btn-flat modal-close modal-action") Cancel
-				a(href="#!" class="btn-flat modal-close modal-action") Send
-		div(class="parallax-container valign-wrapper")
-			div(class="parallax")
-				img(src="/public/images/coffee-chat-second-text.jpg")
-			div(class="row container valign")
-				h4(class="center" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)") Real Advice from Real Industry Leaders
+			div(class="")
+				h2(class="center text-orange") Coffee Chat
+				h5(class="center") Build connections within your community
+				p(class="spacer-30")
+				div(class="row valign-wrapper")
+					div(class="center col s12 m3 l3 valign")
+						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/e85aec93-1d2b-48b9-8110-b8a6925e9771/207/123/207/123/0/0/af14e641-orangeconnections_05r03f05r03f000000.png")
+					div(class="center col s12 m3 l3 valign")
+						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/c7b04ae3-f640-42f3-ba4b-f353480ed650/148/167/148/167/0/0/a9e8cb42-orangeconversations_04404n04404n000000.png")
+					div(class="center col s12 m3 l3 valign")
+						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/321053e5-d0e7-4d46-a79c-62274ba38c28/173/133/173/133/0/0/bd7c1919-orangescheduling_04t03p04t03p000000.png")
+					div(class="center col s12 m3 l3 valign")
+						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/4c37e19a-b538-4479-9fbe-8338e459365b/214/118/214/118/0/0/f4a5cc31-no-clutter_05y03a05y03a000000.png")
+				div(class="row")
+					div(class="center col s12 m3 l3")
+						h5(class="center") Personal Connections
+						p A unique proprietary algorithm that matches peers within a shared community based on personal interests 
+					div(class="center col s12 m3 l3")
+						h5(class="center") Relevant Conversations
+						p Conversation prompts are suggested to have a fun and interesting coffee chat with peers in your community
+					div(class="center col s12 m3 l3")
+						h5(class="center") Easy Scheduling
+						p Conversation prompts are suggested to have a fun and interesting coffee chat with peers in your community
+					div(class="center col s12 m3 l3")
+						h5(class="center") No Clutter
+						p Join CoffeeChat and we do the rest of the work to build a collaborative work environment
+
+
+		//- div(class="section white")
+		//- 	div(class="row container")
+		//- 		h3(class="center header") Expert of the Week
+		//- 		div(class="col s12 m6 l4")
+		//- 			include ./includes/card.jade
+		//- 		div(class="col s12 m6 l4")
+		//- 			h5 About
+		//- 			div(class="text-grey")
+		//- 				h6 Work
+		//- 				each work in person.work
+		//- 					div=work
+		//- 				h6 Education
+		//- 				each education in person.education
+		//- 					div=education
+		//- 			//- h5 Interested in connecting?
+		//- 			//- div(class="text-grey")
+		//- 			//- 	h6 Sign up now for a chance to connect!
+		//- 			//- div(class="center")
+		//- 			//- 	a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
+		//- 			p
+		//- 			each tag in person.tags
+		//- 				div(class="chip") ##{tag}
+		//- 		div(class="col s12 m6 l4")
+		//- 			div(class="row")
+		//- 				from(class="col s12 m12 l12")
+		//- 					div(class="row")
+		//- 						div What would you like you like your intro message to be?
+		//- 						div(class="input-field col s12")
+		//- 							textarea(class="fill")
+		//- 						p(class="tiny-text") One person will be chosen each week, if you are not chose, you are eligible to setup additional coffee chats below.
+		//- 						div(class="input-field col s12 m12 l12")
+		//- 							button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill") Request to Meet
+		//- 						div(class="input-field col s12 m12 l12")
+		//- 							button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill modal-trigger" href="#modal") Send to a Friend
+		//- div(class="section coffee-chat-grey-background")
+		//- 	div(class="row container")
+		//- 		h3(class="center header") Schedule a Coffee Chat
+		//- 		h6(class="center") Based on your interests, the industry leaders below are eager to coffee chat with you. 
+		//- 		h6(class="center") Select the people that you would like to be paired with.
+		//- 		each person, index in people
+		//- 			div(class="col s12 m6 l3" data-schedule-cc)
+		//- 				include ./includes/card.jade
+		//- 				input(type="checkbox" hidden value="off")
+		//- 		from(class="col offset-m3 offset-l3 s12 m6 l12 row")
+		//- 			div(class="input-field col s12 m12 l3")
+		//- 				button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill schedule-meet") Request to Meet
+		//- 			div(class="input-field col s12 m12 l3")
+		//- 				button(class="btn btn-flat waves-effect white-text coffee-chat-orange fill modal-trigger" href="#modal") Send to a Friend
+		//- div(id="modal" class="modal")
+		//- 	div(class="modal-content")
+		//- 		h4 Refer a Friend
+		//- 		div(class="input-field col s12 m4 l4")
+		//- 			input(type="text" id="first_name")
+		//- 			label(for="first_name") First Name
+		//- 		div(class="input-field col s12 m4 l4")
+		//- 			input(type="text" id="last_name")
+		//- 			label(for="last_name") Last Name
+		//- 		div(class="input-field col s12 m4 l4")
+		//- 			input(type="text" id="email")
+		//- 			label(for="email") Email
+		//- 		div(class="input-field col s12 m12 l12")
+		//- 			textarea(class="fill")
+		//- 	div(class="modal-footer")
+		//- 		a(href="#!" class="btn-flat modal-close modal-action") Cancel
+		//- 		a(href="#!" class="btn-flat modal-close modal-action") Send
+		//- div(class="parallax-container valign-wrapper")
+		//- 	div(class="parallax")
+		//- 		img(src="/public/images/coffee-chat-second-text.jpg")
+		//- 	div(class="row container valign")
+		//- 		h4(class="center" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)") Real Advice from Real Industry Leaders
 		include ./includes/partners.jade
 		include ./includes/footer.jade
 

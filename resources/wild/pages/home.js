@@ -2,7 +2,7 @@ var exports = module.exports = {},
     fs = require('fs');
     dbConn = require("./../../elf/db/dbConn.js");
 
-exports.path = 'wild/pages/homepage';
+exports.path = '';
 
 exports.getHandle = function(req, res) {
     fs.readFile('./public/browse.json', function(err, data) {

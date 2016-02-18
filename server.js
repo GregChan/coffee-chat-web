@@ -15,31 +15,32 @@ var express = require('express'),
         next();
     },
     myAutheticator = function(req, res, next) {
-        logger.debug('myLogger - new request: ' + req.cookies.userID);
-        if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
-        {
-              next();
-              return;
-        }
-        if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
-            authenticationFailed(req, res, next);
-        } else {
-            var userID = req.cookies.userID;
-            var p1 = dbConn.getUserName(userID);
-            return p1.then(
-                function(val) {
-                    var obj = JSON.parse(val);
-                    console.log("serverjs: validated user: " + obj.id);
-                    req.loginUserID = obj.id;
-                    next();
-                    return;
-                }
-            ).catch(
-                function(reason) {
-                    authenticationFailed(req, res, next);
-                }
-            );
-        }
+        next();
+        // logger.debug('myLogger - new request: ' + req.cookies.userID);
+        // if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
+        // {
+        //       next();
+        //       return;
+        // }
+        // if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
+        //     authenticationFailed(req, res, next);
+        // } else {
+        //     var userID = req.cookies.userID;
+        //     var p1 = dbConn.getUserName(userID);
+        //     return p1.then(
+        //         function(val) {
+        //             var obj = JSON.parse(val);
+        //             console.log("serverjs: validated user: " + obj.id);
+        //             req.loginUserID = obj.id;
+        //             next();
+        //             return;
+        //         }
+        //     ).catch(
+        //         function(reason) {
+        //             authenticationFailed(req, res, next);
+        //         }
+        //     );
+        // }
 
     },
     authenticationFailed = function(req, res, next) {

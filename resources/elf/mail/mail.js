@@ -15,7 +15,7 @@ exports.sendTemplate = function(to, from, subject, templateId, substitutions, ca
 	email.setTos([to]);
 	email.setFrom(from);
 	email.setSubject(subject);
-	email.setText('Some text');
+	email.setHtml('<p></p>');
 	email.setSubstitutions(substitutions);
 
 	email.setFilters({

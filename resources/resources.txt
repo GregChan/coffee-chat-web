@@ -5,6 +5,7 @@
 ./resources/cat/info/getIndustryList.js
 ./resources/cat/info/getHobbyList.js
 ./resources/cat/info/getJobFeatureList.js
+./resources/cat/mail/email.js
 ./resources/wild/oauth/auth.js
 ./resources/wild/oauth/callBack.js
 ./resources/wild/pages/home.js
@@ -13,3 +14,4 @@
 ./resources/wild/pages/survey.js
 ./resources/wild/pages/survey1.js
 ./resources/wild/pages/survey2.js
+./resources/wild/pages/email.js

@@ -1,0 +1,37 @@
+html
+	head
+		link(href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
+		link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css')
+		link(rel="stylesheet" href="/public/css/index.css")
+	body
+		include ./includes/header.jade
+		div(class="container")
+			h3(class="center text-orange") Coffee Chat Email Tool
+			div(class="row")
+				form(class="col s12" method="post" action="/cat/mail/email")
+					p This is a simple email tool to help send signup, match, and feedback emails.
+					div(class="row")
+						div(class="input-field col s12 m4")
+							input(name="name" placeholder="Name" id="name" type="text")
+							label(for="name") Name
+						div(class="input-field col s12 m4")
+							input(name="email" placeholder="Email" id="email" type="text")
+							label(for="email") Email
+						div(class="input-field col s12 m4")
+							select(name="template")
+								option(value="" disabled selected) Choose a template
+								option(value="685e3647-5f99-4819-a373-99a80566199a")  Match
+								option(value="def5c045-1306-4bb1-9238-5eaf6aca8887") Feedback
+								option(value="208552c8-634f-427b-ae17-7a1dcad3447b") Signup
+							label Template
+					p Note: If you chose "Match" as a template, you must also fill out the details section.
+					div(class="row")
+						div(class="input-field col s12")
+							textarea(name="substitutions[details]" class="materialize-textarea" id="details" type="text")
+							label(for="details") Details
+					button(class="coffee-chat-orange btn") Submit
+
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="/public/js/survey.js")

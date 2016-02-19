@@ -19,6 +19,137 @@ exports.clearup = function() {
         logger.debug('Error in release pool ' + err);
     });
 }
+// SELECT  a.fieldID, a. fieldName, a.communityID, a.required, a. displayPriority,a.grouped, b.group, b.name
+// from survey_field_desc as a 
+// inner join survey_field_items as b
+// Where a.communityID = 1
+// and a.fieldID = b.fieldID
+
+exports.getSurvey = function(communityID)
+{
+    return new Promise(function(resolve, reject) {
+           pool.getConnection(function(err, connection) {
+            if (err) {
+                connection.release();
+                logger.debug('Error in connection database');
+
+                reject('Error in connection database');
+            }
+            logger.debug('connected as id ' + connection.threadId);
+
+            var sql = "SELECT  a.fieldID, a. fieldName, a.communityID, a.required, a. displayPriority,a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.fieldID, b.group, b.name";
+            var inserts = [communityID];
+            sql = mysql.format(sql, inserts);
+            logger.debug("getIndustryList: going to query survey list: "+ sql);
+            connection.query(sql,function(err, rows) {
+                if(!err)
+                {
+                    if(rows.length > 0 ) {                   
+                         var result = JSON.parse("{}");
+                         result["community"]=communityID;
+                         result["fields"] =JSON.parse("[]");
+                         var fieldID = -1;
+                         var field ;
+                         var groupName;
+                         var hasGroup = false;
+                         var group;
+                         for(i=0; i<rows.length;i++)
+                         {
+                            if(fieldID != rows[i].fieldID )
+                            {
+                                if(fieldID != -1)
+                                {
+                                    if(hasGroup)
+                                    {
+                                        field["values"].push(group); 
+                                        hasGroup = false;
+                                    }
+                                    result["fields"].push(field);  
+                                }
+                                fieldID = rows[i].fieldID ;
+                                field = JSON.parse("{}");
+                                field["fieldID"] = fieldID;
+                                field["name"] = rows[i].fieldName;
+                                field["required"] = rows[i].required == 0? false:true;
+                                field["grouped"] = rows[i].grouped == 0? false:true;
+                                field["priority"] = rows[i].displayPriority;
+                                field["values"] =JSON.parse("[]");
+                            }
+                            if(rows[i].grouped == 0)
+                            {
+                                if(hasGroup)
+                                {
+                                    field["values"].push(group); 
+                                    hasGroup = false;
+                                }
+                                field["values"].push(JSON.parse('{"id":'+rows[i].id+', "name":"'+rows[i].name+'"}'));
+                            }
+                            else
+                            {
+                                if(hasGroup)
+                                {
+                                    if(groupName != rows[i].group )
+                                    {
+                                        field["values"].push(group);  
+                                        groupName = rows[i].group;
+                                        group = JSON.parse("{}");
+                                        group["name"] = groupName;
+                                        group["values"] =JSON.parse("[]");
+                                    }
+                                }
+                                else
+                                {
+                                    groupName = rows[i].group;
+                                    group = JSON.parse("{}");
+                                    group["name"] = groupName;
+                                    group["values"] =JSON.parse("[]");
+                                    hasGroup=true;
+                                }
+                                group["values"].push(JSON.parse('{"id":'+rows[i].id+', "name":"'+rows[i].name+'"}'));
+
+                            }
+
+                            if(i==rows.length-1)
+                            {
+                                if(hasGroup)
+                                {
+                                    field["values"].push(group);  
+                                }
+                                result["fields"].push(field); 
+                            }
+                        }
+                    
+                    console.log("getSurvey: result: "+ result);
+                    connection.release();
+                    resolve(result);
+                
+                    }
+                    else
+                    {
+                        logger.debug("dbConn: unable to find hobby list.");
+                        connection.release();
+                        reject('{"error":"500", "errorMsg":"DB Error"}');
+                                    
+                    }
+                }
+                else
+                {
+                     logger.debug('Error in connection database');
+                     connection.release();
+                     reject('{"error":"500","errorMsg": '+err+'}');
+                }
+               
+            });
+            connection.on('error',function(err) {
+                logger.debug('Error in connection database');
+                connection.release();
+                reject('{"error":"500","errorMsg": "Error in connection database"}');
+
+            });
+        });
+       });
+}
+
 
 exports.addSchool = function(userID, schoolName, gradYear) {
     return new Promise(function(resolve, reject) {

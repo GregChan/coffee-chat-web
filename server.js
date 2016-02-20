@@ -15,7 +15,7 @@ var express = require('express'),
         next();
     },
     myAutheticator = function(req, res, next) {
-        logger.debug('myLogger - new request: ' + req.cookies.userID);
+        logger.debug('myLogger - user id: ' + req.cookies.userID);
         if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
         {
               next();

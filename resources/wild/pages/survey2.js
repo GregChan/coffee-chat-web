@@ -4,37 +4,48 @@ var exports = module.exports = {},
 exports.path = 'wild/pages/survey2';
 
 exports.getHandle = function(req, res) {
-    fs.readFile('./public/browse.json', function(err, data) {
-        if (err) {
-            throw err;
-        }
+    var http = require('http'); 
 
-        var people = JSON.parse(data);
-         var industries = ["Manufacturing", "Technology", "Transportation", "Legal", "Human Resources", "Health", "Arts", "Media", "Retail", "Urban Planning", "Government", "Finance", "Corporate Goods", "Education", "Service Goods", "Agriculture/Environment"];
-        var hobbies = {
-            "Team Sports": ["Basketball", "Rugby", "Soccer", "Football", "Baseball"],
-            "Outdoor Sports": ["Horseback riding", "Hunting/Shooting", "Water sports", "Motor sports", "Rock climbing", "Skiing/Snowboarding", "Cycling", "Camping", "Fishing", "Running"],
-            "Indoor Sports" : ["Swimming", "Bodybuilding", "Martial arts", "Skating", "Dance"],
-            "Healthy Living" : ["Backpacking", "Yoga", "Vegan", "Cooking"],
-            "Technology" : ["Computer programming", "Online gaming", "Video games"],
-            "The Arts" : ["Pottery", "Acting", "Creative writing", "Music", "Arts/Crafts/DIY", "Reading", "Movies", "Photography"],
-            "Fashion" : ["Knitting", "Design", "Blogging", "Retail", "Interior design"],
-            "Other" : ["Coffee", "Board games", "Collecting specialty items", "Puzzles/games"]
-            
-        };
-        var jobFeatures = ["Stability", "Proximity to home", "Interesting/Challenging work", "Adequate benefits/salary", "Education/training benefits", "Ability to grow", "Relationships with peers", "Control over hours", "Company beliefs", "Company success", "Company culture", "Industry/Field/Title"];
-        res.render('survey2', {
-            people: people,
-            industries: industries,
-            hobbies: hobbies,
-            jobFeatures: jobFeatures,
-            user: {
-                "name": "Stacey",
-                "image": "http://d9hhrg4mnvzow.cloudfront.net/womensilab.com/coffeechat2/bb0185b8-sussana-shuman_07107207106x000002.jpg",
-                "bio": "",
-                "tags": ["tech", "sf", "49ers"],
-                "job": "Northwestern University"
-            }
+    var options = {
+      host: "localhost",
+      port:1337,
+      path: '/cat/info/1/getSurvey',
+      method: 'GET',
+      headers: {'Cookie': 'userID='+req.cookies.userID}
+    };
+
+    callback = function(response) {
+        var survey = '';
+        response.on('data', function(d) {
+            survey= JSON.parse(d);
         });
-    });
+        response.on('end', function() {
+            if(req.loginUserID != undefined && req.loginUserID != "undefined")
+            {
+                res.render('survey2', {
+                        survey: survey
+                });
+                res.end();
+                return;
+
+            }
+        
+            else
+            {
+                res.status(500);
+                res.end();
+            }
+            return;
+            
+        });
+
+        req.on('error', function(e) {
+            throw err;
+        });
+    }
+
+    var request = http.request(options, callback);
+   // request.write(bodyString);
+    request.end();
+
 }

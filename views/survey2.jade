@@ -12,10 +12,10 @@ html
 				div(class="col s12")
 					p 1. Industries you are interested in (Choose 3)
 					form(action="#")
-						for item in industries	
+						for item in survey.fields[0].values	
 							div(class="col s3")
-								input(id=item type="checkbox")
-								label(for=item)=item
+								input(id=item.id type="checkbox")
+								label(for=item.id)=item.name
 			div(class="row")
 				form(class="col s4")
 					p 2. School
@@ -33,21 +33,21 @@ html
 					p 4. Hobbies/Interests (Choose as many as you want)
 					ul(class="collapsible popout" data-collapsible="expandable")
 						li()
-							for key in Object.keys(hobbies)
-								div(class="collapsible-header")=key
+							for key in survey.fields[1].values
+								div(class="collapsible-header")=key.name
 								div(class="collapsible-body active")
 									form(action="#")
-									for sport in hobbies[key]
-										input(id=sport type="checkbox")
-										label(for=sport)=sport
+									for hobby in key.values
+										input(id=hobby.id type="checkbox")
+										label(for=hobby.id)=hobby.name
 			div(class="row")
 				div(class="col s12")
 					p 5. What would you like to get out of CoffeeChats? (Choose up to 3)
 					form(action="#")
-						for feat in jobFeatures	
+						for feat in survey.fields[2].values
 							div(class="col s4")
-								input(id=feat type="checkbox" class="orange")
-								label(for=feat)=feat
+								input(id=feat.id type="checkbox" class="orange")
+								label(for=feat.id)=feat.name
 			div(class="row")
 				button(class="btn waves-effect waves-light col coffee-chat-orange offset-s5" type="submit" name="action") Submit
 	include ./includes/footer.jade

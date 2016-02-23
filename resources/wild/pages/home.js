@@ -20,6 +20,9 @@ exports.getHandle = function(req, res) {
                     curUser: curUser
                 });
                 res.end();
+            } else {
+                res.render('index');
+                res.end();
             }
         });
     } else {

@@ -124,7 +124,7 @@ fs.readFile('./resources/resources.txt', function(err, data) {
         if (typeof resource.getHandle === 'function') {
             logger.debug(resource.path + " GET");
 
-            if (resource.path.slice(0, 5) == "tools") {
+            if (process.env.ENV == "staging" || resource.path.slice(0, 5) == "tools") {
                 app.get('/' + resource.path, auth, resource.getHandle);
             } else {
                 app.get('/' + resource.path, resource.getHandle);

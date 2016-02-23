@@ -13,3 +13,4 @@
 ./resources/wild/pages/survey.js
 ./resources/wild/pages/survey1.js
 ./resources/wild/pages/survey2.js
+./resources/wild/pages/team.js

@@ -1,33 +1,60 @@
 $(document).ready(function(){
+        $.get('/cat/info/1/getSurvey', function(data) {
+           survey = data; 
+        });
         $('select').material_select();
         $('.collapsible').collapsible({
             accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
         });
-	$('.submit').click(function() {
+	$('.submit').on('click', function() {
               var selections = [];
-                for(var field in survey.fields){
+                for(var i = 0; i < survey.fields.length; i++){
+                    var field = survey.fields[i];
+                    console.log(field);
                     var choice = {};
                     choice["fieldID"] = field.fieldID;
                     choice["choices"] = [];
-                    for(var val in field.values){
-                        if(field.fieldID == 2){
+                    console.log(choice);
+                    if(field.grouped == true){
+                        for(var val in field.values){                        
                             for(var val2 in val.values){
-                                if(document.getElementById(val.id).checked){
-                                choice["choices"].append(val2.id);
+                                if(field.displayType == 1){
+                                    if(document.getElementById(val.id).checked){
+                                        choice["choices"].push(val2.id);
+                                    }
+                                }
+                                if(field.displayType == 2){
+                                    if(document.getElementById(val.id).value){
+                                        choice["choices"].push(val2.id);
+                                    }
                                 }
                             }
                         }
-                        else{
-                            if(document.getElementById(val.id).checked){
-                                choice["choices"].append(val.id);
-                            }
+                    }
+                    else{
+                        for(var val in field.values){   
+                            if(field.displayType == 1){
+                                    if(document.getElementById(val.id).checked){
+                                        choice["choices"].push(val2.id);
+                                    }
+                                }
+                                if(field.displayType == 2){
+                                    if(document.getElementById(val.id).value){
+                                        choice["choices"].push(val2.id);
+                                    }
+                                }
                         }
                     }
-                    selections.append(choice);
+                    console.log(choice);
+                    selections.push(choice);
                 }
             console.log(selections);
-            window.location.href = '/';
+            
+            $.post('/cat/info/1/addSurveyData', selections, function(data) {
+                console.log(data); 
+            }, "json");
     });
+    
 });
 
 

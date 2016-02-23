@@ -22,7 +22,7 @@ exports.getHandle = function(req, res) {
         response.on('end', function() {
             if(req.loginUserID != undefined && req.loginUserID != "undefined")
             {
-                res.render('survey2', {
+                res.render('survey3', {
                         survey: survey
                 });
                 res.end();

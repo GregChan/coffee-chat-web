@@ -26,8 +26,8 @@ html
 					div(class="col s12")
 						select
 							option(value="" disabled selected) Select a Year
-							-for(var x=2019; x>1939; --x)
-								option(value=x)=x				
+							for year in survey.fields[4].values
+								option(value=year.id)=year.name			
 			div(class="row")
 				div(class="col s12")
 					p 4. Hobbies/Interests (Choose as many as you want)

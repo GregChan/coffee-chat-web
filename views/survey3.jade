@@ -10,7 +10,7 @@ html
 		div(class="row container text-orange")			
 			for field in survey.fields
 				div(class="row")
-					div(class="col s12")
+					div(class="col s12 m6 l4")
 					p=field.name
 						if (field.grouped == true)
 							ul(class="collapsible popout" data-collapsible="expandable")
@@ -25,8 +25,9 @@ html
 						else
 							if (field.displayType == 1)
 								for item in field.values	
-									div(class="col s3")
-										input(id=item.id type="checkbox")
+									div(class="col s4 m4 l4")
+										input(id=item.id type="checkbox"
+										class=field.id)
 										label(for=item.id)=item.name
 
 							if (field.displayType == 2)
@@ -34,7 +35,8 @@ html
 									option(value="" disabled selected)=field.name
 									for year in field.values
 										option(value=year.id)=year.name	
-
+			div(class="row")
+				button(class="btn waves-effect waves-light col coffee-chat-orange offset-s5 submit" type="submit" name="action") Submit
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

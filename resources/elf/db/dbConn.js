@@ -80,7 +80,7 @@ exports.getSurvey = function(communityID)
             }
             logger.debug('connected as id ' + connection.threadId);
 
-            var sql = "SELECT  a.fieldID, a. fieldName, a.communityID, a.required, a. displayPriority,a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.fieldID, b.group, b.name";
+            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.fieldID, b.group, b.name";
             var inserts = [communityID];
             sql = mysql.format(sql, inserts);
             logger.debug("getIndustryList: going to query survey list: "+ sql);
@@ -116,6 +116,7 @@ exports.getSurvey = function(communityID)
                                 field["required"] = rows[i].required == 0? false:true;
                                 field["grouped"] = rows[i].grouped == 0? false:true;
                                 field["priority"] = rows[i].displayPriority;
+                                field["displayType"] = rows[i].displayType;
                                 field["values"] =JSON.parse("[]");
                             }
                             if(rows[i].grouped == 0)

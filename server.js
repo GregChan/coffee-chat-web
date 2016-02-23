@@ -10,6 +10,7 @@ var express = require('express'),
     path = require('path'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
+    basicAuth = require('basic-auth'),
     myLogger = function(req, res, next) {
         logger.debug('myLogger - new request: ' + req.path);
         next();
@@ -70,6 +71,31 @@ var express = require('express'),
         }
         if (err) console.log(err.stack);
         if (options.exit) process.exit();
+    },
+    auth = function(req, res, next) {
+        function unauthorized(res) {
+            res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+            res.sendStatus(401);
+            return;
+        };
+
+        var user = basicAuth(req);
+
+        if (!user || !user.name || !user.pass) {
+            unauthorized(res);
+            return;
+        };
+
+        var password = process.env.PASSWORD || "NUvention2016!",
+            username = process.env.USERNAME || "GoCoffeeChat";
+
+        if (user.name === username && user.pass === password) {
+            next();
+            return;
+        } else {
+            unauthorized(res);
+            return;
+        };
     };
 
 // App settings
@@ -97,7 +123,12 @@ fs.readFile('./resources/resources.txt', function(err, data) {
 
         if (typeof resource.getHandle === 'function') {
             logger.debug(resource.path + " GET");
-            app.get('/' + resource.path, resource.getHandle);
+
+            if (resource.path.slice(0, 5) == "tools") {
+                app.get('/' + resource.path, auth, resource.getHandle);
+            } else {
+                app.get('/' + resource.path, resource.getHandle);
+            }
         }
         if (typeof resource.postHandle === 'function') {
             logger.debug(resource.path + " POST");

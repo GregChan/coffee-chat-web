@@ -41,6 +41,11 @@
   margin-top: 75px;
 }
 
+.brand-logo {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
 .text-grey {
   color: #635A5D;
 }

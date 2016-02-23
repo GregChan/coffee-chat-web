@@ -46,10 +46,10 @@ html
 					form(action="#")
 						for feat in survey.fields[2].values
 							div(class="col s4")
-								input(id=feat.id type="checkbox" class="orange")
+								input(id=feat.id type="checkbox" class="orange job-features" )
 								label(for=feat.id)=feat.name
 			div(class="row")
-				button(class="btn waves-effect waves-light col coffee-chat-orange offset-s5" type="submit" name="action") Submit
+				button(class="btn waves-effect waves-light col coffee-chat-orange offset-s5 submit" type="submit" name="action") Submit
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

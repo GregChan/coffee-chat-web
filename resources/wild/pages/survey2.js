@@ -42,10 +42,13 @@ exports.getHandle = function(req, res) {
         req.on('error', function(e) {
             throw err;
         });
+      
     }
 
     var request = http.request(options, callback);
    // request.write(bodyString);
     request.end();
+    
+    
 
 }

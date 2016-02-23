@@ -1,0 +1,42 @@
+html
+	head
+		link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css')
+		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
+		link(rel="stylesheet" href="/public/css/index.css")
+	body
+		include ./includes/header.jade
+		h2(class="center text-orange") Profile Survey
+		h5(class="center text-orange") Help us improve your matches!
+		div(class="row container text-orange")			
+			for field in survey.fields
+				div(class="row")
+					div(class="col s12")
+					p=field.name
+						if (field.grouped == true)
+							ul(class="collapsible popout" data-collapsible="expandable")
+								li()
+									for key in field.values
+										div(class="collapsible-header")=key.name
+										div(class="collapsible-body active")
+											form(action="#")
+											for hobby in key.values
+												input(id=hobby.id type="checkbox")
+												label(for=hobby.id)=hobby.name
+						else
+							if (field.displayType == 1)
+								for item in field.values	
+									div(class="col s3")
+										input(id=item.id type="checkbox")
+										label(for=item.id)=item.name
+
+							if (field.displayType == 2)
+								select
+									option(value="" disabled selected)=field.name
+									for year in field.values
+										option(value=year.id)=year.name	
+
+	include ./includes/footer.jade
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="/public/js/survey.js")
+						

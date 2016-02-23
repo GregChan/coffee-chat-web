@@ -25,6 +25,49 @@ exports.clearup = function() {
 // Where a.communityID = 1
 // and a.fieldID = b.fieldID
 
+
+exports.addSurveyData = function(userID, communityID, surveys)
+{
+    return new Promise(function(resolve, reject) {
+           pool.getConnection(function(err, connection) {
+                if (err) {
+                    connection.release();
+                    logger.debug('Error in connection database');
+
+                    reject('{"error":"500","errorMsg": "Error in connection database"}');
+                }
+                logger.debug('connected as id ' + connection.threadId);
+
+                var sql = "INSERT INTO user_survey (userID, communityID, fieldID, itemID) VALUES ? ON DUPLICATE KEY UPDATE userID=userID";
+                var values = [];
+                for(index = 0; index < surveys.length; index++) {
+                    var fieldID = surveys[index].fieldID;
+                    var choices = surveys[index].chocies;
+                    for(i = 0; i < choices.length; i++) {
+                        var v = [userID, communityID, fieldID, choices[i]];
+                        values.push(v);
+                    }  
+                }
+                connection.query(sql, [values], function(err) {
+                    if (err)
+                    {
+                         logger.debug('Error in connection database');
+                         connection.release();
+                         reject('{"error":"500","errorMsg": '+err+'}');
+                    }
+                    connection.release();
+                    resolve(200);
+                });
+                connection.on('error',function(err) {
+                    logger.debug('Error in connection database');
+                    connection.release();
+                    reject('{"error":"500","errorMsg": "Error in connection database"}');
+
+                });
+             });
+       });
+}
+
 exports.getSurvey = function(communityID)
 {
     return new Promise(function(resolve, reject) {

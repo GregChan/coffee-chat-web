@@ -379,53 +379,28 @@ exports.getUserInfo = function(userId) {
 
 
 exports.getUserName = function(userId) {
-
     return new Promise(function(resolve, reject) {
-        pool.getConnection(function(err, connection) {
-            if (err) {
-                connection.release();
-                logger.debug('Error in connection database');
+        var sql = "SELECT * FROM ?? WHERE ?? = ?";
+        var inserts = ['user_basic', 'id', userId];
+        sql = mysql.format(sql, inserts);
 
-                reject('Error in connection database');
-            }
-            logger.debug('connected as id ' + connection.threadId);
-
-            var sql = "SELECT * FROM ?? WHERE ?? = ?";
-            var inserts = ['user_basic', 'id', userId];
-            sql = mysql.format(sql, inserts);
-
-            connection.query(sql, function(err, rows) {
-                if (!err) {
-                    if (rows.length > 0) {
-                        logger.debug("dbConn: found user: " + userId);
-                        var result = '{"id":"' + userId + '","firstName":"' + rows[0].firstName + '","lastName":"' + rows[0].lastName + '","profilePicSmall":"' + rows[0].profilePicS + '"}';
-                        connection.release();
-                        resolve(result);
-
-                    } else {
-                        logger.debug("dbConn: didnt find user: " + userId);
-                        connection.release();
-                        reject('{"error":"400", "errorMsg":"Invalid UserID"}');
-
-                    }
+        pool.query(sql, function(err, rows, fields) {
+            if (!err) {
+                if (rows.length > 0) {
+                    logger.debug("dbConn: found user: " + userId);
+                    // this needs to be changed later when we reformat the api of dbConn.js
+                    var result = '{"id":"' + userId + '","firstName":"' + rows[0].firstName + '","lastName":"' + rows[0].lastName + '","profilePicSmall":"' + rows[0].profilePicS + '"}';
+                    resolve(result);
                 } else {
-                    logger.debug('Error in connection database');
-                    connection.release();
-                    reject('{"error":"500","errorMsg": ' + err + '}');
+                    logger.debug("dbConn: didnt find user: " + userId);
+                    reject('{"error":"400", "errorMsg":"Invalid UserID"}');
                 }
-
-            });
-
-
-            connection.on('error', function(err) {
+            } else {
                 logger.debug('Error in connection database');
-                connection.release();
-                reject('{"error":"500","errorMsg": "Error in connection database"}');
-
-            });
+                reject('{"error":"500","errorMsg": ' + err + '}');
+            }
         });
     });
-
 }
 
 

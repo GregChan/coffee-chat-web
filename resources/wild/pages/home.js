@@ -1,28 +1,29 @@
 var exports = module.exports = {},
     request = require('request'),
     fs = require('fs');
-dbConn = require("./../../elf/db/dbConn.js");
 
 exports.path = '';
 
 exports.getHandle = function(req, res) {
     if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
-        var p1 = dbConn.getUserName(req.cookies.userID); // should call cat resource instead.
+        var options = {
+            url: 'http://localhost:1337/cat/user/' + req.cookies.userID + '/getUserName',
+            headers: {
+                'Cookie': 'userID=' + req.cookies.userID
+            }
+        };
 
-        p1.then(function(val) {
-            var curUser = (JSON.parse(val));
-            res.render('index', {
-                curUser: curUser
-            });
-            res.end();
-        }).catch(function(reason) {
-            var obj = JSON.parse(reason)
-            res.status(obj.error);
-            return;
+        request(options, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                var curUser = (JSON.parse(body));
+                res.render('index', {
+                    curUser: curUser
+                });
+                res.end();
+            }
         });
     } else {
         res.render('index');
         res.end();
     }
-    return;
 }

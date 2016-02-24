@@ -16,8 +16,8 @@ exports.postHandle=function (req,res) {
 function addSurveyData(userId,commID,res, req)
 {
 	var survey =req.body;
-    console.log('user/addSurveyData: survey: '+ survey);
-    var p1 = dbConn.addSurveyData(userId,commID, survey);
+    console.log('user/addSurveyData: survey: '+ survey.data);
+    var p1 = dbConn.addSurveyData(userId,commID, survey.data);
     return p1.then(
         function(val)
         {

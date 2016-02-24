@@ -9,8 +9,7 @@ html
 		h5(class="center text-orange") Help us improve your matches!
 		div(class="row container text-orange")			
 			for field in survey.fields
-				div(class="row")
-					div(class="col s12 m6 l4")
+				div(class="row" data-field=field.name data-field-id=field.fieldID)
 					p=field.name
 						if (field.grouped == true)
 							ul(class="collapsible popout" data-collapsible="expandable")
@@ -18,23 +17,20 @@ html
 									for key in field.values
 										div(class="collapsible-header")=key.name
 										div(class="collapsible-body active")
-											form(action="#")
-											for hobby in key.values
-												input(id=hobby.id type="checkbox")
-												label(for=hobby.id)=hobby.name
+											for item in key.values
+												input(data-field-input data-field-id=field.fieldID data-input-id=item.id data-group-name=key.name id=item.id type="checkbox")
+												label(for=item.id)=item.name
 						else
 							if (field.displayType == 1)
 								for item in field.values	
 									div(class="col s4 m4 l4")
-										input(id=item.id type="checkbox"
-										class=field.id)
+										input(data-field-input data-field-id=field.fieldID data-input-id=item.id id=item.id type="checkbox")
 										label(for=item.id)=item.name
-
 							if (field.displayType == 2)
-								select
+								select(data-field-input data-field-id=field.fieldID type="select")
 									option(value="" disabled selected)=field.name
 									for year in field.values
-										option(value=year.id)=year.name	
+										option(value=year.id)=year.name
 			div(class="row")
 				button(class="btn waves-effect waves-light col coffee-chat-orange offset-s5 submit" type="submit" name="action") Submit
 	include ./includes/footer.jade

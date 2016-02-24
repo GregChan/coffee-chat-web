@@ -26,46 +26,33 @@ exports.clearup = function() {
 // and a.fieldID = b.fieldID
 
 
-exports.addSurveyData = function(userID, communityID, surveys)
-{
+exports.addSurveyData = function(userID, communityID, surveys) {
     return new Promise(function(resolve, reject) {
-           pool.getConnection(function(err, connection) {
-                if (err) {
-                    connection.release();
-                    logger.debug('Error in connection database');
-
-                    reject('{"error":"500","errorMsg": "Error in connection database"}');
+        // TODO: this query still allows for duplicate fields for dropdowns e.g. i can 
+        var sql = "INSERT INTO user_survey (userID, communityID, fieldID, itemID) VALUES ? ON DUPLICATE KEY UPDATE userID=userID",
+            values = [];
+        for (var i = 0; i < surveys.length; i++) {
+            var fieldID = surveys[i].fieldID,
+                choices = surveys[i].choices;
+            if (fieldID && choices) {
+                for (var j = 0; j < choices.length; j++) {
+                    var value = [userID, communityID, fieldID, choices[j]];
+                    values.push(value);
                 }
-                logger.debug('connected as id ' + connection.threadId);
+            }
+        }
 
-                var sql = "INSERT INTO user_survey (userID, communityID, fieldID, itemID) VALUES ? ON DUPLICATE KEY UPDATE userID=userID";
-                var values = [];
-                for(index = 0; index < surveys.length; index++) {
-                    var fieldID = surveys[index].fieldID;
-                    var choices = surveys[index].chocies;
-                    for(i = 0; i < choices.length; i++) {
-                        var v = [userID, communityID, fieldID, choices[i]];
-                        values.push(v);
-                    }  
-                }
-                connection.query(sql, [values], function(err) {
-                    if (err)
-                    {
-                         logger.debug('Error in connection database');
-                         connection.release();
-                         reject('{"error":"500","errorMsg": '+err+'}');
-                    }
-                    connection.release();
-                    resolve(200);
-                });
-                connection.on('error',function(err) {
-                    logger.debug('Error in connection database');
-                    connection.release();
-                    reject('{"error":"500","errorMsg": "Error in connection database"}');
+        sql = mysql.format(sql, [values]);
 
-                });
-             });
-       });
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query:');
+                logger.debug(err);
+            } else {
+                logger.debug('addSurveyData for ' + userID);
+            }
+        });
+    });
 }
 
 exports.getSurvey = function(communityID)

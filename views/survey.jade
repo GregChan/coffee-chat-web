@@ -16,20 +16,22 @@ html
 					p=field.name
 						if (field.grouped == true)
 							ul(class="collapsible popout" data-collapsible="expandable")
-								li()
-									for key in field.values
+								for key in field.values
+									li()
 										div(class="collapsible-header")=key.name
-										div(class="collapsible-body active")
+										div(class="collapsible-body")
 											for item in key.values
-												input(data-field-input data-field-id=field.fieldID data-input-id=item.id data-group-name=key.name id=item.id type="checkbox")
-												label(for=item.id)=item.name
+												div(class="coffee-chat-collapsible-body coffee-chat-inline")
+													input(data-field-input data-field-id=field.fieldID data-input-id=item.id data-group-name=key.name id=item.id type="checkbox")
+													label(for=item.id)=item.name
 						else
 							if (field.displayType == 1)
 								for item in field.values	
-									div(class="col s4 m4 l4")
+									div(class="col s12 m6 l4")
 										input(data-field-input data-field-id=field.fieldID data-input-id=item.id id=item.id type="checkbox")
 										label(for=item.id)=item.name
 							if (field.displayType == 2)
+								div(class="col s12 m6 l6")
 								select(data-field-input data-field-id=field.fieldID type="select")
 									option(value="" disabled selected)=field.name
 									for year in field.values

@@ -98,6 +98,10 @@ textarea {
   margin-left: 2rem;
 }
 
+.coffee-chat-inline {
+  display: inline-block;
+}
+
 .coffee-chat-circle {
   width: 100%;
 }
@@ -125,6 +129,11 @@ textarea {
 
 .nav-btn {
   margin-top: 13px !important;
+}
+
+/* materialize overrides */
+.dropdown-content {
+  color: #565a56;
 }
 
 .btn-outline:hover {

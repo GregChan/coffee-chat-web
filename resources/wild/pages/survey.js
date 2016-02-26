@@ -24,7 +24,8 @@ exports.getHandle = function(req, res) {
         response.on('end', function() {
             if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
                 res.render('survey', {
-                    survey: survey
+                    survey: survey,
+                    curUser: req.cookies.userID
                 });
                 res.end();
                 return;

@@ -36,7 +36,8 @@ exports.getHandle = function(req, res) {
                     communities: [
                         results[0]
                     ],
-                    profile: results[1]
+                    profile: results[1],
+                    curUser: req.cookies.userID
                 }
 
                 res.render('settings', data);

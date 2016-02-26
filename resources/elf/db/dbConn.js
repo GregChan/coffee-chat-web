@@ -59,6 +59,8 @@ exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
 exports.getUserProfileForCommunity = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
         var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, b.macthPriority, c.name, b.grouped, c.group from user_survey as a left join survey_field_desc as b on a.fieldID=b.fieldID left join survey_field_items as c on a.itemID = c.id where userID=? and a.communityID=? order by b.displayPriority, a.fieldID, c.group';
+        
+        // var sql = 'select a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name, c.itemID from survey_field_desc as a inner join survey_field_items as b left join user_survey as c on c.itemID = b.id where c.userID = ? and a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.displayPriority, a.fieldID, b.group, b.name';
         sql = mysql.format(sql, [userID, communityID]);
 
         pool.query(sql, function(err, rows, fields) {

@@ -17,7 +17,7 @@
   background-image: url('/public/images/LinkedIn-Hover.png');
 }
 
-.coffe-chat-logo {
+.coffee-chat-logo {
   height: 100%;
 }
 
@@ -93,9 +93,9 @@ textarea {
   border-bottom: 1px solid;
 }
 
-.coffee-chat-collapsible {
+.coffee-chat-collapsible-body {
   margin: 10px;
-  margin-left: 1rem;
+  margin-left: 2rem;
 }
 
 .coffee-chat-circle {

@@ -14,21 +14,21 @@ var express = require('express'),
         logger.debug('myLogger - new request: ' + req.path);
         next();
     },
-    myAutheticator = function(req, res, next) {
+    authenticator = function(req, res, next) {
         logger.debug('myLogger - user id: ' + req.cookies.userID);
-        if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
-        {
-              next();
-              return;
-        }
+        // if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
+        // {
+        //       next();
+        //       return;
+        // }
         if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
             authenticationFailed(req, res, next);
         } else {
             var userID = req.cookies.userID;
-            var p1 = dbConn.getUserName(userID);
+            var p1 = dbConn.getUser(userID);
             return p1.then(
-                function(val) {
-                    var obj = JSON.parse(val);
+                function(data) {
+                    var obj = data;
                     console.log("serverjs: validated user: " + obj.id);
                     req.loginUserID = obj.id;
                     next();
@@ -36,6 +36,7 @@ var express = require('express'),
                 }
             ).catch(
                 function(reason) {
+                    console.log(reason);
                     authenticationFailed(req, res, next);
                 }
             );
@@ -83,7 +84,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(myLogger);
 app.use(cookieParser());
-app.use(myAutheticator);
+app.use(authenticator);
 app.use(interalServerError);
 
 var resource = null;

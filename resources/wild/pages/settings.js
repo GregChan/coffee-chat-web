@@ -1,49 +1,47 @@
 var exports = module.exports = {},
-    fs = require('fs');
+    fs = require('fs'),
+    async = require('async'),
+    request = require('request');
 
 exports.path = 'settings';
 
 exports.getHandle = function(req, res) {
-    var http = require('http');
-
-    var options = {
-        host: "localhost",
-        port: 1337,
-        path: '/cat/community/1/settings',
-        method: 'GET',
-        headers: {
-            'Cookie': 'userID=' + req.cookies.userID
-        }
-    };
-
-    callback = function(response) {
-        var settings = {};
-
-        response.on('data', function(data) {
-            settings = JSON.parse(data);
-        });
-
-        response.on('end', function() {
-            if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
-                res.render('settings', {
-                    settings: settings
+    async.parallel([
+            function(callback) {
+                request({
+                    url: 'http://localhost:1337/cat/user/' + req.cookies.userID + '/community/1/profile',
+                    method: 'GET',
+                    headers: {
+                        'Cookie': 'userID=' + req.cookies.userID
+                    }
+                }, function(error, response, body) {
+                    callback(error, JSON.parse(body));
                 });
-                res.end();
-                return;
-
-            } else {
-                res.status(500);
-                res.end();
+            },
+            function(callback) {
+                request({
+                    url: 'http://localhost:1337/cat/user/' + req.cookies.userID,
+                    method: 'GET',
+                    headers: {
+                        'Cookie': 'userID=' + req.cookies.userID
+                    }
+                }, function(error, response, body) {
+                    callback(error, JSON.parse(body));
+                });
             }
-            return;
+        ],
+        function(err, results) {
+            if (!err) {
+                var data = {
+                    communities: [
+                        results[0]
+                    ],
+                    profile: results[1]
+                }
 
+                res.render('settings', data);
+            } else {
+                res.sendStatus(500);
+            }
         });
-
-        req.on('error', function(e) {
-            throw err;
-        });
-    }
-
-    var request = http.request(options, callback);
-    request.end();
 }

@@ -15,10 +15,10 @@ function getSurvey(commID,res)
 {
 	var p1 = dbConn.getSurvey(commID);
 	return p1.then(
-        function(val)
+        function(data)
         {
-           console.log("commID: then: "+ val);
-           res.json(val);
+           console.log("commID: then: "+ data);
+           res.json(data);
         }
     ).catch(
         function(reason) {

@@ -7,25 +7,46 @@ html
 		include ./includes/header.jade
 		h2(class="center text-orange") My Profile
 		div(class="row container")
-			ul(class="collapsible z-depth-0" data-collapsible="expandable")
-				for field, index in settings.fields
-					- var color = "coffee-chat-grey-background"
+			div(class="col s12 m6 l6")
+				ul(class="collapsible z-depth-0" data-collapsible="expandable")
 					li
 						div(class="collapsible-header active")
-							h5=field.name
+							div #{profile.firstName} #{profile.lastName}
 						div(class="collapsible-body")
-							if (field.grouped == true)
-								for key in field.values
-									div(class="coffee-chat-collapsible")=key.name
-										for item in key.values
-											div(class="coffee-chat-collapsible")=item.name
-							else
-								if (field.displayType == 1)
-									for item in field.values	
-										div(class="coffee-chat-collapsible")=item.name
-								if (field.displayType == 2)
-									for item in field.values
-										div(class="coffee-chat-collapsible")=item.name
+							img(class="responsive-img coffee-chat-circle" src=profile.profilePic)
+					li
+						div(class="collapsible-header active")
+							div Email
+						div(class="collapsible-body")
+							div(class="coffee-chat-collapsible-body")=profile.email
+					li
+						div(class="collapsible-header active")
+							div Headline
+						div(class="collapsible-body")
+							div(class="coffee-chat-collapsible-body")=profile.headLine
+
+
+			div(class="col s12 m6 l6")
+				ul(class="collapsible z-depth-0" data-collapsible="expandable")
+					for community in communities
+						for field, index in community.fields
+							- var color = "coffee-chat-grey-background"
+							li
+								div(class="collapsible-header active")
+									div=field.name
+								div(class="collapsible-body")
+									if (field.grouped == true)
+										for key in field.values
+											div(class="coffee-chat-collapsible-body")=key.name
+												for item in key.values
+													div(class="coffee-chat-collapsible-body")=item.name
+									else
+										if (field.displayType == 1)
+											for item in field.values	
+												div(class="coffee-chat-collapsible-body")=item.name
+										if (field.displayType == 2)
+											for item in field.values
+												div(class="coffee-chat-collapsible-body")=item.name
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

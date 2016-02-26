@@ -7,6 +7,12 @@
 ./resources/wild/oauth/auth.js
 ./resources/wild/oauth/callBack.js
 ./resources/wild/pages/home.js
+<<<<<<< Updated upstream
+=======
+./resources/wild/pages/match.js
+./resources/wild/pages/settings.js
+./resources/wild/pages/schedule.js
+>>>>>>> Stashed changes
 ./resources/wild/pages/survey.js
 ./resources/wild/pages/survey2.js
 ./resources/wild/pages/team.js

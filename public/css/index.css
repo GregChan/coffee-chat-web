@@ -93,6 +93,11 @@ textarea {
   border-bottom: 1px solid;
 }
 
+.coffee-chat-collapsible {
+  margin: 10px;
+  margin-left: 1rem;
+}
+
 .clear {
   background: none !important;
 }

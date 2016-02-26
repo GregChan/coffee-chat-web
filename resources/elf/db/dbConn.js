@@ -58,7 +58,112 @@ exports.addSurveyData = function(userID, communityID, surveys) {
 exports.getSurvey = function(communityID)
 {
     return new Promise(function(resolve, reject) {
+<<<<<<< Updated upstream
            pool.getConnection(function(err, connection) {
+=======
+        var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, b.macthPriority, c.name, b.grouped, c.group from user_survey as a left join survey_field_desc as b on a.fieldID=b.fieldID left join survey_field_items as c on a.itemID = c.id where userID=? and a.communityID=? order by b.displayPriority, a.fieldID';
+        sql = mysql.format(sql, [userID, communityID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('getSurveyData for ' + userID + ' with community ' + communityID);
+
+                if (rows.length > 0) {
+                    var result = {};
+                    result["community"] = communityID;
+                    result["fields"] = [];
+
+                    var fieldID = -1;
+                    var field;
+                    var groupName;
+                    var hasGroup = false;
+                    var group;
+
+                    for (var i = 0; i < rows.length; i++) {
+                        if (fieldID != rows[i].fieldID) {
+                            if (fieldID != -1) {
+                                if (hasGroup) {
+                                    field["values"].push(group);
+                                    hasGroup = false;
+                                }
+                                result["fields"].push(field);
+                            }
+                            fieldID = rows[i].fieldID;
+                            field = {};
+                            field["fieldID"] = fieldID;
+                            field["name"] = rows[i].fieldName;
+                            field["required"] = rows[i].required == 0 ? false : true;
+                            field["grouped"] = rows[i].grouped == 0 ? false : true;
+                            field["priority"] = rows[i].displayPriority;
+                            field["displayType"] = rows[i].displayType;
+                            field["values"] = [];
+                        }
+
+                        if (rows[i].grouped == 0) {
+                            if (hasGroup) {
+                                field["values"].push(group);
+                                hasGroup = false;
+                            }
+
+                            field["values"].push({
+                                id: rows[i].id,
+                                name: rows[i].name
+                            });
+                        } else {
+                            if (hasGroup) {
+                                if (groupName != rows[i].group) {
+                                    field["values"].push(group);
+                                    groupName = rows[i].group;
+                                    group = {}
+                                    group["name"] = groupName;
+                                    group["values"] = JSON.parse("[]");
+                                }
+                            } else {
+                                groupName = rows[i].group;
+                                group = {}
+                                group["name"] = groupName;
+                                group["values"] = [];
+                                hasGroup = true;
+                            }
+
+                            group["values"].push({
+                                id: rows[i].id,
+                                name: rows[i].name
+                            });
+                        }
+
+                        if (i == rows.length - 1) {
+                            if (hasGroup) {
+                                field["values"].push(group);
+                            }
+                            result["fields"].push(field);
+                        }
+                    }
+
+                    console.log("getSurvey: result: " + result);
+                    resolve(result);
+                } else {
+                    logger.debug('dbConn: unable to find hobby list.');
+                    reject({
+                        error: '404',
+                        message: 'no record found'
+                    });
+                }
+            }
+        });
+    });
+}
+
+exports.getSurvey = function(communityID) {
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
+>>>>>>> Stashed changes
             if (err) {
                 connection.release();
                 logger.debug('Error in connection database');
@@ -67,7 +172,7 @@ exports.getSurvey = function(communityID)
             }
             logger.debug('connected as id ' + connection.threadId);
 
-            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.fieldID, b.group, b.name";
+            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.displayPriority, a.fieldID, b.group, b.name";
             var inserts = [communityID];
             sql = mysql.format(sql, inserts);
             logger.debug("getIndustryList: going to query survey list: "+ sql);

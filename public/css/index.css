@@ -98,6 +98,10 @@ textarea {
   margin-left: 1rem;
 }
 
+.coffee-chat-circle {
+  width: 100%;
+}
+
 .clear {
   background: none !important;
 }

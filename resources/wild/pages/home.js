@@ -12,7 +12,6 @@ exports.getHandle = function(req, res) {
                 'Cookie': 'userID=' + req.cookies.userID
             }
         };
-
         request(options, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 var curUser = (JSON.parse(body));

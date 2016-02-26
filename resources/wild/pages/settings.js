@@ -9,7 +9,7 @@ exports.getHandle = function(req, res) {
     async.parallel([
             function(callback) {
                 request({
-                    url: 'http://localhost:1337/cat/user/' + req.cookies.userID + '/community/1/profile',
+                    url: 'http://localhost:1337/cat/user/community/1/profile',
                     method: 'GET',
                     headers: {
                         'Cookie': 'userID=' + req.cookies.userID

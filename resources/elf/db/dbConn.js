@@ -20,7 +20,7 @@ exports.clearup = function() {
     });
 }
 
-exports.addSurveyData = function(userID, communityID, surveys) {
+exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
     return new Promise(function(resolve, reject) {
         // TODO: this query still allows for duplicate fields for dropdowns e.g. i can have two graduation years
         var sql = "INSERT INTO user_survey (userID, communityID, fieldID, itemID) VALUES ? ON DUPLICATE KEY UPDATE userID=userID",
@@ -47,7 +47,7 @@ exports.addSurveyData = function(userID, communityID, surveys) {
                     'message': 'DB Error'
                 });
             } else {
-                logger.debug('addSurveyData for ' + userID);
+                logger.debug('updateUserProfileForCommunity for ' + userID);
                 resolve({
                     'success': '200'
                 });
@@ -58,7 +58,7 @@ exports.addSurveyData = function(userID, communityID, surveys) {
 
 exports.getUserProfileForCommunity = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, b.macthPriority, c.name, b.grouped, c.group from user_survey as a left join survey_field_desc as b on a.fieldID=b.fieldID left join survey_field_items as c on a.itemID = c.id where userID=? and a.communityID=? order by b.displayPriority, a.fieldID';
+        var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, b.macthPriority, c.name, b.grouped, c.group from user_survey as a left join survey_field_desc as b on a.fieldID=b.fieldID left join survey_field_items as c on a.itemID = c.id where userID=? and a.communityID=? order by b.displayPriority, a.fieldID, c.group';
         sql = mysql.format(sql, [userID, communityID]);
 
         pool.query(sql, function(err, rows, fields) {
@@ -143,7 +143,6 @@ exports.getUserProfileForCommunity = function(userID, communityID) {
                         }
                     }
 
-                    console.log("getSurvey: result: " + result);
                     resolve(result);
                 } else {
                     logger.debug('dbConn: unable to find hobby list.');
@@ -157,7 +156,7 @@ exports.getUserProfileForCommunity = function(userID, communityID) {
     });
 }
 
-exports.getSurvey = function(communityID) {
+exports.getCommunityProfileSurvey = function(communityID) {
     return new Promise(function(resolve, reject) {
         pool.getConnection(function(err, connection) {
             if (err) {
@@ -236,7 +235,7 @@ exports.getSurvey = function(communityID) {
                             }
                         }
 
-                        console.log("getSurvey: result: " + result);
+                        console.log("getCommunityProfileSurvey: result: " + result);
                         connection.release();
                         resolve(result);
 
@@ -281,7 +280,6 @@ exports.getUser = function(userId) {
                         linkedInProfile: rows[0].linkedInProfile,
                         profilePic: rows[0].profilePicO
                     };
-                    console.log(result);
                     resolve(result);
                 } else {
                     logger.debug("dbConn: didnt find user: " + userId);

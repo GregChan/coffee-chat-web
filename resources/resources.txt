@@ -1,12 +1,14 @@
 ./resources/cat/oauth/getUserID.js
-./resources/cat/user/addSurveyData.js
+./resources/cat/user/updateUserProfileForCommunity.js
 ./resources/cat/user/getUser.js
 ./resources/cat/user/getUserProfileForCommunity.js
-./resources/cat/info/getSurvey.js
+./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/wild/oauth/auth.js
 ./resources/wild/oauth/callBack.js
 ./resources/wild/pages/home.js
 ./resources/wild/pages/settings.js
 ./resources/wild/pages/survey.js
-./resources/wild/pages/survey2.js
+./resources/wild/pages/kelloggFeedbackSurvey.js
+./resources/wild/pages/kelloggSignupSurvey.js
+./resources/wild/pages/survey.js
 ./resources/wild/pages/team.js

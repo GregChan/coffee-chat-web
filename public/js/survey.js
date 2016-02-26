@@ -1,7 +1,4 @@
 $(document).ready(function() {
-    $.get('/cat/info/1/getSurvey', function(data) {
-        survey = data;
-    });
     $('select').material_select();
     $('.collapsible').collapsible({
         accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
@@ -35,9 +32,9 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: '/cat/user/1/addSurveyData',
-            success: function() {
-                alert('success');
+            url: '/cat/user/community/1/update',
+            success: function(data) {
+                window.location.href =  data.url
             },
             data: data
         });

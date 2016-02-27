@@ -28,6 +28,17 @@ exports.getHandle = function(req, res) {
                 }, function(error, response, body) {
                     callback(error, JSON.parse(body));
                 });
+            },
+            function(callback) {
+                request({
+                    url: 'http://localhost:1337/cat/community/1/profile-survey',
+                    method: 'GET',
+                    headers: {
+                        'Cookie': 'userID=' + req.cookies.userID
+                    }
+                }, function(error, response, body) {
+                    callback(error, JSON.parse(body));
+                });
             }
         ],
         function(err, results) {
@@ -37,7 +48,8 @@ exports.getHandle = function(req, res) {
                         results[0]
                     ],
                     profile: results[1],
-                    curUser: req.cookies.userID
+                    curUser: req.cookies.userID,
+                    survey: results[2]
                 }
 
                 res.render('settings', data);

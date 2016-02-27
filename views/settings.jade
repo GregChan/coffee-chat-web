@@ -30,24 +30,25 @@ html
 			div(class="col s12 m6 l6")
 				ul(class="collapsible z-depth-0" data-collapsible="expandable")
 					for community in communities
-						for field, index in community.fields
-							- var color = "coffee-chat-grey-background"
-							li
-								div(class="collapsible-header active")
-									div=field.name
-								div(class="collapsible-body")
-									if (field.grouped == true)
-										for key in field.values
-											div(class="coffee-chat-collapsible-body")=key.name
-												for item in key.values
+						if community.fields
+							for field, index in community.fields
+								- var color = "coffee-chat-grey-background"
+								li
+									div(class="collapsible-header active")
+										div=field.name
+									div(class="collapsible-body")
+										if (field.grouped == true)
+											for key in field.values
+												div(class="coffee-chat-collapsible-body")=key.name
+													for item in key.values
+														div(class="coffee-chat-collapsible-body")=item.name
+										else
+											if (field.displayType == 1)
+												for item in field.values	
 													div(class="coffee-chat-collapsible-body")=item.name
-									else
-										if (field.displayType == 1)
-											for item in field.values	
-												div(class="coffee-chat-collapsible-body")=item.name
-										if (field.displayType == 2)
-											for item in field.values
-												div(class="coffee-chat-collapsible-body")=item.name
+											if (field.displayType == 2)
+												for item in field.values
+													div(class="coffee-chat-collapsible-body")=item.name
 
 		div(id="settings-modal" class="modal modal-fixed-footer")
 			div(class="modal-content")

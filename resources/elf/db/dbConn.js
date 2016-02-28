@@ -6,7 +6,7 @@ var exports = module.exports = {};
 
 
 var pool = mysql.createPool({
-    connectionLimit: 4, //maximum connection for Azure student
+    connectionLimit: 1, //maximum connection for Azure student
     host: "us-cdbr-azure-central-a.cloudapp.net",
     user: "b443fc80dd2566",
     password: "4d39195d",
@@ -17,6 +17,199 @@ exports.clearup = function() {
     logger.debug('Going to release DB connection pool');
     pool.end(function(err) { //release all connections
         logger.debug('Error in release pool ' + err);
+    });
+}
+
+exports.updateMatchStatus = function(userID,matchID,newStatus) {
+    //0:idle, 1: notified, 2: accepted, 3: rejected, 4:feedbacked
+    return new Promise(function(resolve, reject) {
+        //TODO: status cannot be changed back, add validation before updating!!!
+        var sql = "UPDATE user_match SET userAStatus = if(userA = ?, ?, userAStatus), userBStatus = if(userB = ?, ?, userBStatus) WHERE id = ?";
+        values = [userID,newStatus,userID,newStatus,matchID];
+
+        sql = mysql.format(sql, values);
+        console.log('updateMatchStatus: going to update db with sql: ' + sql);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query:');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                logger.debug('updateMatchStatus for ' + userID +' for match: '+matchID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    });
+}
+
+exports.getAllMatches = function(communityID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? order by create_at';
+        
+        sql = mysql.format(sql, [communityID]);
+
+        console.log('getAllMatches: going to query db with sql: ' + sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('getAllMatches for community ' + communityID);
+                var result = {};
+                    result["community"] = communityID;
+                    result["total"] = rows.length;
+                if (rows.length > 0) {
+                    result["matches"]=[];
+
+                    for (var i = 0; i < rows.length; i++) {
+                        match = {};
+                        match["id"] = rows[i].id;
+                        match["userAID"] = rows[i].userA;
+                        match["userAstatus"] = rows[i].userAStatus;
+                        match["userBID"] = rows[i].userB;
+                        match["userBstatus"] = rows[i].userBStatus;
+                        match["matchTime"] = rows[i].create_at;
+                        result["matches"].push(match);
+                    }
+                   
+                } 
+                resolve(result);
+            }
+        });
+    });
+}
+
+exports.getMatchHistory = function(userID, communityID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
+        
+        sql = mysql.format(sql, [communityID, userID,userID]);
+
+        console.log('getCurrentMatches: going to query db with sql: ' + sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('getCurrentMatches for ' + userID + ' with community ' + communityID);
+                var result = {};
+                    result["community"] = communityID;
+                    result["total"] = rows.length;
+                if (rows.length > 0) {
+                    result["matches"]=[];
+
+                    for (var i = 0; i < rows.length; i++) {
+                        match = {};
+                        match["id"] = rows[i].id;
+                        if(rows[i].userA == userID)
+                        {
+                             match["userID"] = rows[i].userB;
+                             match["status"] = rows[i].userBStatus;
+                             match["myStatus"] = rows[i].userAStatus;
+                        }
+                        else
+                        {
+                            match["userID"] = rows[i].userA;
+                            match["status"] = rows[i].userAStatus;
+                            match["myStatus"] = rows[i].userBStatus;
+                            
+                        }
+                        match["matchTime"] = rows[i].create_at;
+                        result["matches"].push(match);
+                    }
+                   
+                } 
+                resolve(result);
+            }
+        });
+    });
+}
+
+exports.getCurrentMatches = function(userID, communityID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus < 3) or (userB = ? and userBStatus < 3) ) order by create_at';
+        
+        sql = mysql.format(sql, [communityID, userID,userID]);
+
+        console.log('getCurrentMatches: going to query db with sql: ' + sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('getCurrentMatches for ' + userID + ' with community ' + communityID);
+                var result = {};
+                    result["community"] = communityID;
+                    result["total"] = rows.length;
+                if (rows.length > 0) {
+                    result["matches"]=[];
+
+                    for (var i = 0; i < rows.length; i++) {
+                        match = {};
+                        match["id"] = rows[i].id;
+                        if(rows[i].userA == userID)
+                        {
+                             match["userID"] = rows[i].userB;
+                             match["status"] = rows[i].userBStatus;
+                             match["myStatus"] = rows[i].userAStatus;
+                        }
+                        else
+                        {
+                            match["userID"] = rows[i].userA;
+                            match["status"] = rows[i].userAStatus;
+                            match["myStatus"] = rows[i].userBStatus;
+                            
+                        }
+                        match["matchTime"] = rows[i].create_at;
+                        result["matches"].push(match);
+                    }
+                   
+                } 
+                resolve(result);
+            }
+        });
+    });
+}
+
+exports.insertMatchForCommunity = function(userAID,userBID,communityID) {
+    return new Promise(function(resolve, reject) {
+        var sql = "INSERT INTO user_match (userA, userB, communityID) VALUES (?)",
+        values = [userAID,userBID,communityID];
+
+        sql = mysql.format(sql, [values]);
+        console.log('insertMatchForCommunity: going to insert with sql: ' + sql);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query:');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                logger.debug('insertMatchForCommunity for ' + userAID +' & '+userBID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
     });
 }
 

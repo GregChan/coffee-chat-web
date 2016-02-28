@@ -40,13 +40,12 @@ exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
 
                     connection.query(sql, function(err, rows, fields) {
                         if (err) {
-                            logger.debug('Error deleting old preferences');
-                            reject({
-                                'error': '500',
-                                'message': 'DB Error'
-                            });
                             return connection.rollback(function() {
-                                throw err;
+                                logger.debug('Error deleting old preferences');
+                                reject({
+                                    'error': '500',
+                                    'message': 'DB Error'
+                                });
                             });
                         }
 
@@ -63,19 +62,27 @@ exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
                             }
                         }
 
+                        if (values.length <= 0) {
+                            return connection.rollback(function() {
+                                logger.debug('No values submitted with form');
+                                reject({
+                                    'error': '500',
+                                    'message': 'No values submitted with the form'
+                                });
+                            });
+                        }
+
                         sql = mysql.format(sql, [values]);
                         connection.query(sql, function(err, rows, fields) {
                             if (err) {
-                                logger.debug('Error in connection or query:');
-                                logger.debug(err);
-
-                                reject({
-                                    'error': '500',
-                                    'message': 'DB Error'
-                                });
-
                                 return connection.rollback(function() {
-                                    throw err;
+                                    logger.debug('Error in connection or query:');
+                                    logger.debug(err);
+
+                                    reject({
+                                        'error': '500',
+                                        'message': 'DB Error'
+                                    });
                                 });
                             } else {
                                 logger.debug('updateUserProfileForCommunity for ' + userID);

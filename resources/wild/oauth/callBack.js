@@ -16,7 +16,7 @@ exports.getHandle = function(req, res) {
     auth.linkedInOauth2.authCode.getToken({
             code: code,
             state: state,
-            redirect_uri: 'http://localhost:1337/callback'
+            redirect_uri: process.env.BASE_URL + '/callback'
         },
         saveToken);
 
@@ -44,8 +44,8 @@ function createOAuthUser(token, res) {
     });
 
     var options = {
-        host: 'localhost',
-        port: 1337,
+        host: process.env.HOST,
+        port: process.env.PORT,
         path: '/cat/oauth/getUserID',
         method: 'POST',
         headers: {

@@ -6,8 +6,9 @@ exports.path = '';
 
 exports.getHandle = function(req, res) {
     if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
+        console.log(process.env.BASE_URL);
         var options = {
-            url: 'http://localhost:1337/cat/user/' + req.cookies.userID,
+            url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID,
             headers: {
                 'Cookie': 'userID=' + req.cookies.userID
             }

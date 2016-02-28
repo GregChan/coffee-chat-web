@@ -1,6 +1,7 @@
 // require modules
 var express = require('express'),
     app = express(),
+    config = require('./config'),
     request = require('request'),
     bodyParser = require('body-parser'),
     dbConn = require("./resources/elf/db/dbConn.js"),

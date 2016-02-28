@@ -15,6 +15,7 @@ exports.getHandle = function(req, res) {
         request(options, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 var curUser = (JSON.parse(body));
+				getMatchStatus(curUser.userID);
                 res.render('index', {
                     curUser: curUser
                 });
@@ -29,3 +30,27 @@ exports.getHandle = function(req, res) {
         res.end();
     }
 }
+
+function getMatchStatus(uID) {
+	var http = require('http');
+	
+	var options = {
+	host: "localhost",
+	port: 1337,
+	path: '/cat/user/community/1/match/current',
+	method: 'GET',
+	headers: {
+		'Cookie': 'userID=' + uID
+	}
+	};
+	
+	callback = function(error, response, body) {
+		console.log(response);
+		return;
+	}
+	
+	var request = http.request(options, callback);
+	request.end();
+}
+
+

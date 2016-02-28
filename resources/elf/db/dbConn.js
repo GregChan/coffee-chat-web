@@ -190,24 +190,44 @@ exports.getCurrentMatches = function(userID, communityID) {
 
 exports.insertMatchForCommunity = function(userAID,userBID,communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = "INSERT INTO user_match (userA, userB, communityID) VALUES (?)",
-        values = [userAID,userBID,communityID];
+        var sql = "INSERT INTO user_match (userA, userB, communityID) " 
+                 +"Select ?, ?, ? from user_match "
+                 +"where not exists "
+                 +"(select * from user_match where communityiD=1 and ((userA=? and userB=?) or (userA=? and userB=?))) "
+                 +"and exists "
+                 +"(select * from user_community where userID=? and communityID=?) "
+                 +"and exists "
+                 +"(select * from user_community where userID=? and communityID=?) "
+                 +"Limit 1";
 
-        sql = mysql.format(sql, [values]);
+        values = [userAID,userBID,communityID,userAID,userBID, userBID, userAID,userAID,communityID,userBID,communityID];
+
+        sql = mysql.format(sql, values);
         console.log('insertMatchForCommunity: going to insert with sql: ' + sql);
         pool.query(sql, function(err, rows, fields) {
             if (err) {
                 logger.debug('Error in connection or query:');
                 logger.debug(err);
                 reject({
-                    'error': '500',
+                    'error': 500,
                     'message': 'DB Error'
                 });
             } else {
                 logger.debug('insertMatchForCommunity for ' + userAID +' & '+userBID);
-                resolve({
-                    'success': '200'
-                });
+                if(rows.affectedRows>0)
+                {
+                    resolve({
+                         'success': '200'
+                    });
+                }
+                else
+                {
+                    reject({
+                    'error': 400,
+                    'message': 'Bad request: match already exists, or users do not under given community.'
+                    });
+                }
+                
             }
         });
     });

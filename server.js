@@ -34,8 +34,8 @@ var express = require('express'),
             return p1.then(
                 function(data) {
                     var obj = data;
-                    console.log("serverjs: validated user: " + obj.id);
-                    req.loginUserID = obj.id;
+                    console.log("serverjs: validated user: " + obj.userId);
+                    req.loginUserID = obj.userId;
                     next();
                     return;
                 }

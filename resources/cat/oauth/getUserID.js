@@ -9,7 +9,7 @@ exports.path='cat/oauth/getUserID';
 
 exports.postHandle=function (req,res) {
 	logger.debug('oAuth/getUserId: userID: request received');
-	// console.log('oAuth/getUserId: body: '+ req.body.accessToken);
+	console.log('oAuth/getUserId: body: '+ req.body.accessToken);
 	req.accepts('application/json');
 	var accessToken =req.body.accessToken;
 	logger.debug('oAuth/getUserId: accessToken: '+ accessToken);

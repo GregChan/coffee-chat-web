@@ -1,6 +1,7 @@
 var exports = module.exports = {},
     oauth2 = require('simple-oauth2'),
     path = require('path'),
+    request = require('request'),
     auth = require('./auth.js');
 
 exports.path = 'callback';
@@ -37,47 +38,28 @@ exports.getHandle = function(req, res) {
 
 function createOAuthUser(token, res) {
     console.log('createOAuthUser token', token);
-    var http = require('http');
 
-    var bodyString = JSON.stringify({
-        accessToken: token
-    });
-
-    var options = {
-        host: process.env.HOST,
-        port: process.env.PORT,
-        path: '/cat/oauth/getUserID',
+    request({
+        url: process.env.BASE_URL + '/cat/oauth/getUserID',
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': bodyString.length
-        },
-    };
-
-    console.log('createOAuthUser body', bodyString);
-
-    callback = function(response) {
-        var userID = '';
-        response.on('data', function(d) {
-            userID = JSON.parse(d).user;
-        });
-        response.on('end', function() {
+        json: true,
+        body: {
+            accessToken: token
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('server.js: createOAuthUser met error ' + e);
+            res.redirect('/');
+            res.end();
+        } else {
+            var userID = body.user;
             console.log('server.js: got userID ' + userID);
             res.cookie('userID', userID, {
                 maxAge: 9000000,
                 httpOnly: false
             });
             res.redirect('/');
-
-        });
-
-        req.on('error', function(e) {
-            console.log('server.js: createOAuthUser met error ' + e);
-            res.redirect('/');
-        });
-    }
-
-    var req = http.request(options, callback);
-    req.write(bodyString);
-    req.end();
+            res.end();
+        }
+    });
 }

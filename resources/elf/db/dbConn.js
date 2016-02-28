@@ -311,7 +311,6 @@ exports.getUser = function(userId) {
     return new Promise(function(resolve, reject) {
         var sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.headline, u.profilePicO, u.linkedInProfile, i.`name` as industry From user_basic as u LEFT JOIN industry_desc as i on u.industry = i.id WHERE u.id =?";
         sql = mysql.format(sql, [userId]);
-
         pool.query(sql, function(err, rows, fields) {
             if (!err) {
                 if (rows.length > 0) {
@@ -361,6 +360,7 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                 if (rows.length > 0) {
                     userId += rows[0].id;
                     logger.debug("createUserIfNotExist: found user: " + userId);
+                    connection.release();
                     resolve(userId);
                     return;
                 }

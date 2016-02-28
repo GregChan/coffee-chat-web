@@ -2,48 +2,75 @@ html
 	head
 		include ./includes/styles.jade
 	body
-		include ./includes/home-header.jade
-		div(class="parallax-container valign-wrapper")
-			div(class="parallax")
-				img(src="/public/images/coffee-phone.jpg")
-			div(class="row container valign" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)")
-				h3(class="center header white-text") Meet the Team
-		div(class="section coffee-chat-grey-background")
+		nav(class="white z-depth-0")
+			div(class="nav-wrapper")
+				a(href="/")
+					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
+				a(href="/home")
+					img(class="right brand-logo coffee-chat-logo circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAaBAAAAJGVlMzlmYmY3LWRiNDAtNGIwZi1iYjZmLTkyMTE0MTdlMTY2NA.jpg")
+				h3(class="center text-orange hide-on-small-only") Welcome!
+		div(class="section white" id="match")
+			h2(class="center text-orange") Coffee Chat Connected!
+			div(class="row container valign-wrapper")
+				div(class="col s5 m5 l4")
+					a(href="https://www.linkedin.com/in/mukailu")
+						img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAaBAAAAJGVlMzlmYmY3LWRiNDAtNGIwZi1iYjZmLTkyMTE0MTdlMTY2NA.jpg")
+					h6(class="center") MUKAI LU
+					h6(class="center") Northwestern University
+				div(class="col s2 m2 l4 valign")
+					img(class="center-block responsive-img" src="public/images/brewing.png")
+					p
+					div(class="center")
+						i(class="material-icons") schedule
+						|  Tuesday 12:30pm - 1 pm
+				div(class="col s5 m5 l4")
+					a(href="https://www.linkedin.com/in/chinyeamanda")
+						img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/p/3/005/07c/2f7/3ad1f11.jpg")
+					h6(class="center") CHINYE OSAMUSALI
+					h6(class="center") Northwestern University
+		div(class="section coffee-chat-grey-background" id="match-info")
+			h4(class="center text-orange") About Chinye
+			div(class="row container")
+				div(class="col s12 m4 l3")
+					a(href="https://www.linkedin.com/in/chinyeamanda")
+						img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/p/3/005/07c/2f7/3ad1f11.jpg")
+				div(class="col s12 m4 l3")
+					h5(class="text-orange") Work Experience
+					div Product Manager & Business Intelligence, Aereo
+					div Special Operations, Warby Parker
+					div Marketing, Quirky
+					div Special Customer Operations, Simon Schuster
+					div Associate, Triage Consulting Group
+				div(class="col s12 m4 l3")
+					h5(class="text-orange") Education
+					div MBA from NYU Stern Business School
+					div University of California San Diego
+					h5(class="text-orange") Interests
+					div #strategy #marketing #tech #SF #49ers #dogs #consulting #productmanager
+				div(class="col s12 m4 l3")
+					h5(class="text-orange") Preferred Times
+					div Tuesday 12pm - 1pm
+					div Friday 12pm - 1pm
+		div(class="section white" id="previous-matches")
+				h4(class="center text-orange") Past Coffee Chats
 				div(class="row container")
-					div(class="col s12 m6 l3 center spacer-15")
+					div(class="col s6 m3 l3 center spacer-15")
 						a(href="https://www.linkedin.com/in/gregory-chan-719b1668")
 							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/mpr/mpr/shrinknp_400_400/p/5/005/09d/077/152c911.jpg")
 						h5 Greg Chan
-					div(class="col s12 m6 l3 center spacer-15")
+					div(class="col s6 m3 l3 center spacer-15")
 						a(href="https://www.linkedin.com/in/tarachang")
 							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAASrAAAAJDdkMDU5YzRjLTNlOGMtNDEyMS1iYWViLTg5NmE3NjgwMDk3Mw.jpg")
 						h5 Tara Chang
-					div(class="col s12 m6 l3 center spacer-15")
+					div(class="col s6 m3 l3 center spacer-15")
 						a(href="https://www.linkedin.com/in/avery-fisher-12910379")
 							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAbXAAAAJDI0MDNmYmZkLTMxZWYtNDk2MC05ZGU2LTMxODEyNzZmOGM4Mg.jpg")
 						h5 Avery Fisher
-					div(class="col s12 m6 l3 center spacer-15")
+					div(class="col s6 m3 l3 center spacer-15")
 						a(href="https://www.linkedin.com/in/nick-hall-7734548a")
 							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAIwAAAAJGQxZDFiMmFjLWE4YzQtNDVjMy1iYzgwLTNmYmEwNTRhNGM4Yg.jpg")
 						h5 Nick Hall
-				div(class="row container")
-					div(class="col s12 m6 l3 center spacer-15")
-						a(href="https://www.linkedin.com/in/mukailu")
-							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAaBAAAAJGVlMzlmYmY3LWRiNDAtNGIwZi1iYjZmLTkyMTE0MTdlMTY2NA.jpg")
-						h5 Mukai Lu
-					div(class="col s12 m6 l3 center spacer-15")
-						a(href="https://www.linkedin.com/in/jasonlustbader")
-							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAK9AAAAJGQwNDk0ODRmLWJjOTQtNDQ0Ni05N2Q0LTBhYjNjMjEyZGJkMg.jpg")
-						h5 Jason Lustbader
-					div(class="col s12 m6 l3 center spacer-15")
-						a(href="https://www.linkedin.com/in/chinyeamanda")
-							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/p/3/005/07c/2f7/3ad1f11.jpg")
-						h5 Chinye Osamusali
-					div(class="col s12 m6 l3 center spacer-15")
-						a(href="https://www.linkedin.com/in/holliday-shuler-69ba0489")
-							img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/p/4/005/07f/29d/2f9a40f.jpg")
-						h5 Holliday Shuler
-			
+		include ./includes/partners.jade
 		include ./includes/footer.jade
 
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")

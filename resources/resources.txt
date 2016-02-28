@@ -13,3 +13,4 @@
 ./resources/wild/pages/survey.js
 ./resources/wild/pages/team.js
 ./resources/wild/pages/email.js
+./resources/wild/user/signout.js

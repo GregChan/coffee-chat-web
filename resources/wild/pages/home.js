@@ -15,7 +15,6 @@ exports.getHandle = function(req, res) {
         request(options, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 var curUser = (JSON.parse(body));
-				getMatchStatus(curUser.userID);
                 res.render('index', {
                     curUser: curUser
                 });
@@ -31,26 +30,46 @@ exports.getHandle = function(req, res) {
     }
 }
 
-function getMatchStatus(uID) {
-	var http = require('http');
-	
-	var options = {
-	host: "localhost",
-	port: 1337,
-	path: '/cat/user/community/1/match/current',
-	method: 'GET',
-	headers: {
-		'Cookie': 'userID=' + uID
-	}
-	};
-	
-	callback = function(error, response, body) {
-		console.log(response);
-		return;
-	}
-	
-	var request = http.request(options, callback);
-	request.end();
-}
-
-
+//function getMatchStatus() {
+//	var http = require('http');
+//	
+//	var options = {
+//	host: "localhost",
+//	port: 1337,
+//	path: '/cat/user/community/1/match/current',
+//	method: 'GET',
+//	headers: {
+//		'Cookie': 'userID=' + curUser.uID
+//	}
+//	};
+//	
+//	callback = function(response) {
+//		var matches = '';
+//		response.on('data', function(d) {
+//					matches = JSON.parse(d);
+//					});
+//		response.on('end', function() {
+//					if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
+//					res.end();
+//					return;
+//					
+//					} else {
+//					res.status(500);
+//					res.end();
+//					}
+//					return;
+//					
+//					});
+//		
+//		req.on('error', function(e) {
+//			   throw err;
+//						});
+//		
+//	}
+//	
+//	
+//	var request = http.request(options, callback);
+//	request.end();
+//}
+//
+//getMatchStatus();

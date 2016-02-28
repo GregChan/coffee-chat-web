@@ -7,15 +7,15 @@ html
 				a(href="/")
 					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
 				a(href="/home")
-					img(class="right brand-logo coffee-chat-logo circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAaBAAAAJGVlMzlmYmY3LWRiNDAtNGIwZi1iYjZmLTkyMTE0MTdlMTY2NA.jpg")
+					img(class="right brand-logo coffee-chat-logo circle" src=curUser.profilePic)
 				h3(class="center text-orange hide-on-small-only") Welcome!
 		div(class="section white" id="match")
 			h2(class="center text-orange") Coffee Chat Connected!
 			div(class="row container valign-wrapper")
 				div(class="col s5 m5 l4")
 					a(href="https://www.linkedin.com/in/mukailu")
-						img(class="responsive-img circle coffee-chat-circle" src="https://media.licdn.com/media/AAEAAQAAAAAAAAaBAAAAJGVlMzlmYmY3LWRiNDAtNGIwZi1iYjZmLTkyMTE0MTdlMTY2NA.jpg")
-					h6(class="center") MUKAI LU
+						img(class="responsive-img circle coffee-chat-circle" src=curUser.profilePic)
+						h6(class="center") #{curUser.firstName + " " + curUser.lastName}
 					h6(class="center") Northwestern University
 				div(class="col s2 m2 l4 valign")
 					img(class="center-block responsive-img" src="public/images/brewing.png")

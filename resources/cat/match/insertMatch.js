@@ -33,8 +33,9 @@ function insertMatch( commID, res, req) {
         }
     ).catch(
         function(reason) {
-            var obj = JSON.parse(reason)
-            res.status(obj.error).end();
+            console.log("insertMatch: catch ");
+            res.status(reason.error).json(reason);
+            return;
         }
     );
     return;

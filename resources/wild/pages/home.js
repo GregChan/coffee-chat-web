@@ -1,76 +1,89 @@
 var exports = module.exports = {},
     request = require('request'),
+    async = require('async'),
     fs = require('fs');
 
 exports.path = '';
 
 exports.getHandle = function(req, res) {
     if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
-        console.log(process.env.BASE_URL);
-        var options = {
-            url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID,
-            headers: {
-                'Cookie': 'userID=' + req.cookies.userID
-            }
-        };
-        request(options, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                var curUser = (JSON.parse(body));
-                res.render('index', {
-                    curUser: curUser
-                });
-                res.end();
-            } else {
-                res.render('index');
-                res.end();
-            }
-        });
-    } else {
+		async.parallel([
+				function(callback) {
+					request({
+						url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID,
+						method: 'GET',
+						headers: {
+							'Cookie': 'userID=' + req.cookies.userID
+						}
+					}, function(error, response, body) {
+						callback(error, JSON.parse(body));
+					});
+				},
+				function(callback) {
+					request({
+						url: process.env.BASE_URL + '/cat/user/community/1/profile',
+						headers: {
+							'Cookie': 'userID=' + req.cookies.userID
+						}
+					}, function(error, response, body) {
+						callback(error, JSON.parse(body));
+					});
+				},
+				function(callback) {
+					request({
+						url: process.env.BASE_URL + '/cat/user/community/1/match/current',
+						method: 'GET',
+						headers: {
+							'Cookie': 'userID=' + req.cookies.userID
+						}
+					}, function(error, response, body) {
+						callback(error, JSON.parse(body));
+					});
+				},
+				function(callback) {
+					request({
+						url: process.env.BASE_URL + '/cat/user/community/1/match/history',
+						method: 'GET',
+						headers: {
+							'Cookie': 'userID=' + req.cookies.userID
+						}
+					}, function(error, response, body) {
+						callback(error, JSON.parse(body));
+					});
+				}
+//				function(callback) {
+//					request({
+//						url: process.env.BASE_URL + '/cat/user/community/1/match/insert',
+//						method: 'POST',
+//						form: {
+//							"userA": 131,
+//							"userB": 151
+//						},
+//						headers: {
+//							'Cookie': 'userID=' + req.cookies.userID
+//						}
+//					}, function(error, response, body) {
+//						callback(error, JSON.parse(body));
+//					});
+//				}
+			],
+			function(err, results) {
+				if (!err) {
+					console.log(match);
+					res.render('home', {
+						curUser: results[0],
+						curMatch: results[2],
+						matchHist: results[3]
+					});
+				} else {
+					res.render('index', {
+						curUser: req.cookies.userID
+					});
+				}
+				res.end();
+			});
+	} else {
         res.render('index');
         res.end();
     }
 }
-
-//function getMatchStatus() {
-//	var http = require('http');
-//	
-//	var options = {
-//	host: "localhost",
-//	port: 1337,
-//	path: '/cat/user/community/1/match/current',
-//	method: 'GET',
-//	headers: {
-//		'Cookie': 'userID=' + curUser.uID
-//	}
-//	};
-//	
-//	callback = function(response) {
-//		var matches = '';
-//		response.on('data', function(d) {
-//					matches = JSON.parse(d);
-//					});
-//		response.on('end', function() {
-//					if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
-//					res.end();
-//					return;
-//					
-//					} else {
-//					res.status(500);
-//					res.end();
-//					}
-//					return;
-//					
-//					});
-//		
-//		req.on('error', function(e) {
-//			   throw err;
-//						});
-//		
-//	}
-//	
-//	
-//	var request = http.request(options, callback);
-//	request.end();
-//}
-//
-//getMatchStatus();

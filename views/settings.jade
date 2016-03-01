@@ -4,7 +4,13 @@ html
 		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
 		link(rel="stylesheet" href="/public/css/index.css")
 	body
-		include ./includes/header.jade
+		nav(class="white z-depth-0")
+			div(class="nav-wrapper")
+				a(href="/")
+					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
+				ul(class="right hide-on-small-and-down")
+					li 
+						a(class="waves btn btn-outline nav-btn z-depth-0" href="/wild/user/signout") Signout
 		h2(class="center text-orange") Profile Settings
 		div(class="row container")
 			div(class="col s12 m6 l6")

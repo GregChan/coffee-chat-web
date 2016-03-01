@@ -13,7 +13,7 @@ exports.getHandle = function(req, res) {
 						url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID,
 						method: 'GET',
 						headers: {
-							'Cookie': 'userID=' + req.cookies.userID
+							'Cookie': 'userID=' + 541
 						}
 					}, function(error, response, body) {
 						callback(error, JSON.parse(body));
@@ -22,6 +22,7 @@ exports.getHandle = function(req, res) {
 				function(callback) {
 					request({
 						url: process.env.BASE_URL + '/cat/user/community/1/profile',
+						method: 'GET',
 						headers: {
 							'Cookie': 'userID=' + req.cookies.userID
 						}
@@ -68,8 +69,8 @@ exports.getHandle = function(req, res) {
 //				}
 			],
 			function(err, results) {
-				if (!err) {
-					console.log(match);
+			    var hasFilledOutSurvery = Object.keys(results[1]).length > 0;
+				if (!err && hasFilledOutSurvery) {
 					res.render('home', {
 						curUser: results[0],
 						curMatch: results[2],
@@ -77,7 +78,7 @@ exports.getHandle = function(req, res) {
 					});
 				} else {
 					res.render('index', {
-						curUser: req.cookies.userID
+						curUser: results[0]
 					});
 				}
 				res.end();

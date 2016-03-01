@@ -1,0 +1,25 @@
+div(class="section white" id="match")
+	div(class="row container valign-wrapper")
+		div(class="col s5 m5 l4")
+			img(class="responsive-img circle coffee-chat-circle" src=curUser.profilePic)
+			h5(class="center") #{curUser.firstName + " " + curUser.lastName}
+			h6(class="center") #{curUser.headLine}
+		div(class="col s2 m2 l4 valign")
+			img(class="center-block responsive-img" src="public/images/brewing.png")
+		div(class="col s5 m5 l4")
+			img(class="responsive-img circle coffee-chat-circle" id="match-pic" src="public/images/generic-profile.png")
+			h5(class="center" id="match-name") Match Name
+			h6(class="center" id="match-title") Match Title
+div(class="section coffee-chat-grey-background" id="match-info")
+	h4(class="center text-orange" id="about-match") About Your Match
+	div(class="row container")
+		div(class="col s12 m4 l3")
+			a(href="" id="match-link")
+				img(class="responsive-img circle coffee-chat-circle" id="match-pic2" src="public/images/generic-profile.png")
+				h5(class="center" id="match-name2") Match Name
+				h6(class="center" id="match-title2") Match Title
+		div(class="col s12 m4 l3" id="match-data")
+
+script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+script var matchData = !{JSON.stringify(match)}
+script(src="/public/js/match.js")

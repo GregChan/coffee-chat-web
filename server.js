@@ -1,6 +1,7 @@
 // require modules
 var express = require('express'),
     app = express(),
+    config = require('./config'),
     request = require('request'),
     bodyParser = require('body-parser'),
     dbConn = require("./resources/elf/db/dbConn.js"),
@@ -10,32 +11,42 @@ var express = require('express'),
     path = require('path'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
+    basicAuth = require('basic-auth'),
     myLogger = function(req, res, next) {
         logger.debug('myLogger - new request: ' + req.path);
         next();
     },
-    myAutheticator = function(req, res, next) {
-        logger.debug('myLogger - new request: ' + req.cookies.userID);
+    authenticator = function(req, res, next) {
+        logger.debug('myLogger - user id: ' + req.cookies.userID);
+        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell") {
+            next();
+            return;
+        }
+        // if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
+        // {
+        //       next();
+        //       return;
+        // }
         if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
             authenticationFailed(req, res, next);
         } else {
             var userID = req.cookies.userID;
-            var p1 = dbConn.getUserName(userID);
+            var p1 = dbConn.getUser(userID);
             return p1.then(
-                function(val) {
-                    var obj = JSON.parse(val);
-                    console.log("serverjs: validated user: " + obj.id);
-                    req.loginUserID = obj.id;
+                function(data) {
+                    var obj = data;
+                    console.log("serverjs: validated user: " + obj.userId);
+                    req.loginUserID = obj.userId;
                     next();
                     return;
                 }
             ).catch(
                 function(reason) {
+                    console.log(reason);
                     authenticationFailed(req, res, next);
                 }
             );
         }
-
     },
     authenticationFailed = function(req, res, next) {
         var path = req.path;
@@ -64,6 +75,31 @@ var express = require('express'),
         }
         if (err) console.log(err.stack);
         if (options.exit) process.exit();
+    },
+    auth = function(req, res, next) {
+        function unauthorized(res) {
+            res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+            res.sendStatus(401);
+            return;
+        };
+
+        var user = basicAuth(req);
+
+        if (!user || !user.name || !user.pass) {
+            unauthorized(res);
+            return;
+        };
+
+        var password = process.env.PASSWORD || "NUvention2016!",
+            username = process.env.USERNAME || "GoCoffeeChat";
+
+        if (user.name === username && user.pass === password) {
+            next();
+            return;
+        } else {
+            unauthorized(res);
+            return;
+        };
     };
 
 // App settings
@@ -78,74 +114,8 @@ app.use(bodyParser.urlencoded({
 
 app.use(myLogger);
 app.use(cookieParser());
-app.use(myAutheticator);
+app.use(authenticator);
 app.use(interalServerError);
-
-// Homepage
-app.get('/', function(req, res) {
-    fs.readFile('./public/browse.json', function(err, data) {
-        if (err) {
-            throw err;
-        }
-
-        var people = JSON.parse(data);
-
-        res.render('index', {
-            people: people,
-            person: {
-                "name": "Lisa Eng",
-                "image": "https://media.licdn.com/media/AAEAAQAAAAAAAALfAAAAJDU2YWFiZGM0LTgxZmEtNDcyZC05ODI4LTViZGM1YTg5MDkyOQ.jpg",
-                "work": ["Product Manager, Business Intelligence, Aereo", "Special Operations, Warby Parker Marketing, Quirky", "Special Customer Operations, Simon Schuster", "Associate, Triage Consulting Group"],
-                "education": ["MBA from NYU Stern Business School, University of California San Diego"],
-                "tags": ["strategy", "marketing", "tech", "SF", "49ers", "dogs", "consulting", "productmanager"],
-                "job": "Product Manager at Oracle Data Cloud",
-                "quote": "I am a dog-lover, 49ers fan, and tech enthusiast. Previously in New York, I live in San Francisco now with my husband and malti-poo dog, Izzo. Yes named after Coach Izzo!"
-            }
-        });
-    });
-});
-
-app.get('/schedule', function(req, res) {
-    fs.readFile('./public/browse.json', function(err, data) {
-        if (err) {
-            throw err;
-        }
-
-        var people = JSON.parse(data);
-
-        res.render('schedule', {
-            people: people,
-            user: {
-                "name": "Stacey",
-                "image": "http://d9hhrg4mnvzow.cloudfront.net/womensilab.com/coffeechat2/bb0185b8-sussana-shuman_07107207106x000002.jpg",
-                "bio": "",
-                "tags": ["tech", "sf", "49ers"],
-                "job": "Northwestern University"
-            }
-        });
-    });
-});
-
-app.get('/match', function(req, res) {
-    res.render('match', {
-        user: {
-            "name": "Stacey",
-            "image": "http://d9hhrg4mnvzow.cloudfront.net/womensilab.com/coffeechat2/bb0185b8-sussana-shuman_07107207106x000002.jpg",
-            "bio": "",
-            "tags": ["tech", "sf", "49ers"],
-            "job": "Northwestern University"
-        },
-        match: {
-            "name": "Lisa Eng",
-            "image": "https://media.licdn.com/media/AAEAAQAAAAAAAALfAAAAJDU2YWFiZGM0LTgxZmEtNDcyZC05ODI4LTViZGM1YTg5MDkyOQ.jpg",
-            "work": ["Product Manager, Business Intelligence, Aereo", "Special Operations, Warby Parker Marketing, Quirky", "Special Customer Operations, Simon Schuster", "Associate, Triage Consulting Group"],
-            "education": ["MBA from NYU Stern Business School", "University of California San Diego"],
-            "tags": ["strategy", "marketing", "tech", "SF", "49ers", "dogs", "consulting", "productmanager"],
-            "job": "Product Manager at Oracle Data Cloud",
-            "quote": "I am a dog-lover, 49ers fan, and tech enthusiast. Previously in New York, I live in San Francisco now with my husband and malti-poo dog, Izzo. Yes named after Coach Izzo!"
-        }
-    });
-});
 
 var resource = null;
 fs.readFile('./resources/resources.txt', function(err, data) {
@@ -157,7 +127,12 @@ fs.readFile('./resources/resources.txt', function(err, data) {
 
         if (typeof resource.getHandle === 'function') {
             logger.debug(resource.path + " GET");
-            app.get('/' + resource.path, resource.getHandle);
+
+            if (process.env.ENV == "staging" || resource.path.slice(0, 5) == "tools") {
+                app.get('/' + resource.path, auth, resource.getHandle);
+            } else {
+                app.get('/' + resource.path, resource.getHandle);
+            }
         }
         if (typeof resource.postHandle === 'function') {
             logger.debug(resource.path + " POST");

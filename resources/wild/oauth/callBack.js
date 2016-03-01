@@ -1,13 +1,14 @@
-var exports = module.exports = {};
+var exports = module.exports = {},
     oauth2 = require('simple-oauth2'),
-    path = require('path');
-    auth = require('./auth.js')
+    path = require('path'),
+    request = require('request'),
+    auth = require('./auth.js');
 
-exports.path='callback';
+exports.path = 'callback';
 
 
-exports.getHandle=function (req,res) {
-	var code = req.query.code,
+exports.getHandle = function(req, res) {
+    var code = req.query.code,
         state = req.query.state;
     console.log('/wild/oauth/callback');
     console.log(code);
@@ -16,7 +17,7 @@ exports.getHandle=function (req,res) {
     auth.linkedInOauth2.authCode.getToken({
             code: code,
             state: state,
-            redirect_uri: 'http://localhost:1337/callback'
+            redirect_uri: process.env.BASE_URL + '/callback'
         },
         saveToken);
 
@@ -29,56 +30,36 @@ exports.getHandle=function (req,res) {
 
         // this is where we need to do something with their token...
         console.log(token);
-        createOAuthUser(token.token.access_token,res)
+        createOAuthUser(token.token.access_token, res)
 
-        
+
     }
 }
 
-function createOAuthUser(token,res)
-{
+function createOAuthUser(token, res) {
     console.log('createOAuthUser token', token);
-    var http = require('http'); 
 
-    var bodyString = JSON.stringify({
-        accessToken: token
+    request({
+        url: process.env.BASE_URL + '/cat/oauth/getUserID',
+        method: 'POST',
+        json: true,
+        body: {
+            accessToken: token
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('server.js: createOAuthUser met error ' + e);
+            res.redirect('/');
+            res.end();
+        } else {
+            var userID = body.user;
+            console.log('server.js: got userID ' + userID);
+            res.cookie('userID', userID, {
+                maxAge: 9000000,
+                httpOnly: false
+            });
+            res.redirect('/');
+            res.end();
+        }
     });
-
-    var options = {
-      host: 'localhost',
-      port: 1337,
-      path: '/cat/oauth/getUserID',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': bodyString.length
-      },
-    };
-
-    console.log('createOAuthUser body', bodyString);
-
-    callback = function(response) {
-        var userID = '';
-        response.on('data', function(d) {
-            userID= JSON.parse(d).user;
-        });
-        response.on('end', function() {
-            console.log('server.js: got userID '+ userID);
-            res.cookie('userID' , userID,{ maxAge: 900000, httpOnly: false });
-            res.redirect('/');
-            
-        });
-
-        req.on('error', function(e) {
-            console.log('server.js: createOAuthUser met error '+ e);
-            res.redirect('/');
-        });
-    }
-
-    var req = http.request(options, callback);
-    req.write(bodyString);
-    req.end();
 }
-
-
-

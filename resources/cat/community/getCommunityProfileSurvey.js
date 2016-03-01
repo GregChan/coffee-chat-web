@@ -4,28 +4,27 @@ var dbConn = require("../../elf/db/dbConn.js");
 // var urlLinkedin='api.linkedin.com';
 // var urlBasicProfie='/v1/people/~?format=json';
 
-exports.path='cat/user/:userId/getUserName';
+exports.path='cat/community/:commID/profile-survey';
 
 exports.getHandle=function (req,res) {
-	console.log('user/getUserName: userID: request received');
-	var userId =req.params.userId;
-	console.log('user/getUserName: userId: '+ userId);
-	getUserName(userId,res);
+    var commID =req.params.commID;
+	getCommunityProfileSurvey(commID,res);
 }
 
-function getUserName(userId,res)
+function getCommunityProfileSurvey(commID,res)
 {
-	var p1 = dbConn.getUserInfo(userId);
+	var p1 = dbConn.getCommunityProfileSurvey(commID);
 	return p1.then(
-        function(val)
+        function(data)
         {
-           console.log("getUserName: then: "+ val);
-           res.json(JSON.parse(val));
+           console.log("commID: then: "+ data);
+           res.json(data);
         }
     ).catch(
         function(reason) {
             var obj=JSON.parse(reason)
             res.status(obj.error);
+            res.end();
   
         }
     );

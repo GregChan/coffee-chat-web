@@ -17,16 +17,33 @@
   background-image: url('/public/images/LinkedIn-Hover.png');
 }
 
-.coffe-chat-logo {
+.coffee-chat-logo {
   height: 100%;
 }
 
 .parallax-container {
-  height: 400px;
+  height: 600px;
 }
 
 .text-orange {
   color: #EC6445;
+}
+
+.spacer-15 {
+  margin-top: 15px;
+}
+
+.spacer-30 {
+  margin-top: 30px;
+}
+
+.spacer-75 {
+  margin-top: 75px;
+}
+
+.brand-logo {
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
 .text-grey {
@@ -76,6 +93,55 @@ textarea {
   border-bottom: 1px solid;
 }
 
+.coffee-chat-collapsible-body {
+  margin: 10px;
+  margin-left: 2rem;
+}
+
+.coffee-chat-inline {
+  display: inline-block;
+}
+
+.coffee-chat-circle {
+  width: 100%;
+}
+
+.clear {
+  background: none !important;
+}
+
+.btn-outline {
+  border: 1px solid !important;
+  border-color: #ff7050 !important;
+  background: none;
+  color: #ff7050;
+}
+
+.nav-absolute {
+  position: absolute;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Firefox 3.6 to 15 */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important;
+}
+
+.nav-btn {
+  margin-top: 13px !important;
+}
+
+/* materialize overrides */
+.dropdown-content {
+  color: #565a56;
+}
+
+.btn-outline:hover {
+  border: 1px solid !important;
+  border-color: #ff7050 !important;
+  background: none;
+  co
+
 .coffee-chat-divider:after {
   margin: 0 -55% 0 .5em;
 }
@@ -93,4 +159,19 @@ textarea {
 /* icon prefix focus color */
 .input-field .prefix.active {
  color: #000;
+}
+
+/* label focus color */
+.input-field textarea[type=text]:focus + label {
+ color: #ff7050;
+}
+/* label underline focus color */
+.input-field textarea[type=text]:focus {
+ border-bottom: 1px solid #ff7050;
+ box-shadow: 0 1px 0 0 #ff7050;
+}
+
+
+.dropdown-content li>a, .dropdown-content li>span {
+  color: #EC6445;
 }

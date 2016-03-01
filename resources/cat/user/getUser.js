@@ -1,26 +1,30 @@
 var exports = module.exports = {};
 var dbConn = require("../../elf/db/dbConn.js");
 
-exports.path='cat/user/currentUser';
+// var urlLinkedin='api.linkedin.com';
+// var urlBasicProfie='/v1/people/~?format=json';
+
+exports.path='cat/user/:userId/';
 
 exports.getHandle=function (req,res) {
-	console.log('user/getUserName: userID: request received');
-	var userId =req.loginUserID;
-	console.log('user/getUserName: userId: '+ userId);
-	getUserName(userId,res);
+	console.log('user/getUser: userID: request received');
+	var userId =req.params.userId;
+	console.log('user/getUser: userId: '+ userId);
+	getUser(userId,res);
 }
 
-function getUserName(userId,res)
+function getUser(userId,res)
 {
-	var p1 = dbConn.getUserName(userId);
+	var p1 = dbConn.getUser(userId);
 	return p1.then(
-        function(val)
+        function(data)
         {
-           console.log("currentUser: then: "+ val);
-           res.json(JSON.parse(val));
+           console.log("getUser: then: "+ data);
+           res.json(data);
         }
     ).catch(
         function(reason) {
+            console.log('Error');
             var obj=JSON.parse(reason)
             res.status(obj.error);
   

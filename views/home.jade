@@ -8,7 +8,7 @@ html
 					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
 				a(href="/settings")
 					img(class="right brand-logo coffee-chat-logo circle" src=curUser.profilePic)
-				// h3(class="center text-orange hide-on-small-only") Welcome to Coffee Chat!
+				//- h3(class="center text-orange hide-on-small-only") Welcome to Coffee Chat!
 		div(class="current-matches")
 			if (curMatch.matches.length == 1)
 				h3(class="center text-orange" id="match-announcement") You have a new match!
@@ -18,11 +18,13 @@ html
 				h3(class="center text-orange" id="match-announcement") Please check back soon for new matches!
 			each match in curMatch.matches
 				include ./includes/match.jade
-		div(class="section white" class="past-matches" id="previous-matches")
-			h4(class="center text-orange") Past Coffee Chats
-			div(class="row container")
-				each pastMatch in matchHist.matches
-					include ./includes/past-match.jade
+		if (matchHist.matches)
+			div(class="section white" class="past-matches" id="previous-matches")
+				h4(class="center text-orange") Past Coffee Chats
+				div(class="row container")
+				
+					each pastMatch in matchHist.matches
+						include ./includes/past-match.jade
 		include ./includes/partners.jade
 		include ./includes/footer.jade
 

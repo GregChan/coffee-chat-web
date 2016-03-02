@@ -315,7 +315,7 @@ exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
 
 exports.getUserProfileForCommunity = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, b.macthPriority, c.name, b.grouped, c.group, c.id from user_survey as a left join survey_field_desc as b on a.fieldID=b.fieldID left join survey_field_items as c on a.itemID = c.id where userID=? and a.communityID=? order by b.displayPriority, a.fieldID, c.group';
+        var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, b.macthPriority, c.name, b.grouped, c.group, c.id from user_survey as a left join survey_field_desc as b on a.fieldID=b.fieldID left join survey_field_items as c on a.itemID = c.id where userID=? and a.communityID=? and b.deleted=0  and c.deleted=0 order by b.displayPriority, a.fieldID, c.group';
 
         // var sql = 'select a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name, c.itemID from survey_field_desc as a inner join survey_field_items as b left join user_survey as c on c.itemID = b.id where c.userID = ? and a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.displayPriority, a.fieldID, b.group, b.name';
         sql = mysql.format(sql, [userID, communityID]);
@@ -424,7 +424,7 @@ exports.getCommunityProfileSurvey = function(communityID) {
             }
             logger.debug('connected as id ' + connection.threadId);
 
-            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.displayPriority, a.fieldID, b.group, b.name";
+            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID and a.deleted= 0  and a.deleted=0 ORDER BY a.displayPriority, a.fieldID, b.group, b.name";
             var inserts = [communityID];
             sql = mysql.format(sql, inserts);
             logger.debug("getIndustryList: going to query survey list: " + sql);

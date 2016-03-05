@@ -90,8 +90,8 @@ var express = require('express'),
             return;
         };
 
-        var password = process.env.PASSWORD || "NUvention2016!",
-            username = process.env.USERNAME || "GoCoffeeChat";
+        var password = process.env.PASSWORD,
+            username = process.env.USERNAME;
 
         if (user.name === username && user.pass === password) {
             next();

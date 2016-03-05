@@ -7,10 +7,10 @@ var exports = module.exports = {};
 
 var pool = mysql.createPool({
     connectionLimit: 1, //maximum connection for Azure student
-    host: "us-cdbr-azure-central-a.cloudapp.net",
-    user: "b443fc80dd2566",
-    password: "4d39195d",
-    database: "coffeechat"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_COFFEE_CHAT
 });
 
 exports.clearup = function() {

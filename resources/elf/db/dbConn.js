@@ -20,6 +20,254 @@ exports.clearup = function() {
     });
 }
 
+exports.getUserFeedbackForMatch = function(userID, communityID, matchID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'select b.displayPriority, a.fieldID, a.userID, a.itemID, b.fieldName, b.communityID, b.required, b.displayType, c.name,  c.id ' 
+                +'from user_match_feedback as a ' 
+                +'left join match_feedback_field_desc as b on a.fieldID=b.fieldID '
+                +'left join match_feedback_field_items as c on a.itemID = c.id ' 
+                +'where userID=? and a.communityID=? and a.matchID=? '
+                +'and b.deleted=0  and c.deleted=0 ' 
+                +'order by b.displayPriority, a.fieldID ';
+
+        // var sql = 'select a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name, c.itemID from survey_field_desc as a inner join survey_field_items as b left join user_survey as c on c.itemID = b.id where c.userID = ? and a.communityID = ? and a.fieldID = b.fieldID ORDER BY a.displayPriority, a.fieldID, b.group, b.name';
+        sql = mysql.format(sql, [userID, communityID, matchID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+              
+                if (rows.length > 0) {
+                       var result = {};
+                        result["community"] = communityID;
+                        result["fields"] = [];
+                        var fieldID = -1;
+                        var field;
+                        for (var i = 0; i < rows.length; i++) {
+                            if (fieldID != rows[i].fieldID) {
+                                if (fieldID != -1) {
+                                    result["fields"].push(field);
+                                }
+                                fieldID = rows[i].fieldID;
+                                field = {};
+                                field["fieldID"] = fieldID;
+                                field["name"] = rows[i].fieldName;
+                                field["className"] = rows[i].fieldName.split(' ').join('-').toLowerCase();
+                                field["required"] = rows[i].required == 0 ? false : true;
+                                field["grouped"] =  false ;
+                                field["priority"] = rows[i].displayPriority;
+                                field["displayType"] = rows[i].displayType;
+                                field["values"] = [];
+                            }
+                            field["values"].push(
+                                {
+                                    id:rows[i].id,
+                                    name:rows[i].name
+                                }
+                            );
+                            if (i == rows.length - 1) {
+                                result["fields"].push(field);
+                            }
+                        }
+
+                        console.log("getCommunityFeedback: result: " + result);
+                        resolve(result);
+                } else {
+                    logger.debug('dbConn: no records found');
+                    resolve({});
+                }
+            }
+        });
+    });
+}
+
+exports.updateUserFeedbackForMatch = function(userID, communityID, matchID, match) {
+    return new Promise(function(resolve, reject) {
+        // TODO: this query still allows for duplicate fields for dropdowns e.g. i can have two graduation years
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                connection.beginTransaction(function(err) {
+
+                    var sql = 'delete from user_match_feedback where userID = ? and communityID = ? and matchID = ?'
+
+                    sql = mysql.format(sql, [userID, communityID, matchID]);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            return connection.rollback(function() {
+                                logger.debug('Error deleting old preferences');
+                                reject({
+                                    'error': 500,
+                                    'message': 'DB Error'
+                                });
+                            });
+                        }
+
+                        var sql = "INSERT INTO user_match_feedback (userID, matchID, communityID, fieldID, itemID) VALUES ? ON DUPLICATE KEY UPDATE userID=userID",
+                            values = [];
+                        for (var i = 0; i < match.length; i++) {
+                            var fieldID = match[i].fieldID,
+                                choices = match[i].choices;
+                          
+                            if (fieldID && choices) {
+                                for (var j = 0; j < choices.length; j++) {
+                                    var value = [userID, matchID, communityID, fieldID, choices[j]];
+                                    values.push(value);
+                                }
+                            }
+                        }
+                        console.log("updateUserFeedbackForMatch: values: "+values);
+                        if (values.length <= 0) {
+                            return connection.rollback(function() {
+                                logger.debug('No values submitted with form');
+                                reject({
+                                    'error': 400,
+                                    'message': 'No values submitted with the form'
+                                });
+                            });
+                        }
+
+                        sql = mysql.format(sql, [values]);
+                        console.log("updateUserFeedbackForMatch: going to insert with sql : "+sql);
+                        connection.query(sql, function(err, rows, fields) {
+                            if (err) {
+                                return connection.rollback(function() {
+                                    logger.debug('Error in connection or query:');
+                                    logger.debug(err);
+
+                                    reject({
+                                        'error': 500,
+                                        'message': 'DB Error'
+                                    });
+                                });
+                            } else {
+                                if(rows.affectedRows>0)
+                                {
+                                    console.log("updateUserFeedbackForMatch: affectedRows > 0 ");
+                                    connection.commit(function(err) {
+                                        if (err) { 
+                                            connection.rollback(function() {
+                                             reject({
+                                                'error': 500,
+                                                'message': 'db error.'
+                                                });
+                                          });
+                                        }
+                                        resolve({
+                                             'success': '200'
+                                        });
+                                    });
+                                }
+                                else
+                                {
+                                    connection.rollback(function() {
+                                             reject({
+                                                'error': 400,
+                                                'message': 'Bad request: match does exist.'
+                                        });
+                                    });  
+                                }
+                            }
+                        });
+                    });
+                });
+            }
+
+            connection.release();
+        });
+    });
+}
+
+exports.getCommunityFeedback = function(communityID) {
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                connection.release();
+                logger.debug('Error in connection database');
+
+                reject('Error in connection database');
+            }
+            logger.debug('connected as id ' + connection.threadId);
+
+            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, b.id,  b.name from match_feedback_field_desc as a inner join match_feedback_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID and a.deleted= 0  and a.deleted=0 ORDER BY a.displayPriority, a.fieldID,  b.name";
+            var inserts = [communityID];
+            sql = mysql.format(sql, inserts);
+            logger.debug("getCommunityFeedback: going to query feedback list: " + sql);
+            connection.query(sql, function(err, rows) {
+                if (!err) {
+                    if (rows.length > 0) {
+                        var result = {};
+                        result["community"] = communityID;
+                        result["fields"] = [];
+                        var fieldID = -1;
+                        var field;
+                        for (var i = 0; i < rows.length; i++) {
+                            if (fieldID != rows[i].fieldID) {
+                                if (fieldID != -1) {
+                                    result["fields"].push(field);
+                                }
+                                fieldID = rows[i].fieldID;
+                                field = {};
+                                field["fieldID"] = fieldID;
+                                field["name"] = rows[i].fieldName;
+                                field["className"] = rows[i].fieldName.split(' ').join('-').toLowerCase();
+                                field["required"] = rows[i].required == 0 ? false : true;
+                                field["grouped"] =  false ;
+                                field["priority"] = rows[i].displayPriority;
+                                field["displayType"] = rows[i].displayType;
+                                field["values"] = [];
+                            }
+                            field["values"].push(
+                                {
+                                    id:rows[i].id,
+                                    name:rows[i].name
+                                }
+                            );
+                            if (i == rows.length - 1) {
+                                result["fields"].push(field);
+                            }
+                        }
+
+                        console.log("getCommunityFeedback: result: " + result);
+                        connection.release();
+                        resolve(result);
+
+                    } else {
+                        logger.debug("dbConn: unable to find community feedback.");
+                        connection.release();
+                        reject('{"error":"500", "errorMsg":"DB Error"}');
+
+                    }
+                } else {
+                    logger.debug('Error in connection database');
+                    connection.release();
+                    reject('{"error":"500","errorMsg": ' + err + '}');
+                }
+
+            });
+            connection.on('error', function(err) {
+                logger.debug('Error in connection database');
+                connection.release();
+                reject('{"error":"500","errorMsg": "Error in connection database"}');
+
+            });
+        });
+    });
+}
+
+
 exports.updateMatchStatus = function(userID,matchID,newStatus) {
     //0:idle, 1: notified, 2: accepted, 3: rejected, 4:feedbacked
     return new Promise(function(resolve, reject) {
@@ -299,9 +547,19 @@ exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
                                 });
                             } else {
                                 logger.debug('updateUserProfileForCommunity for ' + userID);
-                                resolve({
-                                    'success': '200'
-                                });
+                                connection.commit(function(err) {
+                                        if (err) { 
+                                            connection.rollback(function() {
+                                             reject({
+                                                'error': 500,
+                                                'message': 'db error.'
+                                                });
+                                          });
+                                        }
+                                       resolve({
+                                            'success': '200'
+                                        });
+                                });        
                             }
                         });
                     });

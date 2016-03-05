@@ -6,7 +6,7 @@ var exports = module.exports = {};
 
 
 var pool = mysql.createPool({
-    connectionLimit: 1, //maximum connection for Azure student
+    connectionLimit: 4, //maximum connection for Azure student
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
@@ -20,12 +20,59 @@ exports.clearup = function() {
     });
 }
 
+exports.getUserPositions = function(userID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'select * from user_position as a left join company_desc as b on a.companyID=b.id where userID = ?';
+        var values = [userID];
+        sql = mysql.format(sql, values);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query:');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    var result = []
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = rows[i];
+                        result.push({
+                            id: row.id,
+                            title: row.title,
+                            company: row.company,
+                            current: row.isCurrent == 1
+                        });
+
+                        if (row.startDate) {
+                            result[i].startDate = row.startDate;
+                        }
+
+                        if (row.endDate) {
+                            result[i].endDate = row.endDate;
+                        }
+                    }
+
+                    resolve(result);
+                } else {
+                    reject({
+                        error: 404,
+                        message: 'Record not found'
+                    });
+                }
+            }
+        });
+    });
+}
+
 exports.updateMatchStatus = function(userID,matchID,newStatus) {
     //0:idle, 1: notified, 2: accepted, 3: rejected, 4:feedbacked
     return new Promise(function(resolve, reject) {
         //TODO: status cannot be changed back, add validation before updating!!!
         var sql = "UPDATE user_match SET userAStatus = if(userA = ?, ?, userAStatus), userBStatus = if(userB = ?, ?, userBStatus) WHERE id = ?";
-        values = [userID,newStatus,userID,newStatus,matchID];
+        var values = [userID,newStatus,userID,newStatus,matchID];
 
         sql = mysql.format(sql, values);
         console.log('updateMatchStatus: going to update db with sql: ' + sql);

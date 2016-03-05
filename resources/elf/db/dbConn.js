@@ -424,7 +424,7 @@ exports.getCommunityProfileSurvey = function(communityID) {
             }
             logger.debug('connected as id ' + connection.threadId);
 
-            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID and a.deleted= 0  and a.deleted=0 ORDER BY a.displayPriority, a.fieldID, b.group, b.name";
+            var sql = "SELECT  a.fieldID, a.fieldName, a.communityID, a.required, a. displayPriority, a.displayType, a.grouped, b.id, b.group, b.name, b.data from survey_field_desc as a inner join survey_field_items as b Where a.communityID = ? and a.fieldID = b.fieldID and a.deleted= 0  and a.deleted=0 ORDER BY a.displayPriority, a.fieldID, b.group, b.name";
             var inserts = [communityID];
             sql = mysql.format(sql, inserts);
             logger.debug("getIndustryList: going to query survey list: " + sql);
@@ -464,7 +464,19 @@ exports.getCommunityProfileSurvey = function(communityID) {
                                     field["values"].push(group);
                                     hasGroup = false;
                                 }
-                                field["values"].push(JSON.parse('{"id":' + rows[i].id + ', "name":"' + rows[i].name + '"}'));
+                                var val ={};
+                                val["id"]= rows[i].id;
+                                val["name"]= rows[i].name;
+                                var d = rows[i].data;
+                                if (d!=null && d !="null") {
+                                    d = JSON.parse(d);
+                                    val["data"]= d;
+                                }
+                                field["values"].push(
+                                    val
+                                );
+                               
+                               // JSON.parse('{"id":' + rows[i].id + ', "name":"' + rows[i].name + '", "data":' + rows[i].data + '}'); 
                             } else {
                                 if (hasGroup) {
                                     if (groupName != rows[i].group) {
@@ -481,8 +493,18 @@ exports.getCommunityProfileSurvey = function(communityID) {
                                     group["values"] = [];
                                     hasGroup = true;
                                 }
-                                group["values"].push(JSON.parse('{"id":' + rows[i].id + ', "name":"' + rows[i].name + '"}'));
 
+                                var val ={};
+                                val["id"]= rows[i].id;
+                                val["name"]= rows[i].name;
+                                var d = rows[i].data;
+                                if (d!=null && d !="null") {
+                                    d = JSON.parse(d);
+                                    val["data"]= d;
+                                }
+                                group["values"].push(
+                                    val
+                                );
                             }
 
                             if (i == rows.length - 1) {

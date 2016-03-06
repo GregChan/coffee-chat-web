@@ -1,30 +1,37 @@
-for field in survey.fields
-	div(class="row" data-field=field.name data-field-id=field.fieldID)
-		p=field.name
-			if (field.grouped == true)
-				ul(class="collapsible popout" data-collapsible="expandable")
-					for key in field.values
-						li()
-							div(class="collapsible-header")=key.name
-							div(class="collapsible-body")
-								for item in key.values
-									div(class="coffee-chat-collapsible-body coffee-chat-inline")
-										input(data-field-input data-field-id=field.fieldID data-input-id=item.id data-group-name=key.name id="#{field.className}#{item.id}" type="checkbox")
-										label(for="#{field.className}#{item.id}")=item.name
-			else
-				if (field.displayType == 1)
-					for item in field.values	
-						div(class="col s12 m6 l3")
-							if (item.data == NULL)
-								input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox")
-								label(for="#{field.className}#{item.id}")=item.name
-							else
-								input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox")
-								label(for="#{field.className}#{item.id}")
-								img(class="responsive-img" style="height: 100px" src=item.data.url)
-				if (field.displayType == 2)
-					div(class="col s12 m6 l6")
-					select(data-field-input data-field-id=field.fieldID id="#{field.className}#{field.fieldID}" type="select")
-						option(value="" disabled selected)=field.name
-						for item in field.values
-							option(value=item.id)=item.name
+h2(class="center text-orange") #{"Profile Survey for " + curUser.firstName}
+h5(class="center text-orange") Help us improve your matches!
+div(class="row")
+	img(class="responsive-img" src=curUser.profilePic)
+	h5 #{curUser.firstName + " " + curUser.lastName}
+	h6=curUser.headLine
+	h6=curUser.email
+	for field in survey.fields
+		div(class="row" data-field=field.name data-field-id=field.fieldID)
+			p=field.name
+				if (field.grouped == true)
+					ul(class="collapsible popout" data-collapsible="expandable")
+						for key in field.values
+							li()
+								div(class="collapsible-header")=key.name
+								div(class="collapsible-body")
+									for item in key.values
+										div(class="coffee-chat-collapsible-body coffee-chat-inline")
+											input(data-field-input data-field-id=field.fieldID data-input-id=item.id data-group-name=key.name id="#{field.className}#{item.id}" type="checkbox")
+											label(for="#{field.className}#{item.id}")=item.name
+				else
+					if (field.displayType == 1)
+						for item in field.values	
+							div(class="col s12 m6 l3")
+								if (item.data == NULL)
+									input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox")
+									label(for="#{field.className}#{item.id}")=item.name
+								else
+									input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox")
+									label(for="#{field.className}#{item.id}")
+									img(class="responsive-img" style="height: 100px" src=item.data.url)
+					if (field.displayType == 2)
+						div(class="col s12 m6 l6")
+						select(data-field-input data-field-id=field.fieldID id="#{field.className}#{field.fieldID}" type="select")
+							option(value="" disabled selected)=field.name
+							for item in field.values
+								option(value=item.id)=item.name

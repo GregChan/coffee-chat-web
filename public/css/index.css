@@ -95,6 +95,21 @@ textarea {
   font-weight: 500;
 }
 
+.profile-edit .editable i {
+  color: #565a56;
+}
+
+.profile-edit .editable .edit {
+  border: none;
+  padding: 0px;
+  margin:0px;
+}
+
+.profile-edit .editable input:focus {
+  border-bottom: 0px;
+  box-shadow: none;
+}
+
 .coffee-chat-orange {
   background: #ff7050 !important;
 }
@@ -155,7 +170,7 @@ textarea {
 }
 
 .nav-wrapper {
-  border-bottom: 1px solid #bbbbbb;
+  /*border-bottom: 1px solid #bbbbbb;*/
 }
 
 /* materialize overrides */

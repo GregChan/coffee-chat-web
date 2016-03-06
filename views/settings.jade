@@ -1,8 +1,6 @@
 html
 	head
-		link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css')
-		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
-		link(rel="stylesheet" href="/public/css/index.css")
+		include ./includes/styles.jade
 	body
 		nav(class="white z-depth-0")
 			div(class="nav-wrapper coffee-chat-grey-background")
@@ -11,29 +9,8 @@ html
 				ul(class="right hide-on-small-and-down")
 					li 
 						a(class="waves btn btn-outline nav-btn z-depth-0" href="/wild/user/signout") Signout
-		div(class="section white profile-section")
-			div(class="row container")
-				div(class="col s12 m3 l3")
-					a(href=profile.linkedInProfile)
-						img(class="responsive-img circle coffee-chat-circle" src=profile.profilePic)
-					h5(class="center text-grey") #{profile.firstName} #{profile.lastName}
-					h6(class="center text-grey")=profile.headLine
-				div(class="col s12 m3 l3")
-					if profile.positions
-						h5(class="section-title text-orange") Work Experience
-						div(class="spacer-15")
-						for work in profile.positions.work
-							h6(class="title")=work.title
-							div(class="subtitle text-grey")=work.company
-				div(class="col s12 m3 l3")
-					if profile.positions
-						h5(class="section-title text-orange") Education
-						div(class="spacer-15")
-						for edu in profile.positions.education
-							h6(class="title")=edu.title
-							div(class="subtitle text-grey")=edu.school
-				div(class="col s12 m3 l3")
-					h5(class="section-title text-orange") Interests
+			
+		include ./includes/profile.jade
 
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")

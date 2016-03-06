@@ -261,7 +261,7 @@ exports.getUserPositions = function(userID) {
         sql = mysql.format(sql, values);
 
         pool.query(sql, function(err, rows, fields) {
-            if (err) {
+            if (!err) {
                 logger.debug('Error in connection or query:');
                 if (rows.length > 0) {
                     var education = [],

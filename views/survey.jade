@@ -4,10 +4,7 @@ html
 		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
 		link(rel="stylesheet" href="/public/css/index.css")
 	body
-		nav(class="white z-depth-0 clear")
-			div(class="nav-wrapper")
-				a(href="/")
-					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
+		include ./includes/header.jade
 		div(class="row container text-orange")			
 			include ./includes/survey.jade
 			div(class="row")

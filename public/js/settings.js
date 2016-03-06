@@ -77,5 +77,16 @@
 			parentEditable.find('[data-edit-input]').val(value);
 			hideEdit(this);
 		});
+
+		$('[data-save]').click(function(e) {
+			$('[data-work-experience]').find('[data-edit-input]').each(function() {
+				var parentEditable = $(this).closest('[data-editable]');
+				console.log({
+					id: parentEditable.find('[data-display-value]').attr('data-display-value'),
+					title: $(this).val()
+				});
+			});
+			$('[data-education]').find('[data-edit-input]');
+		});
 	});
 }());

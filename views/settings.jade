@@ -2,15 +2,13 @@ html
 	head
 		include ./includes/styles.jade
 	body
-		nav(class="white z-depth-0")
-			div(class="nav-wrapper coffee-chat-grey-background")
-				a(href="/")
-					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
-				ul(class="right hide-on-small-and-down")
-					li 
-						a(class="waves btn btn-outline nav-btn z-depth-0" href="/wild/user/signout") Signout
+		include ./includes/header.jade
 			
 		include ./includes/profile.jade
+		div(class="row container")
+			div(class="center" data-save-prompt style="display: none")
+				div It looks like you've made some changes to your profile! Don't forget to click save!
+				a(class="btn btn-outline z-depth-0" data-save) Save
 
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")

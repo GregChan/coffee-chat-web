@@ -122,6 +122,10 @@ textarea {
   background: #FAFAFA;
 }
 
+.coffee-chat-grey-bottom-border {
+  border-bottom: 1px solid #bbbbbb;
+}
+
 .coffee-chat-divider:before, .coffee-chat-divider:after {
   content: "";
   display: inline-block;
@@ -167,10 +171,6 @@ textarea {
 
 .nav-btn {
   margin-top: 13px !important;
-}
-
-.nav-wrapper {
-  /*border-bottom: 1px solid #bbbbbb;*/
 }
 
 /* materialize overrides */

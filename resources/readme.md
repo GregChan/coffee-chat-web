@@ -111,29 +111,23 @@ Sample Response:
 ```
 {
     work: [
-    	{
-    		id: 1
-    		current: 1,
-    		title: "Software Engineer",
-    		company: "Groupon",
-    		startDate: "2015-09-01",
-    		endDate: "2016-09-01"
-    	},
-    	{
-    		id: 1
-    		current: 0,
-    		title: "Software Engineer",
-    		company: "Google",
-    		startDate: "2015-09-01",
-    		endDate: "2016-09-01"
-    	}
+        {
+            positionID: 281,
+            title: "Software Engineering Intern",
+            current: false,
+            company: "Google",
+            companyID: 123,
+            startDate: "2015-09-01",
+            endDate: "2016-09-01"
+        }
     ],
     education: [
         {
-            id: 1
-            current: 1,
-            title: "Undergraduate",
-            company: "Northwestern University",
+            positionID: 271,
+            title: "Computer Science",
+            current: true,
+            school: "Northwestern University",
+            schoolID: 1,
             startDate: "2015-09-01",
             endDate: "2016-09-01"
         }
@@ -155,22 +149,30 @@ Sample Response:
     headLine: "Job",
     linkedInProfile: "https://linkedin....",
     profilePic: "https://media.licdn.com......",
-    positions: [
-		{
-			current: 1,
-			title: "Software Engineer",
-			company: "Groupon",
-			startDate: "2015-09-01",
-			endDate: "2016-09-01"
-		},
-		{
-			current: 1,
-			title: "Software Engineer",
-			company: "Google",
-			startDate: "2015-09-01",
-			endDate: "2016-09-01"
-		}
-	]
+    positions: {
+        work: [
+            {
+                positionID: 281,
+                title: "Software Engineering Intern",
+                current: false,
+                company: "Google",
+                companyID: 123,
+                startDate: "2015-09-01",
+                endDate: "2016-09-01"
+            }
+        ],
+        education: [
+            {
+                positionID: 271,
+                title: "Computer Science",
+                current: true,
+                school: "Northwestern University",
+                schoolID: 1,
+                startDate: "2015-09-01",
+                endDate: "2016-09-01"
+            }
+        ]
+    }
 }
 ```
 
@@ -316,20 +318,22 @@ Updates a user's positions. If an id is included, that field will be updated, ot
 Sample Body:
 ```
 {
-	positions: [
+	companies: [
 		{
 			id: 1
-			current: 0,
-			title: "Software Engineer",
 			company: "Google",
-			startDate: "2015-09-01",
-			endDate: "2016-09-01"
 		}, {
-			current: 0,
-			title: "Software Engineer",
-			company: "Google",
+			id: 1
+			company: "Groupon"
 		}
-	]
+	],
+    positions: [
+        {
+            positionID: 1,
+            company: 'Some company',
+            title: 'new data'
+        }
+    ]
 }
 ```
 

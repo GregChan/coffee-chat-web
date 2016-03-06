@@ -1,6 +1,9 @@
 div(class="#{className} editable" data-editable)
 	div(data-display)
-		span(data-display-value)=display
+		if id
+			span(data-display-value=id)=display
+		else
+			span(data-display-value)=display
 		a(href="#")
 			i(class="material-icons" data-edit-icon) mode_edit
 	div(data-edit)

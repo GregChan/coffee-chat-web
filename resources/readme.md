@@ -35,9 +35,9 @@ GET
 
 [/cat/user/{userID}/](#userBasicProfile)
 
-! [/cat/user/{userID}/positions/](#userPositions)
+[/cat/user/{userID}/positions/](#userPositions)
 
-! [/cat/user/{userID}/profile/](#userProfile)
+[/cat/user/{userID}/profile/](#userProfile)
 
 [/cat/user/{userID}/community/{communityID}/survey/](#userCommunitySurvey) 
 
@@ -109,24 +109,36 @@ Returns an array of a user's positions.
 
 Sample Response:
 ```
-[
-	{
-		id: 1
-		current: 1,
-		title: "Software Engineer",
-		company: "Groupon",
-		startDate: "2015-09-01",
-		endDate: "2016-09-01"
-	},
-	{
-		id: 1
-		current: 0,
-		title: "Software Engineer",
-		company: "Google",
-		startDate: "2015-09-01",
-		endDate: "2016-09-01"
-	}
-]
+{
+    work: [
+    	{
+    		id: 1
+    		current: 1,
+    		title: "Software Engineer",
+    		company: "Groupon",
+    		startDate: "2015-09-01",
+    		endDate: "2016-09-01"
+    	},
+    	{
+    		id: 1
+    		current: 0,
+    		title: "Software Engineer",
+    		company: "Google",
+    		startDate: "2015-09-01",
+    		endDate: "2016-09-01"
+    	}
+    ],
+    education: [
+        {
+            id: 1
+            current: 1,
+            title: "Undergraduate",
+            company: "Northwestern University",
+            startDate: "2015-09-01",
+            endDate: "2016-09-01"
+        }
+    ]
+}
 ```
 
 <a name="userProfile"></a>

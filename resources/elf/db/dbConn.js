@@ -6,7 +6,7 @@ var exports = module.exports = {};
 
 
 var pool = mysql.createPool({
-    connectionLimit: 4, //maximum connection for Azure student
+    connectionLimit: 1, //maximum connection for Azure student
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
@@ -264,26 +264,39 @@ exports.getUserPositions = function(userID) {
             if (err) {
                 logger.debug('Error in connection or query:');
                 if (rows.length > 0) {
-                    var result = []
+                    var education = [],
+                        work = [];
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        result.push({
+                        position = {
                             id: row.id,
                             title: row.title,
-                            company: row.company,
                             current: row.isCurrent == 1
-                        });
+                        };
 
                         if (row.startDate) {
-                            result[i].startDate = row.startDate;
+                            position.startDate = row.startDate;
                         }
 
                         if (row.endDate) {
-                            result[i].endDate = row.endDate;
+                            position.endDate = row.endDate;
                         }
+
+                        if (row.isEdu) {
+                            position['school'] = row.name;
+                            education.push(position);
+                        } else {
+                            position['company'] = row.name;
+                            work.push(position);
+                        }
+
+                        console.log(position);
                     }
 
-                    resolve(result);
+                    resolve({
+                        work: work,
+                        education: education
+                    });
                 } else {
                     reject({
                         error: 404,

@@ -22,9 +22,7 @@ function getUserPositions(userId,res)
     ).catch(
         function(reason) {
             console.log('Error');
-            var obj=JSON.parse(reason)
-            res.status(obj.error);
-  
+            res.sendStatus(400);
         }
     );
 	return;

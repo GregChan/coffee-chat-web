@@ -37,6 +37,14 @@
   margin-top: 30px;
 }
 
+.spacer-45 {
+  margin-top: 45px;
+}
+
+.spacer-60 {
+  margin-top: 60px;
+}
+
 .spacer-75 {
   margin-top: 75px;
 }
@@ -70,6 +78,21 @@ textarea {
 
 .tiny-text {
   font-size: 10px;
+}
+
+.profile-section .title {
+  font-size: 18px !important;
+  font-weight: bolder;
+}
+
+.profile-section .subtitle {
+  font-size: 18px !important;
+  font-weight: 500;
+}
+
+.profile-section .section-title {
+  font-size: 22px !important;
+  font-weight: 500;
 }
 
 .coffee-chat-orange {
@@ -131,6 +154,10 @@ textarea {
   margin-top: 13px !important;
 }
 
+.nav-wrapper {
+  border-bottom: 1px solid #bbbbbb;
+}
+
 /* materialize overrides */
 .dropdown-content {
   color: #565a56;
@@ -140,7 +167,7 @@ textarea {
   border: 1px solid !important;
   border-color: #ff7050 !important;
   background: none;
-  co
+}
 
 .coffee-chat-divider:after {
   margin: 0 -55% 0 .5em;
@@ -152,6 +179,16 @@ textarea {
 }
 /* label underline focus color */
 .input-field input[type=text]:focus {
+ border-bottom: 1px solid #ff7050;
+ box-shadow: 0 1px 0 0 #ff7050;
+}
+
+/* label focus color */
+.input-field input[type=email]:focus + label {
+ color: #ff7050;
+}
+/* label underline focus color */
+.input-field input[type=email]:focus {
  border-bottom: 1px solid #ff7050;
  box-shadow: 0 1px 0 0 #ff7050;
 }
@@ -170,7 +207,6 @@ textarea {
  border-bottom: 1px solid #ff7050;
  box-shadow: 0 1px 0 0 #ff7050;
 }
-
 
 .dropdown-content li>a, .dropdown-content li>span {
   color: #EC6445;

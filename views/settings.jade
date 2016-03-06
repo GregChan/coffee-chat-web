@@ -5,64 +5,36 @@ html
 		link(rel="stylesheet" href="/public/css/index.css")
 	body
 		nav(class="white z-depth-0")
-			div(class="nav-wrapper")
+			div(class="nav-wrapper coffee-chat-grey-background")
 				a(href="/")
 					img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
 				ul(class="right hide-on-small-and-down")
 					li 
 						a(class="waves btn btn-outline nav-btn z-depth-0" href="/wild/user/signout") Signout
-		h2(class="center text-orange") Profile Settings
-		div(class="row container")
-			div(class="col s12 m6 l6")
-				ul(class="collapsible z-depth-0" data-collapsible="expandable")
-					li
-						div(class="collapsible-header active")
-							div #{profile.firstName} #{profile.lastName}
-						div(class="collapsible-body")
-							img(class="responsive-img coffee-chat-circle" src=profile.profilePic)
-					li
-						div(class="collapsible-header active")
-							div Email
-						div(class="collapsible-body")
-							div(class="coffee-chat-collapsible-body")=profile.email
-					li
-						div(class="collapsible-header active")
-							div Headline
-						div(class="collapsible-body")
-							div(class="coffee-chat-collapsible-body")=profile.headLine
-				div(class="center")
-					a(class="btn btn-outline modal-trigger" href="#settings-modal") Edit Profile
+		div(class="section white profile-section")
+			div(class="row container")
+				div(class="col s12 m3 l3")
+					a(href=profile.linkedInProfile)
+						img(class="responsive-img circle coffee-chat-circle" src=profile.profilePic)
+					h5(class="center text-grey") #{profile.firstName} #{profile.lastName}
+					h6(class="center text-grey")=profile.headLine
+				div(class="col s12 m3 l3")
+					if profile.positions
+						h5(class="section-title text-orange") Work Experience
+						div(class="spacer-15")
+						for work in profile.positions.work
+							h6(class="title")=work.title
+							div(class="subtitle text-grey")=work.company
+				div(class="col s12 m3 l3")
+					if profile.positions
+						h5(class="section-title text-orange") Education
+						div(class="spacer-15")
+						for edu in profile.positions.education
+							h6(class="title")=edu.title
+							div(class="subtitle text-grey")=edu.school
+				div(class="col s12 m3 l3")
+					h5(class="section-title text-orange") Interests
 
-			div(class="col s12 m6 l6")
-				ul(class="collapsible z-depth-0" data-collapsible="expandable")
-					for community in communities
-						if community.fields
-							for field, index in community.fields
-								- var color = "coffee-chat-grey-background"
-								li
-									div(class="collapsible-header active")
-										div=field.name
-									div(class="collapsible-body")
-										if (field.grouped == true)
-											for key in field.values
-												div(class="coffee-chat-collapsible-body")=key.name
-													for item in key.values
-														div(class="coffee-chat-collapsible-body")=item.name
-										else
-											if (field.displayType == 1)
-												for item in field.values	
-													div(class="coffee-chat-collapsible-body")=item.name
-											if (field.displayType == 2)
-												for item in field.values
-													div(class="coffee-chat-collapsible-body")=item.name
-
-		div(id="settings-modal" class="modal modal-fixed-footer")
-			div(class="modal-content")
-				h4 Edit Profile
-				include ./includes/survey.jade
-			div(class="modal-footer")
-				a(class="modal-action modal-close btn-flat") cancel
-				a(class="modal-action modal-close btn-flat" class="submit") save
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

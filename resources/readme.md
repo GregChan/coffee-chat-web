@@ -35,9 +35,9 @@ GET
 
 [/cat/user/{userID}/](#userBasicProfile)
 
-! [/cat/user/{userID}/positions/](#userPositions)
+[/cat/user/{userID}/positions/](#userPositions)
 
-! [/cat/user/{userID}/profile/](#userProfile)
+[/cat/user/{userID}/profile/](#userProfile)
 
 [/cat/user/{userID}/community/{communityID}/survey/](#userCommunitySurvey) 
 
@@ -109,24 +109,30 @@ Returns an array of a user's positions.
 
 Sample Response:
 ```
-[
-	{
-		id: 1
-		current: 1,
-		title: "Software Engineer",
-		company: "Groupon",
-		startDate: "2015-09-01",
-		endDate: "2016-09-01"
-	},
-	{
-		id: 1
-		current: 0,
-		title: "Software Engineer",
-		company: "Google",
-		startDate: "2015-09-01",
-		endDate: "2016-09-01"
-	}
-]
+{
+    work: [
+        {
+            positionID: 281,
+            title: "Software Engineering Intern",
+            current: false,
+            company: "Google",
+            companyID: 123,
+            startDate: "2015-09-01",
+            endDate: "2016-09-01"
+        }
+    ],
+    education: [
+        {
+            positionID: 271,
+            title: "Computer Science",
+            current: true,
+            school: "Northwestern University",
+            schoolID: 1,
+            startDate: "2015-09-01",
+            endDate: "2016-09-01"
+        }
+    ]
+}
 ```
 
 <a name="userProfile"></a>
@@ -143,22 +149,30 @@ Sample Response:
     headLine: "Job",
     linkedInProfile: "https://linkedin....",
     profilePic: "https://media.licdn.com......",
-    positions: [
-		{
-			current: 1,
-			title: "Software Engineer",
-			company: "Groupon",
-			startDate: "2015-09-01",
-			endDate: "2016-09-01"
-		},
-		{
-			current: 1,
-			title: "Software Engineer",
-			company: "Google",
-			startDate: "2015-09-01",
-			endDate: "2016-09-01"
-		}
-	]
+    positions: {
+        work: [
+            {
+                positionID: 281,
+                title: "Software Engineering Intern",
+                current: false,
+                company: "Google",
+                companyID: 123,
+                startDate: "2015-09-01",
+                endDate: "2016-09-01"
+            }
+        ],
+        education: [
+            {
+                positionID: 271,
+                title: "Computer Science",
+                current: true,
+                school: "Northwestern University",
+                schoolID: 1,
+                startDate: "2015-09-01",
+                endDate: "2016-09-01"
+            }
+        ]
+    }
 }
 ```
 
@@ -301,23 +315,33 @@ Sample Body:
 <a name="updateUserPositions"></a>
 #### POST cat/user/{userID}/positions/update/
 Updates a user's positions. If an id is included, that field will be updated, otherwise, it will be added.
+
+company - string - name of the company
+positionID - int - id of the position
+companyID - int - id of the company
+title - string - title of the position
+isEdu - int - value 0 for work, 1 for education
+
 Sample Body:
 ```
 {
-	positions: [
+	companies: [
 		{
-			id: 1
-			current: 0,
-			title: "Software Engineer",
+			companyID: 1
 			company: "Google",
-			startDate: "2015-09-01",
-			endDate: "2016-09-01"
 		}, {
-			current: 0,
-			title: "Software Engineer",
-			company: "Google",
+			companyID: 111
+			company: "Groupon"
 		}
-	]
+	],
+    positions: [p
+        {
+            positionID: 1,
+            company: 'Some company',
+            title: 'new data',
+            isEdu: 0
+        }
+    ]
 }
 ```
 

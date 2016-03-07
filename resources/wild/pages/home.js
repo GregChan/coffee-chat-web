@@ -13,7 +13,7 @@ exports.getHandle = function(req, res) {
 						url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID,
 						method: 'GET',
 						headers: {
-							'Cookie': 'userID=' + 541
+							'Cookie': 'userID=' + req.cookies.userID
 						}
 					}, function(error, response, body) {
 						callback(error, JSON.parse(body));

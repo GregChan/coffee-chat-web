@@ -37,6 +37,14 @@
   margin-top: 30px;
 }
 
+.spacer-45 {
+  margin-top: 45px;
+}
+
+.spacer-60 {
+  margin-top: 60px;
+}
+
 .spacer-75 {
   margin-top: 75px;
 }
@@ -72,6 +80,46 @@ textarea {
   font-size: 10px;
 }
 
+.profile-section .profile-container {
+  padding: 10px;
+}
+
+.profile-section .title {
+  font-size: 18px !important;
+  font-weight: bolder;
+}
+
+.profile-section .subtitle {
+  font-size: 18px !important;
+  font-weight: 500;
+}
+
+.profile-section .icon {
+  margin-left: 5px;
+}
+
+.profile-section .section-title {
+  font-size: 22px !important;
+  font-weight: 500;
+}
+
+.profile-edit .editable i {
+  color: #565a56;
+  font-size: 15px;
+  text-align: right;
+}
+
+.profile-edit .editable .edit {
+  border: none;
+  padding: 0px;
+  margin:0px;
+}
+
+.profile-edit .editable input:focus {
+  border-bottom: 0px;
+  box-shadow: none;
+}
+
 .coffee-chat-orange {
   background: #ff7050 !important;
 }
@@ -82,6 +130,10 @@ textarea {
 
 .coffee-chat-grey-background {
   background: #FAFAFA;
+}
+
+.coffee-chat-grey-bottom-border {
+  border-bottom: 1px solid #bbbbbb;
 }
 
 .coffee-chat-divider:before, .coffee-chat-divider:after {
@@ -140,7 +192,7 @@ textarea {
   border: 1px solid !important;
   border-color: #ff7050 !important;
   background: none;
-  co
+}
 
 .coffee-chat-divider:after {
   margin: 0 -55% 0 .5em;
@@ -152,6 +204,16 @@ textarea {
 }
 /* label underline focus color */
 .input-field input[type=text]:focus {
+ border-bottom: 1px solid #ff7050;
+ box-shadow: 0 1px 0 0 #ff7050;
+}
+
+/* label focus color */
+.input-field input[type=email]:focus + label {
+ color: #ff7050;
+}
+/* label underline focus color */
+.input-field input[type=email]:focus {
  border-bottom: 1px solid #ff7050;
  box-shadow: 0 1px 0 0 #ff7050;
 }
@@ -170,7 +232,6 @@ textarea {
  border-bottom: 1px solid #ff7050;
  box-shadow: 0 1px 0 0 #ff7050;
 }
-
 
 .dropdown-content li>a, .dropdown-content li>span {
   color: #EC6445;

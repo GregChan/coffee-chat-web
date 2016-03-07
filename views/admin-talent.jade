@@ -1,0 +1,31 @@
+html
+	head
+		include ./includes/styles.jade
+	body
+		header
+			include ./includes/admin-header.jade
+			ul(class="side-nav fixed z-depth-0" id="slide-out")
+				li
+					a(href="#")
+				li
+					h4(class="text-orange") Groups
+		div(class="row" style="margin-left: 250px;")
+			div(class="col s12 m12 l12")
+				h4 Talent
+				div(class="collection")
+					for user in users
+						div(href="#" class="collection-item")
+							div(class="row")
+								div(class="col s3 m3 l2")
+									img(class="admin-talent-img circle" src=user.profilePic)
+								div(class="col s9 m9 l10")
+									h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
+									h6(class="coffee-chat-grey") #{user.title}
+									h6(class="coffee-chat-grey") #{user.company}
+
+
+	include ./includes/footer.jade
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="/public/js/admin-talent.js")
+						

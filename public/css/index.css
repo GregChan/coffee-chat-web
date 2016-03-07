@@ -25,6 +25,11 @@
   height: 600px;
 }
 
+.admin-talent-img {
+  width: 100px;
+  height: 100px;
+}
+
 .text-orange {
   color: #EC6445;
 }
@@ -118,6 +123,19 @@ textarea {
 .profile-edit .editable input:focus {
   border-bottom: 0px;
   box-shadow: none;
+}
+
+.navbar-fixed {
+  z-index: 1500;
+}
+
+.side-nav {
+  background: #FAFAFA !important;
+  border-right: 1px solid #bbbbbb;
+}
+
+.page-footer {
+  z-index: 1500;
 }
 
 .coffee-chat-orange {

@@ -256,7 +256,7 @@ exports.getCommunityFeedback = function(communityID) {
 
 exports.getUserPositions = function(userID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select * from user_position as a left join company_desc as b on a.companyID=b.id where userID = ?';
+        var sql = 'select a.id as positionID, a.companyID as companyID, a.title, a.isEdu, a.startDate, a.endDate, b.name, a.isCurrent from user_position as a left join company_desc as b on a.companyID=b.id where userID = ?';
         var values = [userID];
         sql = mysql.format(sql, values);
 
@@ -269,7 +269,7 @@ exports.getUserPositions = function(userID) {
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         position = {
-                            id: row.id,
+                            positionID: row.positionID,
                             title: row.title,
                             current: row.isCurrent == 1
                         };
@@ -284,10 +284,12 @@ exports.getUserPositions = function(userID) {
 
                         if (row.isEdu) {
                             position['school'] = row.name;
-                            education.push(position);
+                            position['schoolID'] = row.companyID,
+                                education.push(position);
                         } else {
                             position['company'] = row.name;
-                            work.push(position);
+                            position['companyID'] = row.companyID,
+                                work.push(position);
                         }
 
                         console.log(position);
@@ -303,6 +305,101 @@ exports.getUserPositions = function(userID) {
                         message: 'Record not found'
                     });
                 }
+            }
+        });
+    });
+}
+
+exports.updateUserPositions = function(userID, positions) {
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                connection.release();
+            } else {
+                connection.beginTransaction(function(err) {
+                    if (err) {
+                        logger.debug('DB transaction error');
+                        logger.debug(err);
+                        connection.release();
+                        reject({
+                            'error': '500',
+                            'message': 'DB Error'
+                        });
+                    }
+
+                    var sql = 'insert ignore into company_desc (name, industry) values ?';
+                    var values = [];
+
+                    for (var i = 0; i < positions.companies.length; i++) {
+                        var company = positions.companies[i];
+                        values.push([company.company, 0]);
+                    }
+
+                    sql = mysql.format(sql, [values]);
+                    console.log(sql);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err && err.code != 'ER_DUP_ENTRY') {
+                            return connection.rollback(function() {
+                                logger.debug('Error inserting new companies');
+                                reject({
+                                    error: 500,
+                                    message: 'Error inserting '
+                                });
+                            });
+                        }
+                    });
+
+                    values = [];
+                    for (var i = 0; i < positions.positions.length; i++) {
+                        var position = positions.positions[i];
+                        var subQuery = '(?, ?, (select id from company_desc where name = ?), 0, ?, ?)';
+                        console.log(position.isEdu);
+                        subQuery = mysql.format(subQuery, [position.positionID, userID, position.company, position.title, position.isEdu]);
+                        values.push(subQuery);
+                    }
+
+                    var sql = 'insert into user_position (id, userID, companyID, isCurrent, title, isEdu) values ?? on duplicate key update companyID=values(companyID), title=values(title), isEdu=values(isEdu)';
+                    sql = mysql.format(sql, [values]);
+                    // this line is hella sketch... don't know how to fix it though
+                    sql = sql.replace(/\`/g, '');
+                    console.log(sql);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            console.log(err);
+                            return connection.rollback(function() {
+                                logger.debug('Error inserting new companies');
+                                reject({
+                                    error: 500,
+                                    message: 'Error inserting '
+                                });
+                            });
+                        }
+                    });
+
+                    connection.commit(function(err) {
+                        if (err) {
+                            connection.rollback(function() {
+                                reject({
+                                    'error': 500,
+                                    'message': 'Error committing changes'
+                                });
+                            });
+                        }
+                        resolve({
+                            'success': '200'
+                        });
+                    });
+
+                    connection.release();
+                });
             }
         });
     });
@@ -433,6 +530,7 @@ exports.getCurrentMatches = function(userID, communityID) {
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {
+                console.log(err);
                 logger.debug('Error in connection or query');
                 reject({
                     error: '500',
@@ -506,7 +604,6 @@ exports.insertMatchForCommunity = function(userAID, userBID, communityID) {
 
 exports.updateUserProfileForCommunity = function(userID, communityID, surveys) {
     return new Promise(function(resolve, reject) {
-        // TODO: this query still allows for duplicate fields for dropdowns e.g. i can have two graduation years
         pool.getConnection(function(err, connection) {
             if (err) {
                 logger.debug('DB connection error');
@@ -603,6 +700,7 @@ exports.getUserProfileForCommunity = function(userID, communityID) {
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {
+                console.log(err);
                 logger.debug('Error in connection or query');
                 reject({
                     error: '500',

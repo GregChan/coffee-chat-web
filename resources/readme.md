@@ -315,23 +315,31 @@ Sample Body:
 <a name="updateUserPositions"></a>
 #### POST cat/user/{userID}/positions/update/
 Updates a user's positions. If an id is included, that field will be updated, otherwise, it will be added.
+
+company - string - name of the company
+positionID - int - id of the position
+companyID - int - id of the company
+title - string - title of the position
+isEdu - int - value 0 for work, 1 for education
+
 Sample Body:
 ```
 {
 	companies: [
 		{
-			id: 1
+			companyID: 1
 			company: "Google",
 		}, {
-			id: 1
+			companyID: 111
 			company: "Groupon"
 		}
 	],
-    positions: [
+    positions: [p
         {
             positionID: 1,
             company: 'Some company',
-            title: 'new data'
+            title: 'new data',
+            isEdu: 0
         }
     ]
 }

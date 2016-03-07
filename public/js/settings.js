@@ -42,10 +42,24 @@
 		$('[data-edit-icon]').hide();
 
 		var hideEdit = function(selector) {
-			var parentEditable = $(selector).closest('[data-editable]');
-			parentEditable.find('[data-edit]').hide();
-			parentEditable.find('[data-display]').show();
-		}
+				var parentEditable = $(selector).closest('[data-editable]');
+				parentEditable.find('[data-edit]').hide();
+				parentEditable.find('[data-display]').show();
+			},
+			processWorkAndEducationData = function(selector, postData, isEdu) {
+				var positionElement = $(selector).find('[data-position]');
+				var companyElement = $(selector).find('[data-company]');
+				postData.positions.push({
+					positionID: positionElement.attr('data-id'),
+					company: companyElement.val(),
+					title: positionElement.val(),
+					isEdu: isEdu
+				});
+				postData.companies.push({
+					companyID: companyElement.attr('data-id'),
+					company: companyElement.val()
+				});
+			};
 
 		$('[data-display]').hover(function(e) {
 			var parentEditable = $(this).closest('[data-editable]');
@@ -79,14 +93,25 @@
 		});
 
 		$('[data-save]').click(function(e) {
-			$('[data-work-experience]').find('[data-edit-input]').each(function() {
-				var parentEditable = $(this).closest('[data-editable]');
-				console.log({
-					id: parentEditable.find('[data-display-value]').attr('data-display-value'),
-					title: $(this).val()
-				});
+			var postData = {
+				companies: [],
+				positions: []
+			}
+			$('[data-work-experience]').each(function() {
+				processWorkAndEducationData(this, postData, 0);
 			});
-			$('[data-education]').find('[data-edit-input]');
+			$('[data-education]').each(function() {
+				processWorkAndEducationData(this, postData, 1);
+			});
+			// console.log(postData);
+			$.ajax({
+				type: 'POST',
+				url: '/settings',
+				data: postData,
+				success: function(data) {
+					window.location.href = "/settings";
+				}
+			});
 		});
 	});
 }());

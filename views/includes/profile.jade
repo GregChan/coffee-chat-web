@@ -1,3 +1,4 @@
+include ../mixins/editable-text.jade
 div(class="section white profile-section profile-edit")
 	if title
 		div=title
@@ -6,35 +7,23 @@ div(class="section white profile-section profile-edit")
 			a(href=profile.linkedInProfile)
 				img(class="responsive-img circle coffee-chat-circle" src=profile.profilePic)
 			h5(class="center text-grey") #{profile.firstName} #{profile.lastName}
-			- var display = profile.headLine
-			- var className = "center"
-			include ./editable-text.jade
-		div(class="col s12 m3 l3" data-work-experience)
+			+editableTextInput(profile.headLine, 0, "center", {})
+		div(class="col s12 m3 l3")
 			if profile.positions
 				h5(class="section-title text-orange") Work Experience
 				div(class="spacer-15")
 				for work in profile.positions.work
-					- var display = work.title
-					- var className = "title"
-					- var id = work.positionID
-					include ./editable-text.jade
-					- var display = work.company
-					- var className = "subtitle"
-					- var id = work.companyID
-					include ./editable-text.jade
-		div(class="col s12 m3 l3" data-education)
+					div(data-work-experience)
+						+editableTextInput(work.title, work.positionID, "title", {"data-position":"data"})
+						+editableTextInput(work.company, work.companyID, "subtitle", {"data-company":"data"})
+		div(class="col s12 m3 l3")
 			if profile.positions
 				h5(class="section-title text-orange") Education
 				div(class="spacer-15")
-				for edu in profile.positions.education
-					- var display = edu.title
-					- var className = "title"
-					- var id = edu.positionID
-					include ./editable-text.jade
-					- var display = edu.school
-					- var className = "subtitle"
-					- var id = edu.schoolID
-					include ./editable-text.jade
+					div(data-education)
+						for edu in profile.positions.education
+							+editableTextInput(edu.title, edu.positionID, "title", {"data-position":"data"})
+							+editableTextInput(edu.school, edu.schoolID, "subtitle", {"data-company":"data"})
 		div(class="col s12 m3 l3" data-interests)
 			h5(class="section-title text-orange") Interests
 			if interests && interests.fields

@@ -5,6 +5,7 @@
 ./resources/cat/user/getUserProfile.js
 ./resources/cat/user/getUserProfileForCommunity.js
 ./resources/cat/user/getUserProfileForCommunityUser.js
+./resources/cat/user/updateUserPositions.js
 ./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/cat/community/getCommunityFeedback.js
 ./resources/cat/match/insertMatch.js

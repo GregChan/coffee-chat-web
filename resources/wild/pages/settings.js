@@ -45,3 +45,19 @@ exports.getHandle = function(req, res) {
             }
         });
 }
+
+exports.postHandle = function(req, res) {
+    console.log(req.cookies.userID);
+    request({
+        url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/profile',
+        method: 'POST',
+        headers: {
+            'Cookie': 'userID=' + req.cookies.userID
+        },
+        json: true,
+        body: req.body
+    }, function(error, response, body) {
+        console.log(body);
+        res.json({});
+    });
+}

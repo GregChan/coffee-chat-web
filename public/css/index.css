@@ -97,6 +97,8 @@ textarea {
 
 .profile-edit .editable i {
   color: #565a56;
+  font-size: 15px;
+  text-align: right;
 }
 
 .profile-edit .editable .edit {

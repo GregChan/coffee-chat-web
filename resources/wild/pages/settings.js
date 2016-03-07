@@ -29,14 +29,26 @@ exports.getHandle = function(req, res) {
                     console.log(body);
                     callback(error, JSON.parse(body));
                 });
-            }
+            },
+            function(callback) {
+                request({
+                    url: process.env.BASE_URL + '/cat/community/1/profile-survey',
+                    method: 'GET',
+                    headers: {
+                        'Cookie': 'userID=' + req.cookies.userID
+                    }
+                }, function(error, response, body) {
+                    callback(error, JSON.parse(body));
+                });
+            },
         ],
         function(err, results) {
             if (!err) {
                 console.log(results[1]);
                 var data = {
                     profile: results[0],
-                    interests: results[1]
+                    interests: results[1],
+                    survey: results[2]
                 }
 
                 res.render('settings', data);

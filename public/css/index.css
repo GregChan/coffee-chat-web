@@ -80,6 +80,10 @@ textarea {
   font-size: 10px;
 }
 
+.profile-section .profile-container {
+  padding: 10px;
+}
+
 .profile-section .title {
   font-size: 18px !important;
   font-weight: bolder;
@@ -88,6 +92,10 @@ textarea {
 .profile-section .subtitle {
   font-size: 18px !important;
   font-weight: 500;
+}
+
+.profile-section .icon {
+  margin-left: 5px;
 }
 
 .profile-section .section-title {

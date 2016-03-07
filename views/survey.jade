@@ -5,10 +5,17 @@ html
 		link(rel="stylesheet" href="/public/css/index.css")
 	body
 		include ./includes/header.jade
-		div(class="row container text-orange")			
-			include ./includes/survey.jade
+		div(class="row container text-orange")
+			h2(class="center text-orange") #{"Profile Survey for " + curUser.firstName}
+				h5(class="center text-orange") Help us improve your matches!
+				div(class="row")
+					img(class="responsive-img" src=curUser.profilePic)
+					h5 #{curUser.firstName + " " + curUser.lastName}
+					h6=curUser.headLine
+					h6=curUser.email			
+				include ./includes/survey.jade
 			div(class="row")
-				button(class="btn waves-effect waves-light col coffee-chat-orange offset-s5 submit" type="submit" name="action") Submit
+				button(class="btn waves-effect waves-light col coffee-chat-orange submit" type="submit" name="action") Submit
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

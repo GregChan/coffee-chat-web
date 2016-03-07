@@ -5,14 +5,22 @@ html
 		include ./includes/header.jade
 			
 		include ./includes/profile.jade
+
+		div(class="row container" data-survey)
+			include ./includes/survey.jade
+		div(class="row container center")
+			a(class="text-orange" data-more href="#more") SHOW MORE SETTINGS
 		div(class="row container")
 			div(class="center" data-save-prompt style="display: none")
 				div It looks like you've made some changes to your profile! Don't forget to click save!
 				a(class="btn btn-outline z-depth-0" data-save) Save
+		div(class="row container")				
+			div(id="cy" style="width: 100%; height: 50%;")
 
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
-	script(src="/public/js/survey.js")
+	script(src="http://js.cytoscape.org/js/cytoscape.min.js")
+	//- script(src="/public/js/survey.js")
 	script(src="/public/js/settings.js")
 						

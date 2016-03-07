@@ -127,7 +127,8 @@
 				url: '/settings',
 				data: postData,
 				success: function(data) {
-					window.location.href = "/settings";
+					Materialize.toast('Success!', 2000);
+					$('[data-save-prompt]').hide();
 				}
 			});
 		});

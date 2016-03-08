@@ -4,10 +4,16 @@ html
     body
         nav(class="white z-depth-0 clear")
             div(class="nav-wrapper coffee-chat-grey-background coffee-chat-grey-bottom-border")
-                a(href="/")
-                    img(class="coffee-chat-logo left brand-logo" src="/public/images/logo.png")
-                a(href="/settings")
-                    img(class="right brand-logo account-pic circle" src=curUser.profilePic)
+                div(class="container")
+                    a(href="/")
+                        img(class="coffee-chat-logo left brand-logo" src="/public/images/logo.png")
+                    div(class="right")
+                        a(href="/settings")
+                            img(class="account-pic circle" src=curUser.profilePic)
+                        ul(id="nav-mobile" class="right")
+                            li
+                                a(class="coffee-chat-grey" href="/wild/user/signout") Signout
+
         div(class="current-matches")
             if (curMatch.matches.length > 0)
                 each match in [curMatch.matches[0]]

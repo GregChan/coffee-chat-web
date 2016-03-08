@@ -17,6 +17,37 @@
   background-image: url('/public/images/LinkedIn-Hover.png');
 }
 
+#match-rate {
+    display: none;
+}
+
+.rating {
+  margin-top: -48px;
+  font-size: 100px;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+
+.rating > a {
+  display: inline-block;
+  position: relative;
+}
+
+.rating > a:hover:before,
+.rating > a:hover ~ a:before,
+.rating > a.active:before,
+.rating > a.active ~ a:before{
+   content: "\25CF";
+   margin-left: -2px;
+   margin-top: -2px;
+   position: absolute;
+}
+
+.match-btn {
+  height: 90px;
+  width: 90px;
+}
+
 .coffee-chat-logo {
   height: 100%;
   margin: 0px !important;
@@ -24,7 +55,7 @@
 
 .account-pic {
   height: 84%;
-  /*margin: 10% !important;*/
+  margin: 5px !important;
 }
 
 .parallax-container {

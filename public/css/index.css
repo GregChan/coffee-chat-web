@@ -86,21 +86,23 @@ textarea {
 }
 
 .profile-section .profile-container {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .profile-section .title {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: bolder;
 }
 
 .profile-section .subtitle {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: 500;
 }
 
 .profile-section .icon {
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .profile-section .section-title {
@@ -127,6 +129,11 @@ textarea {
 
 .navbar-fixed {
   z-index: 1500;
+}
+
+.nav-buttons a {
+  margin-top: -10px;
+  height: 55px;
 }
 
 .side-nav {
@@ -199,6 +206,10 @@ textarea {
 
 .nav-btn {
   margin-top: 13px !important;
+}
+
+.nav-wrapper {
+  height: 45px !important;
 }
 
 /* materialize overrides */

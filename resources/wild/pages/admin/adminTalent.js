@@ -1,5 +1,6 @@
 var exports = module.exports = {},
-	request = require('request');
+	request = require('request'),
+	async = require('async');
 
 exports.path = 'admin/talent';
 

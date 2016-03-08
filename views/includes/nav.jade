@@ -1,22 +1,21 @@
 div(class="nav-wrapper")
-	a(href="/")
-		img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
-	ul(class="right hide-on-small-and-down")
-		li
-			a(class="waves btn btn-outline nav-btn" href="/#About") About
-		li
-			a(class="waves btn btn-outline nav-btn" href="mailto:gocoffeechat@gmail.com") Contact
-		li
-			a(class="waves btn btn-outline nav-btn" href="/team") Team
-
-		if (!curUser)
-			li
-				a(class="waves btn btn-outline nav-btn" href="/wild/oauth/auth") Signup
-		else
-			li 
-				a(class="waves btn btn-outline nav-btn" href="/wild/user/signout") Signout
-		//- if (curUser)
-		//- 	li
-		//- 		img(class="brand-logo coffe-chat-logo" src=curUser.profilePicSmall)
-		//- 	li
-		//- 		a(class="grey-text text-darken-3")=curUser.firstName
+    a(href="/")
+        img(class="coffee-chat-logo left brand-logo" src="/public/images/logo.png")
+    ul(class="right hide-on-small-and-down")
+        li
+            a(class="waves btn btn-outline nav-btn" href="/#About") About
+        li
+            a(class="waves btn btn-outline nav-btn" href="mailto:gocoffeechat@gmail.com") Contact
+        li
+            a(class="waves btn btn-outline nav-btn" href="/team") Team
+        if (!curUser)
+            li
+                a(class="waves btn btn-outline nav-btn" href="/wild/oauth/auth") Signup
+        else
+            li 
+                a(class="waves btn btn-outline nav-btn" href="/wild/user/signout") Signout
+        //- if (curUser)
+        //- 	li
+        //- 		img(class="brand-logo coffe-chat-logo" src=curUser.profilePicSmall)
+        //- 	li
+        //- 		a(class="grey-text text-darken-3")=curUser.firstName

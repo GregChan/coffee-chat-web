@@ -9,10 +9,11 @@ html
 			
 			//- include ./includes/header.jade				
 			div(class="row container valign" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)")
-				h3(class="center header white-text") Real Professional Conversations Made Simple
+				h3(class="center header white-text") Professional conversations in your workplace made simple
 				//- h3(class="center header text-orange") Real Advice from
 				//- h3(class="center header text-orange") Real Industry Leaders
-				h5(class="center white-text") Take your online connections back into the coffee shop
+				h5(class="center white-text") Building great organizations one connection at a time
+
 				p(class="spacer-75")
 				//- h5(class="center white-text") The fastest-growing network for professional millenials.
 				div(class="center")
@@ -21,34 +22,51 @@ html
 						a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
 					else
 						a(class="btn btn-outline" href="/survey") We'd like to know more about you.
-		div(class="section coffee-chat-grey-background")
+		div(class="section white")
 			div(class="")
-				h2(class="center text-orange") Coffee Chat
+				h3(class="center") How it Works
 				a(name="About")
-				h5(class="center") Build connections within your community
 				p(class="spacer-30")
 				div(class="row valign-wrapper")
-					div(class="center col s12 m3 l3 valign")
-						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/e85aec93-1d2b-48b9-8110-b8a6925e9771/207/123/207/123/0/0/af14e641-orangeconnections_05r03f05r03f000000.png")
-					div(class="center col s12 m3 l3 valign")
-						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/c7b04ae3-f640-42f3-ba4b-f353480ed650/148/167/148/167/0/0/a9e8cb42-orangeconversations_04404n04404n000000.png")
-					div(class="center col s12 m3 l3 valign")
-						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/321053e5-d0e7-4d46-a79c-62274ba38c28/173/133/173/133/0/0/bd7c1919-orangescheduling_04t03p04t03p000000.png")
-					div(class="center col s12 m3 l3 valign")
-						img(class="responsive-img" src="https://app.unbouncepreview.com/publish/assets/4c37e19a-b538-4479-9fbe-8338e459365b/214/118/214/118/0/0/f4a5cc31-no-clutter_05y03a05y03a000000.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="width:60%;" src="/public/images/join.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="width:60%;" src="/public/images/start-connecting.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="width:60%;" src="/public/images/value.png")
 				div(class="row")
-					div(class="center col s12 m3 l3")
-						h5(class="center") Personal Connections
-						p A unique proprietary algorithm that matches peers within a shared community based on personal interests 
-					div(class="center col s12 m3 l3")
-						h5(class="center") Relevant Conversations
-						p Conversation prompts are suggested to have a fun and interesting coffee chat with peers in your community
-					div(class="center col s12 m3 l3")
-						h5(class="center") Easy Scheduling
-						p Conversation prompts are suggested to have a fun and interesting coffee chat with peers in your community
-					div(class="center col s12 m3 l3")
-						h5(class="center") No Clutter
-						p Join CoffeeChat and we do the rest of the work to build a collaborative work environment
+					div(class="center col s12 m4 l4")
+						h5(class="center") Join CoffeeChat
+						p Sign up your organization with CoffeeChat and we’ll help you discover the best features to start building one-on-one connections within your community.
+					div(class="center col s12 m4 l4")
+						h5(class="center") Start Connecting
+						p Using an algorithm, the CoffeeChat platform will send you the best pairings of people to have conversations for personal and professional development.
+					div(class="center col s12 m4 l4")
+						h5(class="center") Create Value
+						p After the CoffeeChats, the built-in feedback will give you more insights about your team’s dynamics. Have regular CoffeeChats in your company to build connections and culture.
+		div(class="section coffee-chat-grey-background")
+			div(class="")
+				h3(class="center") Saved Time and Money
+				p(class="spacer-30")
+				div(class="row valign-wrapper")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="width:60%;" src="/public/images/continuity.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="width:60%;" src="/public/images/company-growth.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="width:60%;" src="/public/images/consolidation.png")
+				div(class="row")
+					div(class="center col s12 m4 l4")
+						h5(class="center") Continuity
+						p Employees stay at firms 18% longer when they have a sense of community
+
+					div(class="center col s12 m4 l4")
+						h5(class="center") Company Growth
+						p 59% of US Firms offer career development programs to help retain and grow their talent
+					div(class="center col s12 m4 l4")
+						h5(class="center") Consolidation
+						p Avoid tedious manual matching and save hours of employee time for your organization
+
 		include ./includes/partners.jade
 		include ./includes/footer.jade
 

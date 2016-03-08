@@ -17,12 +17,61 @@
   background-image: url('/public/images/LinkedIn-Hover.png');
 }
 
+#match-rate {
+    display: none;
+}
+
+#submit-rating{
+    margin-top: 0px;
+    margin-bottom: 24px;
+    z-index: 1000;
+}
+
+.rating {
+  margin-top: -48px;
+  margin-bottom: -24px;
+  font-size: 100px;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+
+.rating > a {
+  display: inline-block;
+  position: relative;
+}
+
+.rating > a:hover:before,
+.rating > a:hover ~ a:before,
+.rating > a.active:before,
+.rating > a.active ~ a:before{
+   content: "\25CF";
+   margin-left: -2px;
+   margin-top: -2px;
+   position: absolute;
+}
+
+.match-btn {
+  height: 90px;
+  width: 90px;
+}
+
 .coffee-chat-logo {
   height: 100%;
+  margin: 0px !important;
+}
+
+.account-pic {
+  height: 84%;
+  margin: 5px !important;
 }
 
 .parallax-container {
   height: 600px;
+}
+
+.admin-talent-img {
+  width: 100px;
+  height: 100px;
 }
 
 .text-orange {
@@ -81,21 +130,23 @@ textarea {
 }
 
 .profile-section .profile-container {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .profile-section .title {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: bolder;
 }
 
 .profile-section .subtitle {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: 500;
 }
 
 .profile-section .icon {
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .profile-section .section-title {
@@ -120,6 +171,30 @@ textarea {
   box-shadow: none;
 }
 
+.navbar-fixed {
+  z-index: 1500;
+}
+
+.nav-buttons a {
+  margin-top: -10px;
+  height: 55px;
+}
+
+@media only screen and (min-width: 601px) {
+    .nav-buttons a {
+        height: 63px;
+    }
+}
+
+.side-nav {
+  background: #FAFAFA !important;
+  border-right: 1px solid #bbbbbb;
+}
+
+.page-footer {
+  z-index: 1500;
+}
+
 .coffee-chat-orange {
   background: #ff7050 !important;
 }
@@ -130,6 +205,10 @@ textarea {
 
 .coffee-chat-grey-background {
   background: #FAFAFA;
+}
+
+.coffee-chat-orange-background {
+  background: #FCF5F1;
 }
 
 .coffee-chat-grey-bottom-border {
@@ -181,6 +260,9 @@ textarea {
 
 .nav-btn {
   margin-top: 13px !important;
+}
+
+.nav-wrapper {
 }
 
 /* materialize overrides */

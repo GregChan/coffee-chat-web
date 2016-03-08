@@ -4,47 +4,49 @@
 		var fname;
 		$.ajax({
 			type: 'GET',
-			url: '/cat/user/' + matchData.userID,
+			url: '/cat/user/' + matchId + '/profile',
 			success: function(match) {
-			   console.log(match);
-			   $(".current-matches #match-name,#match-name2").text(match.firstName + ' ' + match.lastName);
-			   $(".current-matches #match-title,#match-title2").text(match.headLine);
-			   $(".current-matches #about-match").text('About ' + match.firstName);
-			   $(".current-matches #match-link").attr("href",match.linkedInProfile);
-			   $(".current-matches #match-pic,#match-pic2").attr("src",match.profilePic);
-			   fname = match.firstName;
+                $(".current-matches .match" + matchId + " #match-name").text(match.firstName + ' ' + match.lastName);
+                $(".current-matches .match" + matchId + " #match-title").text(match.headLine);
+                $(".current-matches .match" + matchId + " #match-link").attr("href",match.linkedInProfile);
+                $(".current-matches .match" + matchId + " #match-pic").attr("src",match.profilePic);
+                if (match.positions.work) {
+                    for (var i = 0; i < match.positions.work.length; i++) {
+                        $(".current-matches .match" + matchId + " #work-container").append("<div class='title'>"+match.positions.work[i].title+"</div><div class='subtitle'>"+match.positions.work[i].company+"</div>");
+                    }
+                }
+                if (match.positions.education) {
+                    for (var i = 0; i < match.positions.education.length; i++) {
+                        $(".current-matches .match" + matchId + " #education-container").append("<div class='title'>"+match.positions.education[i].title+"</div><div class='subtitle'>"+match.positions.education[i].school+"</div>");
+                    }
+                }
 			}
 		});
 		$.ajax({
 			type: 'GET',
-			url: '/cat/user/community/1/' + matchData.userID + '/profile',
+			url: '/cat/user/community/1/' + matchId + '/profile',
 			success: function(profile) {
-				if ($.isEmptyObject(profile)) {
-					$(".current-matches #match-data").append("<div>"+fname+" has not filled out his or her profile yet!</div>");
-				} else {
-					var fields = profile.fields;
-					for (var i = 0; i < fields.length; i++) {
-						var field = profile.fields[i];
-						$(".current-matches #match-data").append("<div class='col-block' id='col-block"+i+"'><h5 class='text-orange'>"+profile.fields[i].name+"</h5></div>");
-						if (field.grouped) {
-							for (var j = 0; j < field.values.length; j++) {
-								var group = field.values[j];
-								for (var k = 0; k < group.values.length; k++) {
-									var item = group.values[k];
-										$(".current-matches #col-block"+i).append("<div>"+item.name+"</div>");
-								}
-							}
-						} else {
-							var group = field.values;
-							for (var j = 0; j < group.length; j++) {
-								var item = field.values[j],
-									element = $('#' + field.className + item.id);
-								$(".current-matches #col-block"+i).append("<div>"+item.name+"</div>");
-							}
-						}
-					}
-			   }
+                if (profile && profile.fields) {
+                    for (var i = 0; i < profile.fields.length; i++) {
+                        for (var j = 0; j < profile.fields[i].values.length; j++) {
+                            $(".current-matches .match" + matchId + " #interests-container").append("<div>#"+profile.fields[i].values[j].name+"</div>");
+                        }
+                    }
+                }
 			}
 		});
+        $('#submit-rating').hide();
+        $('#submit-rating').click(function(event){
+            $('#submit-rating').hide();
+        });
+        $('#accept-match').click(function(event){
+            $('#match-accept').hide();
+            $('#match-rate').show();
+        });
+        $('.rating a').click(function(event){
+            $(this).siblings('a').removeClass('active');
+            $(this).addClass('active');
+            $('#submit-rating').show();
+        });
 	});
 }());

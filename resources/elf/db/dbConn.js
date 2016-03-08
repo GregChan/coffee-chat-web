@@ -473,6 +473,56 @@ exports.getAllMatches = function(communityID) {
     });
 }
 
+//select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
+
+exports.getCommunityUsers = function(communityID) {
+    //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
+    return new Promise(function(resolve, reject) {
+        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id left join user_community as d on a.id = d.userID where b.isCurrent = 1 and communityID = ?';
+
+        sql = mysql.format(sql, [communityID])
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                var users = [];
+                var map = {};
+                if (rows.length > 0) {
+                    // map reduce users by id
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = rows[i];
+                        map[row.id] = {
+                            firstName: row.firstName,
+                            lastName: row.lastName,
+                            title: row.title,
+                            company: row.name,
+                            profilePic: row.profilePicO
+                        };
+                    }
+
+                    var ids = Object.keys(map);
+                    for (var i = 0; i < ids.length; i++) {
+                        users.push(map[ids[i]]);
+                    }
+
+                    resolve(users);
+                } else {
+                    reject({
+                        error: 404,
+                        message: 'No users found for this community'
+                    })
+                }
+            }
+        });
+    });
+}
+
+
 exports.getMatchHistory = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
         var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';

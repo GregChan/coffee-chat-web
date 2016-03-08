@@ -1,6 +1,7 @@
+div(class="row")
 for field in survey.fields
-	div(class="row" data-field=field.name data-field-id=field.fieldID)
-		p=field.name
+	div(data-field=field.name data-field-id=field.fieldID)
+		div(class="col s12 m4 l4")
 			if (field.grouped == true)
 				ul(class="collapsible popout" data-collapsible="expandable")
 					for key in field.values

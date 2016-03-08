@@ -19,6 +19,12 @@
 
 .coffee-chat-logo {
   height: 100%;
+  margin: 0px !important;
+}
+
+.account-pic {
+  height: 84%;
+  /*margin: 10% !important;*/
 }
 
 .parallax-container {
@@ -130,6 +136,10 @@ textarea {
 
 .coffee-chat-grey-background {
   background: #FAFAFA;
+}
+
+.coffee-chat-orange-background {
+  background: #FCF5F1;
 }
 
 .coffee-chat-grey-bottom-border {

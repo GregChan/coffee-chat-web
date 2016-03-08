@@ -1,21 +1,21 @@
 html
 	head
-		link(href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css')
-		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css")
-		link(rel="stylesheet" href="/public/css/index.css")
+		include ./includes/styles.jade
 	body
-		include ./includes/header.jade
-		div(class="row container text-orange")
-			h2(class="center text-orange") #{"Profile Survey for " + curUser.firstName}
+		nav(class="white z-depth-0 clear")
+			div(class="nav-wrapper coffee-chat-grey-background coffee-chat-grey-bottom-border")
+				div(class="container")
+					a(href="/")
+						img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
+		div(class="container text-orange")
+			h4(class="center text-orange") #{"Profile Survey for " + profile.firstName}
 				h5(class="center text-orange") Help us improve your matches!
-				div(class="row")
-					img(class="responsive-img" src=curUser.profilePic)
-					h5 #{curUser.firstName + " " + curUser.lastName}
-					h6=curUser.headLine
-					h6=curUser.email			
+		include ./includes/profile.jade	
+		div(class="row text-orange coffee-chat-grey-background")
+			div(class="row container")
 				include ./includes/survey.jade
-			div(class="row")
-				button(class="btn waves-effect waves-light col coffee-chat-orange submit" type="submit" name="action") Submit
+			div(class="row center")
+				a(class="btn waves-effect waves-light coffee-chat-orange" data-submit data-save type="submit" name="action") Submit
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

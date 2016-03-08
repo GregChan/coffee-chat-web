@@ -22,7 +22,10 @@ div(class="section white profile-section profile-edit")
 							+editableTextInput(work.company, work.companyID, "subtitle", {"data-company":"data"},"Company / School")
 				div(class="center")
 					a(href="#")
-						i(class="material-icons" data-add-icon="data-work-container" data-type="data-work-experience") add
+						div(class="valign-wrapper text-grey" data-add-icon="data-work-container" data-type="data-work-experience")
+							span(class="icon")
+								i(class="material-icons") add_circle_outline
+							span(class="valign") ADD POSITION
 		div(class="col s12 m3 l3")
 			if profile.positions
 				h5(class="section-title text-orange") Education
@@ -34,10 +37,15 @@ div(class="section white profile-section profile-edit")
 							+editableTextInput(edu.school, edu.schoolID, "subtitle", {"data-company":"data"},"Company / School")
 				div(class="center")
 					a(href="#")
-						i(class="material-icons" data-add-icon="data-education-container" data-type="data-education") add
+						div(class="valign-wrapper text-grey" data-add-icon="data-education-container" data-type="data-education")
+							span(class="icon")
+								i(class="material-icons") add_circle_outline
+							span(class="valign") ADD POSITION
 		div(class="col s12 m3 l3" data-interests)
 			h5(class="section-title text-orange") Interests
 			if interests && interests.fields
 				for field in interests.fields
 					for item in field.values
-						div #{item.name}
+						div ##{item.name}
+			else
+				div Please answer the questions below to complete your profile!

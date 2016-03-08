@@ -31,6 +31,11 @@
   height: 600px;
 }
 
+.admin-talent-img {
+  width: 100px;
+  height: 100px;
+}
+
 .text-orange {
   color: #EC6445;
 }
@@ -87,21 +92,23 @@ textarea {
 }
 
 .profile-section .profile-container {
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .profile-section .title {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: bolder;
 }
 
 .profile-section .subtitle {
-  font-size: 18px !important;
+  font-size: 14px !important;
   font-weight: 500;
 }
 
 .profile-section .icon {
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .profile-section .section-title {
@@ -124,6 +131,24 @@ textarea {
 .profile-edit .editable input:focus {
   border-bottom: 0px;
   box-shadow: none;
+}
+
+.navbar-fixed {
+  z-index: 1500;
+}
+
+.nav-buttons a {
+  margin-top: -10px;
+  height: 55px;
+}
+
+.side-nav {
+  background: #FAFAFA !important;
+  border-right: 1px solid #bbbbbb;
+}
+
+.page-footer {
+  z-index: 1500;
 }
 
 .coffee-chat-orange {
@@ -191,6 +216,10 @@ textarea {
 
 .nav-btn {
   margin-top: 13px !important;
+}
+
+.nav-wrapper {
+  height: 45px !important;
 }
 
 /* materialize overrides */

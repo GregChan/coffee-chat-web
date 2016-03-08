@@ -21,8 +21,15 @@
     display: none;
 }
 
+#submit-rating{
+    margin-top: 0px;
+    margin-bottom: 24px;
+    z-index: 1000;
+}
+
 .rating {
   margin-top: -48px;
+  margin-bottom: -24px;
   font-size: 100px;
   unicode-bidi: bidi-override;
   direction: rtl;

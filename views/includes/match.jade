@@ -27,10 +27,10 @@ div(class="section coffee-chat-orange-background #{match.userID}" id="match-reas
             p(class="text-grey flow-text") You both attend Northwestern University.
         div(class="center col s12 m4 l4")
             i(class="material-icons large text-orange") done
-            p(class="text-grey flow-text") You are both interested in software development.
+            p(class="text-grey flow-text") You are both interested in startups and technology.
         div(class="center col s12 m4 l4")
             i(class="material-icons large text-orange") done
-            p(class="text-grey flow-text") You both have a passion for DJing!
+            p(class="text-grey flow-text") You both have a passion for outdoor sports!
 div(class="section white #{match.userID}" id="match-accept")
     div(class="container center")
         h5(class="section-title text-orange") Match Details
@@ -63,7 +63,10 @@ div(class="section white #{match.userID}" id="match-rate")
             a(class="text-orange" id="two") &#9675;
             a(class="text-orange" id="three") &#9675;
             a(class="text-orange" id="four") &#9675;
-            a(class="text-orange" id="five") &#9675;  
+            a(class="text-orange" id="five") &#9675;
+        div
+            a(class="spacer-15 btn btn-outline white waves-effect waves-orange text-orange submit z-depth-0" id="submit-rating") Submit
+            
 
 script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 script var matchId = !{match.userID}

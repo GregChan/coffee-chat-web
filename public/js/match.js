@@ -35,6 +35,10 @@
                 }
 			}
 		});
+        $('#submit-rating').hide();
+        $('#submit-rating').click(function(event){
+            $('#submit-rating').hide();
+        });
         $('#accept-match').click(function(event){
             $('#match-accept').hide();
             $('#match-rate').show();
@@ -42,6 +46,7 @@
         $('.rating a').click(function(event){
             $(this).siblings('a').removeClass('active');
             $(this).addClass('active');
+            $('#submit-rating').show();
         });
 	});
 }());

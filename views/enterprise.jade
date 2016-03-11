@@ -1,0 +1,72 @@
+html
+	head
+		include ./includes/styles.jade
+	body
+		include ./includes/home-header.jade
+		div(class="parallax-container valign-wrapper")
+			div(class="parallax")
+				img(src="/public/images/background.png")
+			div(class="row container valign" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)")
+				h3(class="center header white-text") Professional conversations in your workplace made simple
+				h5(class="center white-text") Building great organizations one connection at a time
+				p(class="spacer-75")
+		div(class="section coffee-chat-grey-background")
+			div(class="")
+				h2(class="center text-orange") Start Connecting Today!
+				a(name="About")
+				h5(class="center") Enterprise Sign Up
+				p(class="spacer-30")
+				div(class="row valign-wrapper")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="height:200px" src="public/images/99.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="height:200px" src="public/images/90.png")
+					div(class="center col s12 m4 l4 valign")
+						img(class="responsive-img" style="height:200px" src="public/images/80.png")
+				div(class="row")
+					div(class="center col s12 m4 l4")
+						h5(class="center") of the users in CoffeeChat have been connected with at least one other contact
+					div(class="center col s12 m4 l4")
+						h5(class="center") of the users on CoffeeChat follow through with their meetings
+					div(class="center col s12 m4 l4")
+						h5(class="center") of those who meet through CoffeeChat are satisfied with their conversation
+		br
+		div(class="row container z-depth-3" style="padding:15px")
+			form(class="col s12 l12")
+				div(class="row")
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="name" type="text" required="")
+						label(for="name") Name
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="email" type="text" required="")
+						label(for="email") Email
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="comp" type="text" required="")
+						label(for="comp") Company
+					div(class="input-field col s12 m6 l4")
+						p Do you have a similar in program in place already?
+						form(action="#")
+							input(name="group1" type="radio" id="exists")
+							label(for="exists") Yes
+							br
+							input(name="group1" type="radio" id="nExist")
+							label(for="nExist") No
+					div(class="input-field col s12 m6 l4 center")
+						p How many people do you expect to invite to CoffeeChat?
+						a(class="dropdown-button coffee-chat-orange btn" data-activates="numParticip") Number of Participants
+						- var n = 10
+						ul(id="numParticip" class="dropdown-content")
+							while n < 500
+								li= n++
+					div(class="input-field col s12 m6 l4")
+						p Do you have any questions for us?
+						input(class="validate" placeholder="Questions" id="ques" type="text" required="")
+						label(for="ques") 
+			div(class="center col s12 m6 l12")
+				button(class="btn waves-effect waves-light coffee-chat-orange submit" type="submit" name="action") Submit
+		include ./includes/partners.jade
+		include ./includes/footer.jade
+
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="/public/js/enterprise.js")

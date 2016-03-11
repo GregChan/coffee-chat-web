@@ -15,7 +15,7 @@
 							var group = field.values[j];
 							for (var k = 0; k < group.values.length; k++) {
 								var item = group.values[k];
-									element = $('#' + field.className + item.id)[0];
+								element = $('#' + field.className + item.id)[0];
 								if (field.displayType == 1) {
 									element.checked = true;
 								}
@@ -27,7 +27,7 @@
 								element = $('#' + field.className + item.id);
 							if (field.displayType == 1) {
 								element[0].checked = true;
-							} else if(field.displayType == 2) {
+							} else if (field.displayType == 2) {
 								console.log(field.values[j].id);
 								element = $('#' + field.className + field.fieldID);
 								element.val(field.values[j].id);
@@ -35,6 +35,74 @@
 							}
 						}
 					}
+				}
+			}
+		});
+
+		var elements = {
+			nodes: [{
+				data: {
+					id: "me",
+					'background-image': 'https://farm8.staticflickr.com/7272/7633179468_3e19e45a0c_b.jpg'
+				}
+			}],
+			edges: []
+		};
+
+		var url = $('[data-profile-image]').attr('src');
+		var stylesheet = cytoscape.stylesheet().selector('node')
+			.css({
+				'height': 80,
+				'width': 80,
+				'background-fit': 'cover'
+			})
+			.selector('edge')
+			.css({
+				'width': 3,
+				'line-color': '#EC6445'
+			}).selector('#me')
+			.css('background-image', url)
+			.css('height', 160).css('width', 160);
+
+		$.ajax({
+			type: 'GET',
+			url: '/cat/user/community/1/match/history',
+			success: function(data) {
+				for (var i = 0; i < data.matches.length; i++) {
+					console.log(data.matches[i]);
+					$.ajax({
+						type: 'GET',
+						url: '/cat/user/' + data.matches[i].userID,
+						success: function(pastMatch) {
+							var id = pastMatch.firstName + '-' + pastMatch.lastName;
+							elements.nodes.push({
+								data: {
+									id: id
+								}
+							});
+
+							elements.edges.push({
+								data: {
+									source: "me",
+									target: id
+								}
+							});
+
+							stylesheet.selector('#' + id).css('background-image', pastMatch.profilePic);
+
+							var cy = cytoscape({
+								container: document.getElementById('cy'),
+								boxSelectionEnabled: false,
+								autounselectify: true,
+								style: stylesheet,
+								elements: elements,
+								layout: {
+									name: 'concentric',
+									padding: 10
+								}
+							});
+						}
+					});
 				}
 			}
 		});

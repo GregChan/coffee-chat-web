@@ -1,29 +1,46 @@
 var exports = module.exports = {},
-    request = require('request');
+    request = require('request'),
+    async = require('async');
 
 exports.path = 'survey';
 
 exports.getHandle = function(req, res) {
-    request({
-        url: process.env.BASE_URL + '/cat/community/1/profile-survey',
-        method: 'GET',
-        headers: {
-            'Cookie': 'userID=' + req.cookies.userID
-        }
-    }, function(error, response, body) {
-        var survey = JSON.parse(body);
-
-        if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
-            res.render('survey', {
-                survey: survey,
-                curUser: req.cookies.userID
+    if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
+        async.parallel([
+                function(callback) {
+                    request({
+                        url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/profile',
+                        method: 'GET',
+                        headers: {
+                            'Cookie': 'userID=' + req.cookies.userID
+                        }
+                    }, function(error, response, body) {
+                        callback(error, JSON.parse(body));
+                    });
+                },
+                function(callback) {
+                    request({
+                        url: process.env.BASE_URL + '/cat/community/1/profile-survey',
+                        method: 'GET',
+                        headers: {
+                            'Cookie': 'userID=' + req.cookies.userID
+                        }
+                    }, function(error, response, body) {
+                        callback(error, JSON.parse(body));
+                    });
+                }
+            ],
+            function(err, results) {
+                if (!err) {
+                    res.render('survey', {
+                        profile: results[0],
+                        survey: results[1]
+                    });
+                } else {
+                    res.status(500);
+                }
             });
-            res.end();
-            return;
-
-        } else {
-            res.status(500);
-            res.end();
-        }
-    });
+    } else {
+        res.status(500);
+    }
 }

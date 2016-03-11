@@ -1,0 +1,13 @@
+mixin editableTextInput(display, id, className, data, placeholder)
+	div(class="#{className} editable" data-editable)
+		div(data-display)
+			span(data-display-value)=display
+			span(class="icon")
+				a(href="#")
+					i(class="material-icons" data-edit-icon) mode_edit
+		div(data-edit)
+			input(class="subtitle text-grey edit" data-edit-input type="text" data-id=id value=display placeholder=placeholder)&attributes(data)
+			a(href="#")
+				i(class="material-icons" data-confirm-icon) done
+			a(href="#")
+				i(class="material-icons" data-cancel-icon) clear

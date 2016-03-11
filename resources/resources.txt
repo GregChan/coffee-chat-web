@@ -1,9 +1,14 @@
 ./resources/cat/oauth/getUserID.js
 ./resources/cat/user/updateUserProfileForCommunity.js
 ./resources/cat/user/getUser.js
+./resources/cat/user/getUserPositions.js
+./resources/cat/user/getUserProfile.js
 ./resources/cat/user/getUserProfileForCommunity.js
 ./resources/cat/user/getUserProfileForCommunityUser.js
+./resources/cat/user/updateUserPositions.js
 ./resources/cat/community/getCommunityProfileSurvey.js
+./resources/cat/community/getCommunityFeedback.js
+./resources/cat/community/getCommunityUsers.js
 ./resources/cat/match/insertMatch.js
 ./resources/cat/match/getCurrentMatches.js
 ./resources/cat/match/getMatchHistory.js
@@ -11,6 +16,8 @@
 ./resources/cat/match/acceptMatch.js
 ./resources/cat/match/rejectMatch.js
 ./resources/cat/match/feedbackMatch.js
+./resources/cat/match/updateUserFeedbackForMatch.js
+./resources/cat/match/getUserFeedbackForMatch.js
 ./resources/wild/oauth/auth.js
 ./resources/wild/oauth/callBack.js
 ./resources/wild/pages/home.js
@@ -21,4 +28,6 @@
 ./resources/wild/pages/survey.js
 ./resources/wild/pages/team.js
 ./resources/wild/pages/email.js
+./resources/wild/pages/enterprise.js
 ./resources/wild/user/signout.js
+./resources/wild/pages/admin/adminTalent.js

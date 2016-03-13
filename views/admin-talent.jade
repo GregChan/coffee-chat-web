@@ -9,23 +9,31 @@ html
 					a(href="#")
 				li
 					h4(class="text-orange") Groups
+		div(class="col s2 m2 l2" data-past-match-template data-past-match style="display: none;")
+			a(data-past-match-link)
+				img(data-past-match-image class="circle")
+
 		div(class="row" style="margin-left: 250px;")
 			div(class="col s12 m12 l12")
 				h4 Talent
 				div(class="collection")
 					for user in users
 						div(href="#" class="collection-item")
-							div(class="row")
+							div(class="row #{user.id}")
 								div(class="col s3 m3 l2")
 									img(class="admin-talent-img circle" src=user.profilePic)
-								div(class="col s9 m9 l10")
+								div(class="col s9 m6 l3")
 									h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
 									h6(class="coffee-chat-grey") #{user.title}
 									h6(class="coffee-chat-grey") #{user.company}
+								div(class="col s12 m2 l7")
+									div(class="row" data-past-matches)
+
 
 
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script var users = !{JSON.stringify(users)}
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
-	script(src="/public/js/admin-talent.js")
+	script(src="/public/js/adminTalent.js")
 						

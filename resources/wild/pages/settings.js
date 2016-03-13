@@ -41,6 +41,17 @@ exports.getHandle = function(req, res) {
                     callback(error, JSON.parse(body));
                 });
             },
+            function(callback) {
+                request({
+                    url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/community/1/match/history',
+                    method: 'GET',
+                    headers: {
+                        'Cookie': 'userID=' + req.cookies.userID
+                    }
+                }, function(error, response, body) {
+                    callback(error, JSON.parse(body));
+                });
+            }
         ],
         function(err, results) {
             if (!err) {
@@ -48,7 +59,8 @@ exports.getHandle = function(req, res) {
                 var data = {
                     profile: results[0],
                     interests: results[1],
-                    survey: results[2]
+                    survey: results[2],
+                    pastMatches: results[3]
                 }
 
                 res.render('settings', data);

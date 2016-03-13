@@ -4,11 +4,11 @@ var dbConn = require("../../elf/db/dbConn.js");
 // var urlLinkedin='api.linkedin.com';
 // var urlBasicProfie='/v1/people/~?format=json';
 
-exports.path = 'cat/user/community/:commID/match/history';
+exports.path = 'cat/user/:userID/community/:commID/match/history';
 
 exports.getHandle = function(req, res) {
     var commID = req.params.commID;
-    var userId = req.cookies.userID;
+    var userId = req.params.userID;
     console.log('match/getMatchHistory: getMatchHistory: ' + userId);
     getMatchHistory(userId,commID, res, req);
 }

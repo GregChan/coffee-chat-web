@@ -883,6 +883,7 @@ exports.getCommunityUsers = function(communityID) {
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         map[row.id] = {
+                            id: row.id,
                             firstName: row.firstName,
                             lastName: row.lastName,
                             title: row.title,
@@ -911,9 +912,10 @@ exports.getCommunityUsers = function(communityID) {
 
 exports.getMatchHistory = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
+        // var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
+        var sql = 'select a.id, b.id, b.firstName, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicS, b.linkedInProfile, a.create_at FROM user_match as a inner join user_basic as b on (a.userA = b.id or a.userB =b.id) Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2)) and b.id != ? order by a.create_at desc, a.id'
 
-        sql = mysql.format(sql, [communityID, userID, userID]);
+        sql = mysql.format(sql, [communityID, userID, userID, userID]);
 
         console.log('getCurrentMatches: going to query db with sql: ' + sql);
 
@@ -937,14 +939,20 @@ exports.getMatchHistory = function(userID, communityID) {
                         match["id"] = rows[i].id;
                         if (rows[i].userA == userID) {
                             match["userID"] = rows[i].userB;
+                            match["myID"] = rows[i].userA;
                             match["status"] = rows[i].userBStatus;
                             match["myStatus"] = rows[i].userAStatus;
                         } else {
-                            match["userID"] = rows[i].userA;
+                            match["userID"] = rows[i].userA
+                            match["myID"] = rows[i].userB;
                             match["status"] = rows[i].userAStatus;
                             match["myStatus"] = rows[i].userBStatus;
 
                         }
+                        match['firstName'] = rows[i].firstName;
+                        match['lastName'] = rows[i].lastName;
+                        match['profilePic'] = rows[i].profilePicS;
+                        match['linkedInProfile'] = rows[i].linkedInProfile;
                         match["matchTime"] = rows[i].create_at;
                         result["matches"].push(match);
                     }

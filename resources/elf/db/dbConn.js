@@ -913,7 +913,7 @@ exports.getCommunityUsers = function(communityID) {
 exports.getMatchHistory = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
         // var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
-        var sql = 'select a.id, b.id, b.firstName, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicS, b.linkedInProfile, a.create_at FROM user_match as a inner join user_basic as b on (a.userA = b.id or a.userB =b.id) Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2)) and b.id != ? order by a.create_at desc, a.id'
+        var sql = 'select a.id, b.id, b.firstName, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at FROM user_match as a inner join user_basic as b on (a.userA = b.id or a.userB =b.id) Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2)) and b.id != ? order by a.create_at desc, a.id'
 
         sql = mysql.format(sql, [communityID, userID, userID, userID]);
 
@@ -951,7 +951,7 @@ exports.getMatchHistory = function(userID, communityID) {
                         }
                         match['firstName'] = rows[i].firstName;
                         match['lastName'] = rows[i].lastName;
-                        match['profilePic'] = rows[i].profilePicS;
+                        match['profilePic'] = rows[i].profilePicO;
                         match['linkedInProfile'] = rows[i].linkedInProfile;
                         match["matchTime"] = rows[i].create_at;
                         result["matches"].push(match);

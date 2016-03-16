@@ -25,10 +25,6 @@
 							pastMatchesSection.append(newTemp);
 						}
 					}
-					// $('.past-matches .pastMatch' + users[i].userID + pastMatch.userId + ' .match-name').text(pastMatch.firstName + ' ' + pastMatch.lastName);
-					// $('.past-matches .pastMatch' + users[i].userID + pastMatch.userId + ' .match-title').text(pastMatch.headLine);
-					// $('.past-matches .pastMatch' + users[i].userID + pastMatch.userId + '.match-link').attr("href", pastMatch.linkedInProfile);
-					// $('.past-matches .pastMatch' + users[i].userID + pastMatch.userId + ' .match-pic').attr("src", pastMatch.profilePic);
 				}
 			});
 		}

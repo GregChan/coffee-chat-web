@@ -69,9 +69,32 @@
   height: 600px;
 }
 
-.admin-talent-img {
-  width: 100px;
-  height: 100px;
+.talent .row {
+  margin-bottom: 0px;
+}
+
+.talent .no-padding {
+  padding: 0px;
+}
+
+.talent .admin-talent-img {
+  width: 100%;
+  height: auto;
+
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.talent .admin-talent-past-img {
+  width: 100%;
+  height: auto;
+
+  max-width: 75px;
+  max-height: 75px;
+}
+
+.talent .admin-talent-column {
+  min-width: 350px;
 }
 
 .text-orange {
@@ -256,6 +279,10 @@ textarea {
   background: -o-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Firefox 3.6 to 15 */
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important;
+}
+
+.max-width {
+  max-width: 200px;
 }
 
 .nav-btn {

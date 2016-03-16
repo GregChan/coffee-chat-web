@@ -9,25 +9,29 @@ html
 					a(href="#")
 				li
 					h4(class="text-orange") Groups
-		div(class="col s2 m2 l2" data-past-match-template data-past-match style="display: none;")
+		div(class="col m4 l4" data-past-match-template data-past-match style="display: none;")
 			a(data-past-match-link)
-				img(data-past-match-image class="circle")
+				img(class="admin-talent-past-img circle" data-past-match-image)
 
 		div(class="row" style="margin-left: 250px;")
 			div(class="col s12 m12 l12")
 				h4 Talent
-				div(class="collection")
+				div(class="talent collection")
 					for user in users
 						div(href="#" class="collection-item")
-							div(class="row #{user.id}")
-								div(class="col s3 m3 l2")
-									img(class="admin-talent-img circle" src=user.profilePic)
-								div(class="col s9 m6 l3")
-									h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
-									h6(class="coffee-chat-grey") #{user.title}
-									h6(class="coffee-chat-grey") #{user.company}
-								div(class="col s12 m2 l7")
+							div(class="row #{user.id} valign-wrapper no-padding")
+								div(class="row col s3 m3 l3 admin-talent-column no-padding")
+									div(class="col s5 m5 l5 no-padding")
+										img(class="admin-talent-img circle" src=user.profilePic)
+									div(class="col s7 m7 l7 no-padding")
+										h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
+										h6(class="coffee-chat-grey") #{user.title}
+										h6(class="coffee-chat-grey") #{user.company}
+								div(class="col s12 m6 l6 hide-on-small-only valign")
 									div(class="row" data-past-matches)
+								div(class="col s12 m3 l3 hide-on-small-only valign")
+									
+									
 
 
 

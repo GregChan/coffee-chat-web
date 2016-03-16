@@ -31,3 +31,4 @@
 ./resources/wild/pages/enterprise.js
 ./resources/wild/user/signout.js
 ./resources/wild/pages/admin/adminTalent.js
+./resources/wild/pages/admin/adminMetrics.js

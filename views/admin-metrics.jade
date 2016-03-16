@@ -1,0 +1,40 @@
+html
+	head
+		include ./includes/styles.jade
+	body
+		header
+			include ./includes/admin-header.jade
+			div(class="row center-align" id="curve_chart" style="height:80%")
+			div(class="row coffee-chat-grey-background text-orange")
+				div(class="row valign-wrapper ")
+					div(class="center col s12 m4 l4 valign")
+						h1(class="center")=metrics.totalConnections
+						h3(class="center") Total Connections
+					div(class="center col s12 m4 l4 valign")
+						h1(class="center")=metrics.avgRating
+						h3(class="center") Average Rating
+					div(class="center col s12 m4 l4 valign")
+						h1(class="center")=metrics.connectionRate
+						h3(class="center") Connection Rate						
+			div(class="row" style="padding:100px")
+				table(class="responsive-table highlight")
+					thead(class="text-grey")
+						tr
+							th(data-field="Group") Group
+							th(data-field="Total Connections") Total Connections
+							th(data-field="Average Rating") Average Rating
+							th(data-field="Connection Rate") Connecton Rate
+					tbody(class="text-orange")
+						for group in metrics.groups
+							tr
+								td=group.groupName
+								td=group.totalConnections
+								td=group.avgRating
+								td=group.connectionRate
+	include ./includes/footer.jade
+	meta(http-equiv="content-type" content="text/html; charset=utf-8")
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+	script var matches = !{JSON.stringify(matches.matches)}
+	script(src="/public/js/admin-metrics.js")

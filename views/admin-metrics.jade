@@ -4,7 +4,10 @@ html
 	body
 		header
 			include ./includes/admin-header.jade
-			div(class="row center-align" id="curve_chart" style="height:80%")
+			h1(class="center text-orange") Matching Metrics
+			div(class="row text-orange")
+				h4(style="padding:0px 20px") For the Community
+				div(id="curve_chart" style="height:80%")
 			div(class="row coffee-chat-grey-background text-orange")
 				div(class="row valign-wrapper ")
 					div(class="center col s12 m4 l4 valign")
@@ -15,8 +18,11 @@ html
 						h3(class="center") Average Rating
 					div(class="center col s12 m4 l4 valign")
 						h1(class="center")=metrics.connectionRate
-						h3(class="center") Connection Rate						
-			div(class="row" style="padding:100px")
+						h3(class="center") Connection Rate		
+			br
+			div(class="row text-orange")
+				h4(style="padding:0px 20px") For Groups				
+			div(class="row" style="padding:0px 100px")
 				table(class="responsive-table highlight")
 					thead(class="text-grey")
 						tr

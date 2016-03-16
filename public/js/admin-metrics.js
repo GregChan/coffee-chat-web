@@ -17,6 +17,7 @@ function display() {
     var data = google.visualization.arrayToDataTable(points);
 
         var options = {
+          title: "Total Matches",
           curveType: 'line',
           legend: { position: 'none' },
           colors: ['#ee6545'],

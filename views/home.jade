@@ -15,11 +15,15 @@ html
                                 a(class="coffee-chat-grey" href="/wild/user/signout") Signout
 
         div(class="current-matches")
-            if (curMatch.matches.length > 0)
+            if (curMatch.total > 0)
                 each match in [curMatch.matches[0]]
                     include ./includes/match.jade
             else
-                h3(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                br
+                h3(class="center text-orange" id="match-announcement") CoffeeChats are brewing...
+                img(class="responsive-img center-block" src="/public/images/brewing.png")
+                h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                br
         if (matchHist.matches)
             div(class="section coffee-chat-grey-background  past-matches" id="previous-matches")
                 h5(class="center text-orange") Past CoffeeChats

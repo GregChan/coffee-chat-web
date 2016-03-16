@@ -19,7 +19,7 @@ exports.getHandle = function(req, res) {
 			},
                         function(callback) {
 				request({
-					url: process.env.BASE_URL + '/cat/community/1/users',
+					url: process.env.BASE_URL + '/cat/community/1/analytics',
 					method: 'GET',
 					headers: {
 						'Cookie': 'userID=' + req.cookies.userID
@@ -45,7 +45,7 @@ exports.getHandle = function(req, res) {
 				console.log(results[0]);
 				var data = {
 					users: results[0],
-                                        metrics: {community: "1", totalConnections: "500", avgRating: "4.5", connectionRate: "74%", groups:[{groupName: "C Level", totalConnections: "100", avgRating: "3.2", connectionRate: "80%"}]}, //results[1],
+                                        metrics: results[1],
                                         matches: results[2],
 				}
 

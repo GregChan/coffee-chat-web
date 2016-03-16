@@ -47,11 +47,35 @@ exports.getCommunityGroups = function(communityID) {
      */
 
     return new Promise(function(resolve, reject) {
-        var sql = 'select communityID, name, created from community_group where communityID = 1 and deleted = 0';
+        var sql = 'select id, communityID, name, created from community_group where communityID = ? and deleted = 0';
+        sql = mysql.format(sql, [communityID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+
+            var groups = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                groups.push({
+                    groupID: rows[i].id,
+                    groupName: rows[i].name
+                });
+            }
+
+            resolve(groups);
+        });
     });
 }
 
-exports.getGroupUsers = function(communityID, groupID) {
+exports.getCommunityGroupUsers = function(communityID, groupID) {
     /* Description:
      * returns a list of users in a group for a community
      *
@@ -63,7 +87,43 @@ exports.getGroupUsers = function(communityID, groupID) {
      */
 
     return new Promise(function(resolve, reject) {
-        var sql = 'select ub.firstName, ub.lastName, ub.profilePicO, ub.headline, cg.name as groupName, ug.created from user_basic as ub left join user_group as ug on ub.id = ug.userID left join community_group as cg on cg.id = ug.groupID  where ug.groupID = 1 and cg.communityID = 1 and cg.deleted = 0';
+        var sql = 'select ub.firstName, ub.lastName, ub.profilePicO, ub.headline, cg.name as groupName, ug.created, ug.groupID from user_basic as ub left join user_group as ug on ub.id = ug.userID left join community_group as cg on cg.id = ug.groupID  where ug.groupID = ? and cg.communityID = ? and cg.deleted = 0';
+
+        sql = mysql.format(sql, [groupID, communityID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+
+            var users = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                users.push({
+                    firstName: rows[i].firstName,
+                    lastName: rows[i].lastName,
+                    profilePic: rows[i].profilePicO,
+                    headLine: rows[i].headline,
+                    dateAdded: rows[i].created
+                });
+            }
+
+            if (rows.length > 0) {
+                resolve({
+                    groupName: rows[0].groupName,
+                    groupID: rows[0].groupID,
+                    users: users
+                });
+            } else {
+                resolve({});
+            }
+        });
     });
 }
 
@@ -90,7 +150,7 @@ exports.getCommunityAnalytics = function(communityID) {
                 var sql = 'select id from user_match where ((userAStatus = 2 and userBStatus = 2) or (userAStatus = 4 or userBStatus = 4)) and communityID = ?';
                 sql = mysql.format(sql, [communityID]);
 
-                connection.query(sql, function(er, rows, fields) {
+                connection.query(sql, function(err, rows, fields) {
                     if (err) {
                         logger.debug('Error in connection database');
                         reject({

@@ -77,9 +77,21 @@ GET
 
 \*! [/cat/community/{communityID}/match/{matchID}/](#communityMatchID)
 
+\*! [/cat/community/{communityID}/group/](#getGroups)
+
+\*! [/cat/community/{communityID}/group/{groupID}/users/](#getGroupUsers)
+
+\*! [/cat/community/{communityID}/analytics/](#)
+
 POST
 
 \*! [/cat/community/{communityID}/survey/update/](#communityUpdateSurvey)
+
+\*! [/cat/community/{communityID}/group/create/](#)
+
+\*! [/cat/community/{communityID}/group/{groupID}/user/insert/](#)
+
+\*! [/cat/community/{communityID}/group/{groupID}/user/delete/](#)
 
 ### User End Points ###
 

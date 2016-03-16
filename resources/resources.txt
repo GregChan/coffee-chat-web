@@ -9,6 +9,7 @@
 ./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/cat/community/getCommunityFeedback.js
 ./resources/cat/community/getCommunityUsers.js
+./resources/cat/community/getCommunityAnalytics.js
 ./resources/cat/match/insertMatch.js
 ./resources/cat/match/getCurrentMatches.js
 ./resources/cat/match/getMatchHistory.js

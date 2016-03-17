@@ -37,6 +37,38 @@ exports.clearup = function() {
     });
 }
 
+exports.updateCommunityGroup = function(communityID, data) {
+    /* Description:
+     * creates a new group
+     * 
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * data : object
+     *     object containing group name
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'insert into community_group (communityID, name) values (?, ?)';
+        sql = mysql.format(sql, [communityID, data.name]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new group in ' + communityID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    });
+}
+
 exports.getCommunityGroups = function(communityID) {
     /* Description:
      * returns a list of groups for a community 
@@ -318,7 +350,7 @@ exports.getCommunityAnalytics = function(communityID) {
     });
 }
 
-exports.insertGroupUser = function(communityID, groupID, postData) {
+exports.updateGroupUser = function(communityID, groupID, data) {
     /* Description:
      * deletes a user from a group
      *
@@ -327,16 +359,34 @@ exports.insertGroupUser = function(communityID, groupID, postData) {
      *     id for a community
      * groupID : int
      *     id for a group
-     * postData : object
+     * data : object
      *      object containing the userID
      */
 
     return new Promise(function(resolve, reject) {
-        // insert a user into a group only if that group is in the community
-        var sql = 'insert into user_group (userID, groupID) select r.userID, r.id from (select uc.userID, cg.id from (select * from user_community where communityID = ? and userID = ?) as uc left join (select * from community_group where communityID = ? and id = ?) as cg on cg.communityID = uc.communityID where uc.userID is not null and cg.id is not null) as r;';
-        values = [community, userID, communityID, groupID];
+        return new Promise(function(resolve, reject) {
+            // insert a user into a group only if that group is in the community
+            var sql = 'insert into user_group (userID, groupID) select r.userID, r.id from (select uc.userID, cg.id from (select * from user_community where communityID = ? and userID = ?) as uc left join (select * from community_group where communityID = ? and id = ?) as cg on cg.communityID = uc.communityID where uc.userID is not null and cg.id is not null) as r;';
+            sql = mysql.format(sql, [community, data.userID, communityID, groupID]);
+
+            pool.query(sql, function(err, rows, feilds) {
+                if (err) {
+                    logger.debug('Error in connection or query');
+                    reject({
+                        error: '500',
+                        message: 'DB error'
+                    });
+                } else {
+                    logger.debug('inserted new user in group with id ' + communityID);
+                    resolve({
+                        'success': '200'
+                    });
+                }
+            });
+        });
     });
 }
+
 
 exports.deleteGroupUser = function(communityID, groupID, postData) {
     /* Description:
@@ -861,7 +911,7 @@ exports.getCommunityUsers = function(communityID) {
 
 exports.getMatchHistory = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 3) or (userB = ? and userBStatus > 3) ) order by create_at';
+        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
 
         sql = mysql.format(sql, [communityID, userID, userID]);
 

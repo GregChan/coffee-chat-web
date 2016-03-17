@@ -19,8 +19,7 @@ function doPromise(p, callback) {
 }
 
 function getCommunityUsers(communityID, req, res) {
-    var positions = req.body;
-    doPromise(dbConn.getCommunityUsers(communityID, positions), function(error, data) {
+    doPromise(dbConn.getCommunityUsers(communityID), function(error, data) {
         if (error) {
             console.log(error);
             res.sendStatus(error.error);

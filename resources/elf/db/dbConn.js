@@ -119,7 +119,7 @@ exports.getCommunityGroupUsers = function(communityID, groupID) {
      */
 
     return new Promise(function(resolve, reject) {
-        var sql = 'select ub.firstName, ub.lastName, ub.profilePicO, ub.headline, cg.name as groupName, ug.created, ug.groupID from user_basic as ub left join user_group as ug on ub.id = ug.userID left join community_group as cg on cg.id = ug.groupID  where ug.groupID = ? and cg.communityID = ? and cg.deleted = 0';
+        var sql = 'select ub.id, ub.firstName, ub.lastName, ub.profilePicO, ub.headline, cg.name as groupName, ug.created, ug.groupID from user_basic as ub left join user_group as ug on ub.id = ug.userID left join community_group as cg on cg.id = ug.groupID  where ug.groupID = ? and cg.communityID = ? and cg.deleted = 0';
 
         sql = mysql.format(sql, [groupID, communityID]);
 
@@ -138,6 +138,7 @@ exports.getCommunityGroupUsers = function(communityID, groupID) {
 
             for (var i = 0; i < rows.length; i++) {
                 users.push({
+                    id: rows[i].id,
                     firstName: rows[i].firstName,
                     lastName: rows[i].lastName,
                     profilePic: rows[i].profilePicO,

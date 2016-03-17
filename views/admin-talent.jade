@@ -9,17 +9,28 @@ html
 					a(href="#")
 				li
 					h4(class="text-orange") Groups
-		div(class="col m4 l4" data-past-match-template data-past-match style="display: none;")
-			a(data-past-match-link)
-				img(class="admin-talent-past-img circle" data-past-match-image)
+				li
+					a(class="admin-talent-nav-text" href="#all" data-all) All
+				div(data-groups)
+				li
+					a(data-add-group) 
+						div(class="valign-wrapper")
+							span(class="icon")
+								i(class="material-icons") add_circle_outline
+							span(class="valign") ADD GROUP
+		div(data-templates style="display: none;")
+			div(class="col m4 l4" data-past-match-template data-past-match)
+				a(data-past-match-link)
+					img(class="admin-talent-past-img circle" data-past-match-image)
+			li(data-group-template)
+				a(class="admin-talent-nav-text" data-id data-group) 
 
 		div(class="row" style="margin-left: 250px;")
 			div(class="col s12 m12 l12")
-				h4 Talent
 				div(class="talent collection")
 					for user in users
-						div(href="#" class="collection-item")
-							div(class="row #{user.id} valign-wrapper no-padding")
+						div(href="#" class="#{user.id} collection-item" data-user)
+							div(class="row valign-wrapper no-padding")
 								div(class="row col s3 m3 l3 admin-talent-column no-padding")
 									div(class="col s5 m5 l5 no-padding")
 										img(class="admin-talent-img circle" src=user.profilePic)
@@ -30,12 +41,7 @@ html
 								div(class="col s12 m6 l6 hide-on-small-only valign")
 									div(class="row" data-past-matches)
 								div(class="col s12 m3 l3 hide-on-small-only valign")
-									
-									
-
-
-
-	include ./includes/footer.jade
+	
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script var users = !{JSON.stringify(users)}
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

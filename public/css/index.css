@@ -18,13 +18,13 @@
 }
 
 #match-rate {
-    display: none;
+  display: none;
 }
 
 #submit-rating{
-    margin-top: 0px;
-    margin-bottom: 24px;
-    z-index: 1000;
+  margin-top: 0px;
+  margin-bottom: 24px;
+  z-index: 1000;
 }
 
 .rating {
@@ -44,10 +44,10 @@
 .rating > a:hover ~ a:before,
 .rating > a.active:before,
 .rating > a.active ~ a:before{
-   content: "\25CF";
-   margin-left: -2px;
-   margin-top: -2px;
-   position: absolute;
+ content: "\25CF";
+ margin-left: -2px;
+ margin-top: -2px;
+ position: absolute;
 }
 
 .match-btn {
@@ -91,6 +91,10 @@
 
   max-width: 75px;
   max-height: 75px;
+}
+
+.admin-talent-nav-text {
+  font-size: 18px !important;
 }
 
 .talent .admin-talent-column {
@@ -167,7 +171,7 @@ textarea {
   font-weight: 500;
 }
 
-.profile-section .icon {
+.icon {
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -204,9 +208,9 @@ textarea {
 }
 
 @media only screen and (min-width: 601px) {
-    .nav-buttons a {
-        height: 63px;
-    }
+  .nav-buttons a {
+    height: 63px;
+  }
 }
 
 .side-nav {

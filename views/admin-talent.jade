@@ -33,7 +33,7 @@ html
 							div(class="row valign-wrapper no-padding")
 								div(class="row col s3 m3 l3 admin-talent-column no-padding")
 									div(class="col s5 m5 l5 no-padding")
-										img(class="admin-talent-img circle" src=user.profilePic)
+										img(class="admin-talent-img circle" src=user.profilePic || '/public/images/generic-profile.png')
 									div(class="col s7 m7 l7 no-padding")
 										h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
 										h6(class="coffee-chat-grey") #{user.title}

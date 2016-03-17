@@ -865,7 +865,7 @@ exports.getAllMatches = function(communityID) {
 exports.getCommunityUsers = function(communityID) {
     //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id left join user_community as d on a.id = d.userID where b.isCurrent = 1 and communityID = ?';
+        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_community as d on a.id = d.userID left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id where d.communityID = ?';
 
         sql = mysql.format(sql, [communityID])
 

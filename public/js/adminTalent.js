@@ -44,6 +44,11 @@
 			$('[data-user]').show();
 		});
 
+		$('[data-add-group]').click(function(e) {
+			
+			$('[data-groups]')
+		});
+
 		var pastMatchTemplate = $('[data-past-match-template]');
 		pastMatchTemplate.removeAttr('data-past-match-template');
 

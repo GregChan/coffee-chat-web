@@ -11,6 +11,7 @@ if (!process.env.DB_HOST || !process.env.DB_PASS || !process.env.DB_USER || !pro
 	process.env.DB_PASS = "4d39195d";
 	process.env.DB_USER = "b443fc80dd2566";
 	process.env.DB_COFFEE_CHAT = "coffeechat";
+	process.env.DB_CONNECTIONS = 1;
 }
 
 if (!process.env.PASSWORD || !process.env.USERNAME) {

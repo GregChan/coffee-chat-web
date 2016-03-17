@@ -22,17 +22,21 @@
 							}
 						}
 					} else {
+						var values = [];
 						for (var j = 0; j < field.values.length; j++) {
 							var item = field.values[j],
 								element = $('#' + field.className + item.id);
 							if (field.displayType == 1) {
 								element[0].checked = true;
 							} else if (field.displayType == 2) {
-								console.log(field.values[j].id);
 								element = $('#' + field.className + field.fieldID);
-								element.val(field.values[j].id);
-								element.material_select();
+								values.push(field.values[j].id);
 							}
+						}
+						
+						if (field.displayType == 2) {
+							element.val(values);
+							element.material_select();
 						}
 					}
 				}

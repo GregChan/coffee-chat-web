@@ -36,12 +36,49 @@
 			}
 		});
         $('#submit-rating').hide();
+        $('#match-accept').hide();
+        $('#match-rate').hide();
+        if (matchStatus < 2) {
+            $('#match-accept').show();
+        } else if (matchStatus == 2) {
+            $('#match-rate').show();
+        }
+        
         $('#submit-rating').click(function(event){
-            $('#submit-rating').hide();
+            $.ajax({
+                type: 'POST',
+                url: '/cat/user/community/1/match/feedback',
+                success: function(data) {
+                    window.location.reload();
+                },
+                data: {
+                    "matchID":matchNumber
+                }
+            });
         });
         $('#accept-match').click(function(event){
-            $('#match-accept').hide();
-            $('#match-rate').show();
+            $.ajax({
+                type: 'POST',
+                url: '/cat/user/community/1/match/accept',
+                success: function(data) {
+                    window.location.reload();
+                },
+                data: {
+                    "matchID":matchNumber
+                }
+            });
+        });
+        $('#decline-match').click(function(event){
+            $.ajax({
+                type: 'POST',
+                url: '/cat/user/community/1/match/reject',
+                success: function(data) {
+                    window.location.reload();
+                },
+                data: {
+                    "matchID":matchNumber
+                }
+            });
         });
         $('.rating a').click(function(event){
             $(this).siblings('a').removeClass('active');

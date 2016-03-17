@@ -9,6 +9,11 @@
 ./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/cat/community/getCommunityFeedback.js
 ./resources/cat/community/getCommunityUsers.js
+./resources/cat/community/getCommunityGroups.js
+./resources/cat/community/getCommunityGroupUsers.js
+./resources/cat/community/getCommunityAnalytics.js
+./resources/cat/community/updateCommunityGroup.js
+./resources/cat/community/updateGroupUser.js
 ./resources/cat/match/insertMatch.js
 ./resources/cat/match/getCurrentMatches.js
 ./resources/cat/match/getMatchHistory.js
@@ -31,3 +36,4 @@
 ./resources/wild/pages/enterprise.js
 ./resources/wild/user/signout.js
 ./resources/wild/pages/admin/adminTalent.js
+./resources/wild/pages/admin/adminMetrics.js

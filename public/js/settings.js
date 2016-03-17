@@ -22,17 +22,21 @@
 							}
 						}
 					} else {
+						var values = [];
 						for (var j = 0; j < field.values.length; j++) {
 							var item = field.values[j],
 								element = $('#' + field.className + item.id);
 							if (field.displayType == 1) {
 								element[0].checked = true;
 							} else if (field.displayType == 2) {
-								console.log(field.values[j].id);
 								element = $('#' + field.className + field.fieldID);
-								element.val(field.values[j].id);
-								element.material_select();
+								values.push(field.values[j].id);
 							}
+						}
+						
+						if (field.displayType == 2) {
+							element.val(values);
+							element.material_select();
 						}
 					}
 				}
@@ -64,47 +68,44 @@
 			.css('background-image', url)
 			.css('height', 160).css('width', 160);
 
-		$.ajax({
-			type: 'GET',
-			url: '/cat/user/community/1/match/history',
-			success: function(data) {
-				for (var i = 0; i < data.matches.length; i++) {
-					console.log(data.matches[i]);
-					$.ajax({
-						type: 'GET',
-						url: '/cat/user/' + data.matches[i].userID,
-						success: function(pastMatch) {
-							var id = pastMatch.firstName + '-' + pastMatch.lastName;
-							elements.nodes.push({
-								data: {
-									id: id
-								}
-							});
 
-							elements.edges.push({
-								data: {
-									source: "me",
-									target: id
-								}
-							});
+		console.log(pastMatches);
 
-							stylesheet.selector('#' + id).css('background-image', pastMatch.profilePic);
+		for (var i = 0; i < pastMatches.matches.length; i++) {
+			console.log(pastMatches.matches[i]);
+			$.ajax({
+				type: 'GET',
+				url: '/cat/user/' + pastMatches.matches[i].userID,
+				success: function(pastMatch) {
+					var id = pastMatch.firstName.split(' ').join('-') + '-' + pastMatch.lastName.split(' ').join('-');
+					elements.nodes.push({
+						data: {
+							id: id
+						}
+					});
 
-							var cy = cytoscape({
-								container: document.getElementById('cy'),
-								boxSelectionEnabled: false,
-								autounselectify: true,
-								style: stylesheet,
-								elements: elements,
-								layout: {
-									name: 'concentric',
-									padding: 10
-								}
-							});
+					elements.edges.push({
+						data: {
+							source: "me",
+							target: id
+						}
+					});
+
+					stylesheet.selector('#' + id).css('background-image', pastMatch.profilePic);
+
+					var cy = cytoscape({
+						container: document.getElementById('cy'),
+						boxSelectionEnabled: false,
+						autounselectify: true,
+						style: stylesheet,
+						elements: elements,
+						layout: {
+							name: 'concentric',
+							padding: 10
 						}
 					});
 				}
-			}
-		});
+			});
+		}
 	});
 }());

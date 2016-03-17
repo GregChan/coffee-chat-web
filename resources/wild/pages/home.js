@@ -43,7 +43,7 @@ exports.getHandle = function(req, res) {
 				},
 				function(callback) {
 					request({
-						url: process.env.BASE_URL + '/cat/user/community/1/match/history',
+						url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/community/1/match/history',
 						method: 'GET',
 						headers: {
 							'Cookie': 'userID=' + req.cookies.userID

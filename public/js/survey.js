@@ -5,7 +5,7 @@
                 if (submitted == false) {
                     submitted = true;
                 } else {
-                    window.location.href="/";
+                    window.location.href = "/";
                 }
             };
         $('select').material_select();
@@ -32,12 +32,14 @@
                             fieldData.choices.push($(this).attr('data-input-id'));
                         }
                     } else if (type == 'select' && $(this).val()) {
-                        fieldData.choices.push($(this).val());
+                        fieldData.choices = $(this).val();
                     }
                 })
 
                 data.data.push(fieldData);
             });
+
+            console.log(data);
 
             $.ajax({
                 type: 'POST',
@@ -45,7 +47,7 @@
                 success: function(data) {
                     Materialize.toast('Success!', 2000);
                     $('[data-save-prompt]').hide();
-                    
+
                     finishedCallback();
                 },
                 data: data

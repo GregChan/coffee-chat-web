@@ -1,13 +1,12 @@
 var exports = module.exports = {};
 var dbConn = require("../../elf/db/dbConn.js");
 
-exports.path = 'cat/community/:communityID/users';
+exports.path = 'cat/community/:communityID/group/:groupID/users';
 
 exports.getHandle = function(req, res) {
-    console.log('cat/community/:communityID/users: communityID: request received');
     var communityID = req.params.communityID;
-    console.log('cat/community/:communityID/users: communityID: ' + req.params.communityID);
-    getCommunityUsers(communityID, req, res);
+    var groupID = req.params.groupID;
+    getCommunityGroupUsers(communityID, groupID, req, res);
 }
 
 function doPromise(p, callback) {
@@ -18,8 +17,8 @@ function doPromise(p, callback) {
     });
 }
 
-function getCommunityUsers(communityID, req, res) {
-    doPromise(dbConn.getCommunityUsers(communityID), function(error, data) {
+function getCommunityGroupUsers(communityID, groupID, req, res) {
+    doPromise(dbConn.getCommunityGroupUsers(communityID, groupID), function(error, data) {
         if (error) {
             console.log(error);
             res.sendStatus(error.error);

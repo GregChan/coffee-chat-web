@@ -69,5 +69,8 @@ div(class="section white #{match.userID}" id="match-rate")
             
 
 script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-script var matchId = !{match.userID}
+script. 
+    var matchId = !{match.userID}
+    var matchNumber = !{match.id}
+    var matchStatus = !{match.myStatus}
 script(src="/public/js/match.js")

@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var Promise = require('promise');
 var logger = require("../../../logger.js").getLogger();
+var async = require('async');
 
 var exports = module.exports = {};
 
@@ -13,10 +14,396 @@ var pool = mysql.createPool({
     database: process.env.DB_COFFEE_CHAT
 });
 
+var getValueFromRating = function(str) {
+    var value = 0;
+    if (str == 'Very Poor') {
+        value = 1;
+    } else if (str == 'Poor') {
+        value = 2;
+    } else if (str == 'OK') {
+        value = 3;
+    } else if (str == 'Good') {
+        value = 4;
+    } else if (str == 'Very Poor') {
+        value = 5;
+    }
+    return value;
+}
+
 exports.clearup = function() {
     logger.debug('Going to release DB connection pool');
     pool.end(function(err) { //release all connections
         logger.debug('Error in release pool ' + err);
+    });
+}
+
+exports.updateCommunityGroup = function(communityID, data) {
+    /* Description:
+     * creates a new group
+     * 
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * data : object
+     *     object containing group name
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'insert into community_group (communityID, name) values (?, ?)';
+        sql = mysql.format(sql, [communityID, data.name]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new group in ' + communityID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    });
+}
+
+exports.getCommunityGroups = function(communityID) {
+    /* Description:
+     * returns a list of groups for a community 
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'select id, communityID, name, created from community_group where communityID = ? and deleted = 0';
+        sql = mysql.format(sql, [communityID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+
+            var groups = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                groups.push({
+                    groupID: rows[i].id,
+                    groupName: rows[i].name
+                });
+            }
+
+            resolve(groups);
+        });
+    });
+}
+
+exports.getCommunityGroupUsers = function(communityID, groupID) {
+    /* Description:
+     * returns a list of users in a group for a community
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * groupID : int
+     *     id for a group
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'select ub.id, ub.firstName, ub.lastName, ub.profilePicO, ub.headline, cg.name as groupName, ug.created, ug.groupID from user_basic as ub left join user_group as ug on ub.id = ug.userID left join community_group as cg on cg.id = ug.groupID  where ug.groupID = ? and cg.communityID = ? and cg.deleted = 0';
+
+        sql = mysql.format(sql, [groupID, communityID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+
+            var users = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                users.push({
+                    id: rows[i].id,
+                    firstName: rows[i].firstName,
+                    lastName: rows[i].lastName,
+                    profilePic: rows[i].profilePicO,
+                    headLine: rows[i].headline,
+                    dateAdded: rows[i].created
+                });
+            }
+
+            if (rows.length > 0) {
+                resolve({
+                    groupName: rows[0].groupName,
+                    groupID: rows[0].groupID,
+                    users: users
+                });
+            } else {
+                resolve({});
+            }
+        });
+    });
+}
+
+exports.getCommunityAnalytics = function(communityID) {
+    /* Description:
+     * returns basic analytics for a community with information about users and groups
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     */
+
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                // all users in accepted or feedback state
+                var sql = 'select id from user_match where ((userAStatus = 2 and userBStatus = 2) or (userAStatus = 4 or userBStatus = 4)) and communityID = ?';
+                sql = mysql.format(sql, [communityID]);
+
+                connection.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        logger.debug('Error in connection database');
+                        reject({
+                            error: 500,
+                            msg: 'Query error'
+                        });
+                        return;
+                    }
+
+                    var totalConnections = rows.length;
+
+                    // get all ratings submitted by users to compute the average this is a hack
+                    var sql = 'select name from user_match_feedback as umf left join match_feedback_field_items as mffi on umf.itemID = mffi.id where umf.communityID = ? and umf.fieldID = 1';
+                    sql = mysql.format(sql, [communityID]);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            logger.debug('Error in connection database');
+                            reject({
+                                error: 500,
+                                msg: 'Query error'
+                            });
+                            return;
+                        }
+
+                        var averageRating = 0;
+
+                        console.log(rows.length);
+
+                        if (rows.length > 0) {
+                            var ratingSum = 0;
+
+                            for (var i = 0; i < rows.length; i++) {
+                                // this is also a hack
+                                ratingSum += getValueFromRating(rows[i].name);
+                            }
+
+                            averageRating = ratingSum / rows.length;
+                        }
+
+                        var sql = 'select name, id from community_group where communityID = ?';
+                        sql = mysql.format(sql, [communityID]);
+
+                        connection.query(sql, function(err, rows, fields) {
+                            if (err) {
+                                logger.debug('Error in connection database');
+                                reject({
+                                    error: 500,
+                                    msg: 'Query error'
+                                });
+                                return;
+                            }
+
+                            var calls = [];
+
+                            for (var i = 0; i < rows.length; i++) {
+                                calls.push((function(index) {
+                                    return function(cb) {
+                                        var sql = 'select name from user_match_feedback as umf left join match_feedback_field_items as mffi on umf.itemID = mffi.id left join user_group as ug on  ug.userID = umf.userID  where umf.communityID = ? and umf.fieldID = 1 and ug.groupID = ?';
+                                        sql = mysql.format(sql, [communityID, rows[index].id]);
+
+                                        connection.query(sql, function(err, rs, fields) {
+                                            if (err) {
+                                                logger.debug('Error in connection database');
+                                                reject({
+                                                    error: 500,
+                                                    msg: 'Query error'
+                                                });
+                                                cb(err, null);
+                                                return;
+                                            }
+
+                                            var averageRating = 0;
+
+                                            if (rs.length > 0) {
+                                                var ratingSum = 0;
+
+                                                for (var j = 0; j < rs.length; j++) {
+                                                    // this is also a hack
+                                                    ratingSum += getValueFromRating(rs[j].name);
+                                                }
+
+                                                averageRating = ratingSum / rs.length;
+                                            }
+
+                                            cb(null, {
+                                                type: 0,
+                                                groupID: rows[index].id,
+                                                groupName: rows[index].name,
+                                                value: averageRating
+                                            });
+                                        });
+                                    }
+                                })(i));
+
+                                calls.push((function(index) {
+                                    return function(cb) {
+                                        var sql = 'select distinct id from ((select userA, userB, id from user_match where ((userAStatus = 2 and userBStatus = 2) or (userAStatus = 4 or userBStatus = 4)) and communityID = ?) as um left join (select userID from user_group where groupID = ?) as ug on ug.userID = um.userA or ug.userID = um.userB) where userID is not null';
+                                        sql = mysql.format(sql, [communityID, rows[index].id]);
+
+                                        connection.query(sql, function(err, rs, fields) {
+                                            if (err) {
+                                                logger.debug('Error in connection database');
+                                                reject({
+                                                    error: 500,
+                                                    msg: 'Query error'
+                                                });
+                                                cb(err, null);
+                                                return;
+                                            }
+
+                                            cb(null, {
+                                                type: 1,
+                                                groupID: rows[index].id,
+                                                groupName: rows[index].name,
+                                                value: rs.length
+                                            });
+                                        });
+                                    }
+                                })(i));
+                            }
+
+                            async.parallel(calls,
+                                function(err, results) {
+                                    var groupMap = {};
+
+                                    for (var i = 0; i < results.length; i++) {
+                                        if (!(results[i].groupID in groupMap)) {
+                                            groupMap[results[i].groupID] = {
+                                                groupName: results[i].groupName
+                                            };
+                                        }
+
+                                        var key = null;
+                                        if (results[i].type == 0) {
+                                            key = 'avgRating';
+                                        } else if (results[i].type == 1) {
+                                            key = 'totalConnections';
+                                        }
+
+                                        if (key != null) {
+                                            groupMap[results[i].groupID][key] = results[i].value;
+                                        }
+                                    }
+                                    var groups = [];
+                                    var keys = Object.keys(groupMap);
+                                    for (var i = 0; i < keys.length; i++) {
+                                        groups.push(groupMap[keys[i]]);
+                                    }
+
+                                    resolve({
+                                        community: communityID,
+                                        totalConnections: totalConnections,
+                                        avgRating: averageRating,
+                                        groups: groups
+                                    });
+                                });
+                        });
+                    });
+                });
+
+                connection.release();
+            }
+        });
+    });
+}
+
+exports.updateGroupUser = function(communityID, groupID, data) {
+    /* Description:
+     * deletes a user from a group
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * groupID : int
+     *     id for a group
+     * data : object
+     *      object containing the userID
+     */
+
+    return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) {
+            // insert a user into a group only if that group is in the community
+            var sql = 'insert into user_group (userID, groupID) select r.userID, r.id from (select uc.userID, cg.id from (select * from user_community where communityID = ? and userID = ?) as uc left join (select * from community_group where communityID = ? and id = ?) as cg on cg.communityID = uc.communityID where uc.userID is not null and cg.id is not null) as r;';
+            sql = mysql.format(sql, [community, data.userID, communityID, groupID]);
+
+            pool.query(sql, function(err, rows, feilds) {
+                if (err) {
+                    logger.debug('Error in connection or query');
+                    reject({
+                        error: '500',
+                        message: 'DB error'
+                    });
+                } else {
+                    logger.debug('inserted new user in group with id ' + communityID);
+                    resolve({
+                        'success': '200'
+                    });
+                }
+            });
+        });
+    });
+}
+
+
+exports.deleteGroupUser = function(communityID, groupID, postData) {
+    /* Description:
+     * deletes a user from a group
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * groupID : int
+     *     id for a group
+     * postData : object
+     *      object containing the userID
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = '';
     });
 }
 
@@ -478,7 +865,7 @@ exports.getAllMatches = function(communityID) {
 exports.getCommunityUsers = function(communityID) {
     //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id left join user_community as d on a.id = d.userID where b.isCurrent = 1 and communityID = ?';
+        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_community as d on a.id = d.userID left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id where d.communityID = ?';
 
         sql = mysql.format(sql, [communityID])
 
@@ -497,6 +884,7 @@ exports.getCommunityUsers = function(communityID) {
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         map[row.id] = {
+                            id: row.id,
                             firstName: row.firstName,
                             lastName: row.lastName,
                             title: row.title,
@@ -525,9 +913,10 @@ exports.getCommunityUsers = function(communityID) {
 
 exports.getMatchHistory = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
+        // var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2) ) order by create_at';
+        var sql = 'select a.id, b.id, b.firstName, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at FROM user_match as a inner join user_basic as b on (a.userA = b.id or a.userB =b.id) Where communityID = ? and ((userA = ? and userAStatus > 2) or (userB = ? and userBStatus > 2)) and b.id != ? order by a.create_at desc, a.id'
 
-        sql = mysql.format(sql, [communityID, userID, userID]);
+        sql = mysql.format(sql, [communityID, userID, userID, userID]);
 
         console.log('getCurrentMatches: going to query db with sql: ' + sql);
 
@@ -551,14 +940,20 @@ exports.getMatchHistory = function(userID, communityID) {
                         match["id"] = rows[i].id;
                         if (rows[i].userA == userID) {
                             match["userID"] = rows[i].userB;
+                            match["myID"] = rows[i].userA;
                             match["status"] = rows[i].userBStatus;
                             match["myStatus"] = rows[i].userAStatus;
                         } else {
-                            match["userID"] = rows[i].userA;
+                            match["userID"] = rows[i].userA
+                            match["myID"] = rows[i].userB;
                             match["status"] = rows[i].userAStatus;
                             match["myStatus"] = rows[i].userBStatus;
 
                         }
+                        match['firstName'] = rows[i].firstName;
+                        match['lastName'] = rows[i].lastName;
+                        match['profilePic'] = rows[i].profilePicO;
+                        match['linkedInProfile'] = rows[i].linkedInProfile;
                         match["matchTime"] = rows[i].create_at;
                         result["matches"].push(match);
                     }

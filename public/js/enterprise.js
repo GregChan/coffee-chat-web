@@ -5,5 +5,5 @@ $(document).ready(function(){
 });
 
 $('.submit').on('click', function() {
-    window.location.href = ''
+    window.location.href = '/'
 });

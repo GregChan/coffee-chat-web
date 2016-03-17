@@ -25,7 +25,7 @@ for field in survey.fields
 								label(for="#{field.className}#{item.id}")
 				if (field.displayType == 2)
 					div(class="col s12 m6 l6")
-					select(data-field-input data-field-id=field.fieldID id="#{field.className}#{field.fieldID}" type="select")
+					select(multiple data-field-input data-field-id=field.fieldID id="#{field.className}#{field.fieldID}" type="select")
 						option(value="" disabled selected)=field.name
 						for item in field.values
 							option(value=item.id)=item.name

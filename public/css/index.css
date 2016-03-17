@@ -18,13 +18,13 @@
 }
 
 #match-rate {
-    display: none;
+  display: none;
 }
 
 #submit-rating{
-    margin-top: 0px;
-    margin-bottom: 24px;
-    z-index: 1000;
+  margin-top: 0px;
+  margin-bottom: 24px;
+  z-index: 1000;
 }
 
 .rating {
@@ -44,10 +44,10 @@
 .rating > a:hover ~ a:before,
 .rating > a.active:before,
 .rating > a.active ~ a:before{
-   content: "\25CF";
-   margin-left: -2px;
-   margin-top: -2px;
-   position: absolute;
+ content: "\25CF";
+ margin-left: -2px;
+ margin-top: -2px;
+ position: absolute;
 }
 
 .match-btn {
@@ -69,9 +69,36 @@
   height: 600px;
 }
 
-.admin-talent-img {
-  width: 100px;
-  height: 100px;
+.talent .row {
+  margin-bottom: 0px;
+}
+
+.talent .no-padding {
+  padding: 0px;
+}
+
+.talent .admin-talent-img {
+  width: 100%;
+  height: auto;
+
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.talent .admin-talent-past-img {
+  width: 100%;
+  height: auto;
+
+  max-width: 75px;
+  max-height: 75px;
+}
+
+.admin-talent-nav-text {
+  font-size: 18px !important;
+}
+
+.talent .admin-talent-column {
+  min-width: 350px;
 }
 
 .text-orange {
@@ -144,7 +171,7 @@ textarea {
   font-weight: 500;
 }
 
-.profile-section .icon {
+.icon {
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -181,9 +208,9 @@ textarea {
 }
 
 @media only screen and (min-width: 601px) {
-    .nav-buttons a {
-        height: 63px;
-    }
+  .nav-buttons a {
+    height: 63px;
+  }
 }
 
 .side-nav {
@@ -256,6 +283,10 @@ textarea {
   background: -o-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Opera 11.1 to 12.0 */
   background: -moz-linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important; /* For Firefox 3.6 to 15 */
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0)) !important;
+}
+
+.max-width {
+  max-width: 200px;
 }
 
 .nav-btn {

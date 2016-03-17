@@ -15,11 +15,15 @@ html
                                 a(class="coffee-chat-grey" href="/wild/user/signout") Signout
 
         div(class="current-matches")
-            if (curMatch.matches.length > 0)
+            if (curMatch.total > 0)
                 each match in [curMatch.matches[0]]
                     include ./includes/match.jade
             else
-                h3(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                br
+                h3(class="center text-orange" id="match-announcement") CoffeeChats are brewing...
+                img(class="responsive-img center-block" src="/public/images/brewing.png")
+                h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                br
         if (matchHist.matches)
             div(class="section coffee-chat-grey-background  past-matches" id="previous-matches")
                 h5(class="center text-orange") Past CoffeeChats
@@ -28,9 +32,10 @@ html
                         include ./includes/past-match.jade
         include ./includes/partners.jade
         include ./includes/footer.jade
-
+        
     script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")    
     script(src="/public/js/index.js")
-    script var pastMatchData = !{JSON.stringify(matchHist.matches)}
-    script(src="/public/js/past-matches.js")
+    if (matchHist.matches)
+        script var pastMatchData = !{JSON.stringify(matchHist.matches)}
+        script(src="/public/js/past-matches.js")

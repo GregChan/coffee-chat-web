@@ -1,7 +1,8 @@
 var exports = module.exports = {},
     request = require('request'),
     async = require('async'),
-    fs = require('fs');
+    fs = require('fs'),
+    notifications = require('../../elf/notifications/notifications.js');
 
 exports.path = '';
 

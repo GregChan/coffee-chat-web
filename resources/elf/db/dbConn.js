@@ -37,6 +37,37 @@ exports.clearup = function() {
     });
 }
 
+exports.getMatch = function(matchId) {
+    return new Promise(function(resolve, reject){
+        var sql = 'select id, userA, userB, communityID, userAStatus, userBStatus, create_at from user_match where id = ?';
+        sql = mysql.format(sql, [matchId]);
+        pool.query(sql, function(err, rows, fields) {
+             if (err) {
+                logger.debug('Error in connection or query, in getMatch function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    resolve({
+                        id: rows[0].id,
+                        userA: rows[0].userA,
+                        userB: rows[0].userB,
+                        communityID: rows[0].communityID,
+                        created: rows[0].create_at
+                    });
+                } else {
+                    reject({
+                        error: '404',
+                        message: 'Record not found'
+                    });
+                }
+            }
+        });
+    });
+}
+
 exports.createCommunity = function(data){
     return new Promise(function(resolve, reject){
         var sql = 'insert into community_desc (name, adminUserID) values (?, ?)';

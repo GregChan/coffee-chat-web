@@ -13,6 +13,17 @@
             accordion: false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
         });
 
+        $('[data-companycode]').click(function(e) {
+            $.ajax({
+                url: "/cat/community/join",
+                method: "PUT",
+                data: {companyCode: $('#companyCode').val()},
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+
         $('[data-submit]').click(function(e) {
             var fields = $('[data-field]');
             var data = {

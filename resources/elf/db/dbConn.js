@@ -37,6 +37,50 @@ exports.clearup = function() {
     });
 }
 
+exports.createCommunity = function(data){
+    return new Promise(function(resolve, reject){
+        var sql = 'insert into community_desc (name, adminUserID) values (?, ?)';
+        sql = mysql.format(sql, [data.name, 491]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new community ' + data.name);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    })
+}
+
+exports.insertUserIntoCommunity = function(data){
+    return new Promise(function(resolve, reject){
+        var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+        sql = mysql.format(sql, [data.userID, data.communityID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    })
+}
+
 exports.updateCommunityGroup = function(communityID, data) {
     /* Description:
      * creates a new group

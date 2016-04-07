@@ -5,5 +5,12 @@ $(document).ready(function(){
 });
 
 $('.submit').on('click', function() {
-    window.location.href = '/'
+    $.ajax({
+    	url: "/cat/community",
+    	method: "PUT",
+    	data: {name: $('#name').val()},
+    	success: function(data) {
+    		console.log(data);
+    	}
+    });
 });

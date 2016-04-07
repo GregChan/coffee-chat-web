@@ -45,8 +45,8 @@ exports.getHandle = function(req, res) {
 				console.log(results[0]);
 				var data = {
 					users: results[0],
-                                        metrics: results[1],
-                                        matches: results[2],
+                    metrics: results[1],
+                    matches: results[2],
 				}
 
 				res.render('admin-metrics', data);

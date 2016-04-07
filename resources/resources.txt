@@ -13,7 +13,9 @@
 ./resources/cat/community/getCommunityGroupUsers.js
 ./resources/cat/community/getCommunityAnalytics.js
 ./resources/cat/community/updateCommunityGroup.js
+./resources/cat/community/createCommunity.js
 ./resources/cat/community/updateGroupUser.js
+./resources/cat/community/insertUserIntoCommunity.js
 ./resources/cat/match/insertMatch.js
 ./resources/cat/match/getCurrentMatches.js
 ./resources/cat/match/getMatchHistory.js

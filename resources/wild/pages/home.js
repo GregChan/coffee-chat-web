@@ -7,7 +7,7 @@ var exports = module.exports = {},
 exports.path = '';
 
 exports.getHandle = function(req, res) {
-	notifications.sendFeedbackNotification(301);
+	notifications.sendFeedbackNotification(311);
     if (req.cookies.userID != undefined && req.cookies.userID != "undefined") {
 		async.parallel([
 				function(callback) {

@@ -29,8 +29,8 @@ function updateUserFeedbackForMatch(userId, commID, matchID, res, req) {
     ).catch(
         function(reason) {
             var obj = JSON.parse(reason)
-            res.status(obj.error).end();
+            res.status(obj.error);
+            res.send(obj.message);
         }
     );
-    return;
 }

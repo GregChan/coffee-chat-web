@@ -10,12 +10,12 @@ exports.getHandle = function(req, res) {
 	var rating = req.query.rating;
 
 	request({
-		url: process.env.BASE_URL + 'cat/user/community/feedback/' + communityId
-									+ '/' + matchId + '/update',
+		url: process.env.BASE_URL + '/cat/user/community/feedback/' + communityId + '/' + matchId + '/update',
 		method: 'POST',
-		form: {
-			"data": [{
-				fieldId: 1,
+		json: true,
+		body: {
+			data: [{
+				fieldID: 1,
 				choices: [rating]
 			}]
 		},
@@ -23,15 +23,14 @@ exports.getHandle = function(req, res) {
 			'Cookie': 'userID=' + userId
 		}
 	}, function(error, response, body) {
+		console.log('request sent');
 		if (error) {
 			res.send("Something went wrong. Uh oh!");
 			console.log("error\n" + error);
 			console.log("response\n" + response);
 			console.log("body\n" + body);
 		} else {
-			res.render('feedback', {
-    			curUser: req.cookies.userID
-    		});
+			res.render('feedback');
 		}
 	});
 	/* console.log("UserID: " + userId);

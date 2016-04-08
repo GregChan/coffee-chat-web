@@ -4,6 +4,6 @@ exports.path = 'team';
 
 exports.getHandle = function(req, res) {
     res.render('team', {
-    	curUser: req.cookies.userID
+    	curUser: req.loginUserID
     });
 }

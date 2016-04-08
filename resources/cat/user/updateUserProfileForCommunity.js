@@ -8,7 +8,7 @@ exports.path = 'cat/user/community/:commID/update';
 
 exports.postHandle = function(req, res) {
     var commID = req.params.commID;
-    var userId = req.cookies.userID;
+    var userId = req.loginUserID;
     console.log('user/updateUserProfileForCommunity: updateUserProfileForCommunity: ' + userId);
     updateUserProfileForCommunity(userId, commID, res, req);
 }

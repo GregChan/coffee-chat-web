@@ -8,7 +8,7 @@ exports.path = 'cat/user/community/:commID/match/all';
 
 exports.getHandle = function(req, res) {
     var commID = req.params.commID;
-    var userId = req.cookies.userID;
+    var userId = req.loginUserID;
     // if(userId != 91 && userId != 131 && userId != 151 && userId != 481 && userId != 491 && userId != 541 && userId != 551 && userId != 561)
     // {   
     //     // TODO: a more appropriate access control -> admin of given community

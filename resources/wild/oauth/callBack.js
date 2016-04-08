@@ -2,7 +2,8 @@ var exports = module.exports = {},
     oauth2 = require('simple-oauth2'),
     path = require('path'),
     request = require('request'),
-    auth = require('./auth.js');
+    auth = require('./auth.js'),
+    cypher = require('../../elf/crypto/aesCipher.js');
 
 exports.path = 'callback';
 
@@ -54,7 +55,9 @@ function createOAuthUser(token, res) {
         } else {
             var userID = body.user;
             console.log('server.js: got userID ' + userID);
-            res.cookie('userID', userID, {
+            var encryptedID = cypher.encrypt((userID*10000000 + Math.random() * 9000000  + 1000000).toString());
+            console.log('server.js: encryptedID ' + encryptedID);
+            res.cookie('userID', encryptedID, {
                 maxAge: 9000000,
                 httpOnly: false
             });

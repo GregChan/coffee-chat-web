@@ -25,7 +25,7 @@ exports.getHandle = function(req, res) {
                     communities: [
                         results[0]
                     ],
-                    curUser: req.cookies.userID,
+                    curUser: req.loginUserID,
                 }
                 console.log(results[0]);
                 res.render('analytics', data);

@@ -8,7 +8,7 @@ exports.path = 'cat/user/community/:commID/match/current';
 
 exports.getHandle = function(req, res) {
     var commID = req.params.commID;
-    var userId = req.cookies.userID;
+    var userId = req.loginUserID;
     console.log('match/getCurrentMatches: getCurrentMatches: ' + userId);
     getCurrentMatches(userId,commID, res, req);
 }

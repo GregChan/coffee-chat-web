@@ -5,6 +5,7 @@ var express = require('express'),
     request = require('request'),
     bodyParser = require('body-parser'),
     dbConn = require("./resources/elf/db/dbConn.js"),
+    cypher = require('./resources/elf/crypto/aesCipher.js');
     logger = require("./logger.js").getLogger(),
     port = process.env.PORT || 1337,
     cookieParser = require('cookie-parser'),
@@ -12,6 +13,7 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
     basicAuth = require('basic-auth'),
+
     myLogger = function(req, res, next) {
         logger.debug('myLogger - new request: ' + req.path);
         next();
@@ -30,8 +32,10 @@ var express = require('express'),
         if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
             authenticationFailed(req, res, next);
         } else {
-            var userID = req.cookies.userID;
-            var p1 = dbConn.getUser(userID);
+            var encryptedUserID = req.cookies.userID;
+            var decryptedID = Math.floor(cypher.decrypt(encryptedUserID)/10000000);
+            console.log('server.js: encryptedID ' + decryptedID);
+            var p1 = dbConn.getUser(decryptedID);
             return p1.then(
                 function(data) {
                     var obj = data;

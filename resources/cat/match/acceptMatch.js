@@ -7,7 +7,7 @@ var dbConn = require("../../elf/db/dbConn.js");
 exports.path = 'cat/user/community/:commID/match/accept';
 
 exports.postHandle = function(req, res) {
-    var userId = req.cookies.userID;
+    var userId = req.loginUserID;
     console.log('match/acceptMatch: acceptMatch: ' + userId);
     acceptMatch(userId, res, req);
 }

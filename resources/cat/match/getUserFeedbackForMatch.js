@@ -6,7 +6,7 @@ exports.path = 'cat/user/community/feedback/:commID/:matchID/query';
 exports.getHandle = function(req, res) {
      var commID = req.params.commID;
     var matchID = req.params.matchID;
-    var userId = req.cookies.userID;
+    var userId = req.loginUserID;
     getUserFeedbackForMatch(userId, commID,matchID, res);
 }
 

@@ -49,7 +49,7 @@
                 type: 'POST',
                 url: '/cat/user/community/1/match/feedback',
                 success: function(data) {
-                    window.location.reload();
+                    window.location.replace('/feedback?communityId=1&matchId='+matchNumber+'&rating=' +$('#feedback_rating').val());
                 },
                 data: {
                     "matchID":matchNumber
@@ -84,6 +84,24 @@
             $(this).siblings('a').removeClass('active');
             $(this).addClass('active');
             $('#submit-rating').show();
+            switch($(this).attr("id")){
+                case "one":
+                    $('#feedback_rating').val('1');
+                    break;
+                case "two":
+                    $('#feedback_rating').val('11');
+                    break;
+                case "three":
+                    $('#feedback_rating').val('21');
+                    break;
+                case "four":
+                    $('#feedback_rating').val('31');
+                    break;
+                case "five":
+                    $('#feedback_rating').val('41');
+                    break;
+            }
+            
         });
 	});
 }());

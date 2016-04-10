@@ -4,7 +4,6 @@ var request = require('request');
 exports.path = 'feedback';
 
 exports.getHandle = function(req, res) {
-	var userId = req.query.userId;
 	var communityId = req.query.communityId;
 	var matchId = req.query.matchId;
 	var rating = req.query.rating;
@@ -20,7 +19,7 @@ exports.getHandle = function(req, res) {
 			}]
 		},
 		headers: {
-			'Cookie': 'userID=' + userId
+			'Cookie': 'userID=' + req.cookies.userID
 		}
 	}, function(error, response, body) {
 		console.log('request sent');

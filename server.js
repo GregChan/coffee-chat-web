@@ -21,8 +21,8 @@ var express = require('express'),
     authenticator = function(req, res, next) {
 
         logger.debug('myLogger - user id: ' + req.cookies.userID);
-        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community" || req.path == '/feedback') {
-
+        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community" || req.path == "/feedback") {
+            next();
             return;
         }
         // if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')

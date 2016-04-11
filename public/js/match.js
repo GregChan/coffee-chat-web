@@ -47,12 +47,24 @@
         $('#submit-rating').click(function(event){
             $.ajax({
                 type: 'POST',
-                url: '/cat/user/community/1/match/feedback',
-                success: function(data) {
-                    window.location.replace('/feedback?communityId=1&matchId='+matchNumber+'&rating=' +$('#feedback_rating').val());
+                url: '/cat/user/community/feedback/1/' + matchNumber + '/update',
+                success: function(data) {    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/cat/user/community/1/match/feedback',
+                        success: function(data) {
+                            window.location.reload();
+                        },
+                        data: {
+                            "matchID":matchNumber
+                        }
+                    });
                 },
                 data: {
-                    "matchID":matchNumber
+                    data: [{     
+                    fieldID: 1,
+                    choices: [$('#feedback_rating').val()]
+                    }]
                 }
             });
         });

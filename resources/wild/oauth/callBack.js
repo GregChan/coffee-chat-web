@@ -55,7 +55,7 @@ function createOAuthUser(token, res) {
         } else {
             var userID = body.user;
             console.log('server.js: got userID ' + userID);
-            var encryptedID = cypher.encrypt((userID*10000000 + Math.random() * 9000000  + 1000000).toString());
+            var encryptedID = cypher.encrypt(userID.toString()+'&'+Date.now().toString());
             console.log('server.js: encryptedID ' + encryptedID);
             res.cookie('userID', encryptedID, {
                 maxAge: 9000000,

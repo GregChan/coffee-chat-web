@@ -19,9 +19,10 @@ var express = require('express'),
         next();
     },
     authenticator = function(req, res, next) {
+
         logger.debug('myLogger - user id: ' + req.cookies.userID);
         if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community" || req.path == '/feedback') {
-            next();
+
             return;
         }
         // if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
@@ -33,7 +34,14 @@ var express = require('express'),
             authenticationFailed(req, res, next);
         } else {
             var encryptedUserID = req.cookies.userID;
-            var decryptedID = Math.floor(cypher.decrypt(encryptedUserID)/10000000);
+            var decryptedStr = cypher.decrypt(encryptedUserID).split('&');
+            if(decryptedStr.length < 2 || Date.now()-decryptedStr[1]>9000000)
+            {
+                authenticationFailed(req, res, next);
+                return;
+            }
+           // console.log('server.js: cookie validated for ' + (Date.now() - decryptedStr[1]).toString());
+            var decryptedID = decryptedStr[0];
             console.log('server.js: encryptedID ' + decryptedID);
             var p1 = dbConn.getUser(decryptedID);
             return p1.then(

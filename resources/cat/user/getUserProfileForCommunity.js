@@ -5,7 +5,7 @@ exports.path = 'cat/user/community/:commID/profile';
 
 exports.getHandle = function(req, res) {
     var commID = req.params.commID;
-    var userID = req.cookies.userID;
+    var userID = req.loginUserID;
     getUserProfileForCommunity(userID, commID, res, req);
 }
 

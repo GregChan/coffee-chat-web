@@ -9,7 +9,7 @@ exports.getHandle = function(req, res) {
     async.parallel([
             function(callback) {
                 request({
-                    url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/profile',
+                    url: process.env.BASE_URL + '/cat/user/' + req.loginUserID + '/profile',
                     method: 'GET',
                     headers: {
                         'Cookie': 'userID=' + req.cookies.userID
@@ -43,7 +43,7 @@ exports.getHandle = function(req, res) {
             },
             function(callback) {
                 request({
-                    url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/community/1/match/history',
+                    url: process.env.BASE_URL + '/cat/user/' + req.loginUserID + '/community/1/match/history',
                     method: 'GET',
                     headers: {
                         'Cookie': 'userID=' + req.cookies.userID
@@ -73,7 +73,7 @@ exports.getHandle = function(req, res) {
 exports.postHandle = function(req, res) {
     console.log(req.cookies.userID);
     request({
-        url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/profile',
+        url: process.env.BASE_URL + '/cat/user/' + req.loginUserID + '/profile',
         method: 'POST',
         headers: {
             'Cookie': 'userID=' + req.cookies.userID

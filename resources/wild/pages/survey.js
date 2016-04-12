@@ -9,7 +9,7 @@ exports.getHandle = function(req, res) {
         async.parallel([
                 function(callback) {
                     request({
-                        url: process.env.BASE_URL + '/cat/user/' + req.cookies.userID + '/profile',
+                        url: process.env.BASE_URL + '/cat/user/' + req.loginUserID + '/profile',
                         method: 'GET',
                         headers: {
                             'Cookie': 'userID=' + req.cookies.userID

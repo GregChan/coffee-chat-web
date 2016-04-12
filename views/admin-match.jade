@@ -1,0 +1,26 @@
+html
+    head
+        include ./includes/styles.jade
+    body
+        header
+            include ./includes/admin-header.jade
+        h1(class="center text-orange") Add a Match
+        div(class="row")
+            div(class="input-field col s12 m6 l6")
+                select(id="user1" class="icons")
+                    option(value="" disabled selected)="User 1"
+                    for user in users
+                        option(data-icon=user.profilePic class="circle" value=user.id)=user.firstName+' '+user.lastName
+            div(class="input-field col s12 m6 l6")
+                select(id="user2" class="icons")
+                    option(value="" disabled selected)="User 2"
+                    for user in users
+                        option(data-icon=user.profilePic class="circle" value=user.id)=user.firstName+' '+user.lastName
+        div(class="row")
+            div(class="center col s12 m12 l12" style="padding:0px 20px")
+                a(class='btn coffee-chat-orange' id='submit') Connect Users
+        
+    script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+    script var users = !{JSON.stringify(users)}
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+    script(src="/public/js/adminMatch.js")

@@ -70,8 +70,8 @@ exports.getMatch = function(matchId) {
 
 exports.createCommunity = function(data){
     return new Promise(function(resolve, reject){
-        var sql = 'insert into community_desc (name, adminUserID) values (?, ?)';
-        sql = mysql.format(sql, [data.name, 491]);
+        var sql = 'insert into community_desc (name, adminUserID, communityCode) values (?, ?, ?)';
+        sql = mysql.format(sql, [data.name, 491, data.name]);
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {

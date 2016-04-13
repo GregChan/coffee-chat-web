@@ -47,12 +47,24 @@
         $('#submit-rating').click(function(event){
             $.ajax({
                 type: 'POST',
-                url: '/cat/user/community/1/match/feedback',
-                success: function(data) {
-                    window.location.reload();
+                url: '/cat/user/community/feedback/1/' + matchNumber + '/update',
+                success: function(data) {    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/cat/user/community/1/match/feedback',
+                        success: function(data) {
+                            window.location.reload();
+                        },
+                        data: {
+                            "matchID":matchNumber
+                        }
+                    });
                 },
                 data: {
-                    "matchID":matchNumber
+                    data: [{     
+                    fieldID: 1,
+                    choices: [$('#feedback_rating').val()]
+                    }]
                 }
             });
         });
@@ -84,6 +96,24 @@
             $(this).siblings('a').removeClass('active');
             $(this).addClass('active');
             $('#submit-rating').show();
+            switch($(this).attr("id")){
+                case "one":
+                    $('#feedback_rating').val('1');
+                    break;
+                case "two":
+                    $('#feedback_rating').val('11');
+                    break;
+                case "three":
+                    $('#feedback_rating').val('21');
+                    break;
+                case "four":
+                    $('#feedback_rating').val('31');
+                    break;
+                case "five":
+                    $('#feedback_rating').val('41');
+                    break;
+            }
+            
         });
 	});
 }());

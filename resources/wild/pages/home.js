@@ -53,7 +53,18 @@ exports.getHandle = function(req, res) {
 					}, function(error, response, body) {
 						callback(error, JSON.parse(body));
 					});
-				}
+				},
+				function(callback) {
+				request({
+					url: process.env.BASE_URL + '/cat/user/' + req.loginUserID + '/community/1/useranalytics',
+					method: 'GET',
+					headers: {
+						'Cookie': 'userID=' + req.cookies.userID
+					}
+				}, function(error, response, body) {
+					callback(error, JSON.parse(body));
+				});
+			}
 //				function(callback) {
 //					request({
 //						url: process.env.BASE_URL + '/cat/user/community/1/match/insert',
@@ -76,7 +87,8 @@ exports.getHandle = function(req, res) {
 					res.render('home', {
 						curUser: results[0],
 						curMatch: results[2],
-						matchHist: results[3]
+						matchHist: results[3],
+						metrics: results[4]
 					});
 				} else {
 					res.render('index', {

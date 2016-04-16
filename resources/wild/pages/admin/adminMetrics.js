@@ -19,7 +19,7 @@ exports.getHandle = function(req, res) {
 			},
                         function(callback) {
 				request({
-					url: process.env.BASE_URL + '/cat/community/1/analytics',
+					url: process.env.BASE_URL + '/cat/community/1/commanalytics',
 					method: 'GET',
 					headers: {
 						'Cookie': 'userID=' + req.cookies.userID
@@ -28,6 +28,7 @@ exports.getHandle = function(req, res) {
 					callback(error, JSON.parse(body));
 				});
 			},
+			
                         function(callback) {
 				request({
 					url: process.env.BASE_URL + '/cat/user/community/1/match/all',

@@ -3,7 +3,7 @@ for field in survey.fields
 	div(data-field=field.name data-field-id=field.fieldID)
 		div(class="col s12 m4 l4")
 			if (field.grouped == true)
-				ul(class="collapsible popout" data-collapsible="expandable")
+				ul(class="collapsible popout" data-collapsible="expandable" required)
 					for key in field.values
 						li()
 							div(class="collapsible-header")=key.name
@@ -17,15 +17,15 @@ for field in survey.fields
 					for item in field.values	
 						div(class="col s12 m6 l3")
 							if (item.data == NULL)
-								input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox")
+								input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox" required)
 								label(for="#{field.className}#{item.id}")=item.name
 							else
 								img(class="responsive-img" style="width:100%; height:150px;" src=item.data.url)
-								input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox")
+								input(data-field-input data-field-id=field.fieldID data-input-id=item.id id="#{field.className}#{item.id}" type="checkbox" required)
 								label(for="#{field.className}#{item.id}")
 				if (field.displayType == 2)
 					div(class="col s12 m6 l6")
-					select(multiple data-field-input data-field-id=field.fieldID id="#{field.className}#{field.fieldID}" type="select")
+					select(multiple data-field-input data-field-id=field.fieldID id="#{field.className}#{field.fieldID}" type="select" required)
 						option(value="" disabled selected)=field.name
 						for item in field.values
 							option(value=item.id)=item.name

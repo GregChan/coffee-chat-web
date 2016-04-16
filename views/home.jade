@@ -15,15 +15,36 @@ html
                                 a(class="coffee-chat-grey" href="/wild/user/signout") Signout
 
         div(class="current-matches")
-            if (curMatch.total > 0)
-                each match in [curMatch.matches[0]]
-                    include ./includes/match.jade
-            else
-                br
-                h3(class="center text-orange" id="match-announcement") CoffeeChats are brewing...
-                img(class="responsive-img center-block" src="/public/images/brewing.png")
-                h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
-                br
+            div(class="row")
+                div(class="center col s12 m2 l2 valign")
+                    br
+                    br
+                    br
+                    h4(class="text-orange") Your Matching Stats
+                    div(class="row")
+                        h5(class="center text-orange")=metrics.totalConnections
+                        h5(class="center text-orange") Total Connections
+                    div(class="row")
+                        h5(class="center text-orange")=metrics.avgRating
+                        h5(class="center text-orange") Average Rating
+                div(class="center col s12 m8 l8 valign")
+                    if (curMatch.total > 0)
+                        each match in [curMatch.matches[0]]
+                            include ./includes/match.jade
+                    else
+                        br
+                        h3(class="center text-orange" id="match-announcement") CoffeeChats are brewing...
+                        img(class="responsive-img center-block" src="/public/images/brewing.png")
+                        h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                        br
+                div(class="center col s12 m2 l2 valign")
+                    br
+                    br
+                    br
+                    h4(class="text-orange") You have been matched with
+                    each group in metrics.groups
+                        h5(class="center text-orange")=group.totalConnections
+                        h5(class="center text-orange")=group.groupName
         if (matchHist.matches)
             div(class="section coffee-chat-grey-background  past-matches" id="previous-matches")
                 h5(class="center text-orange") Past CoffeeChats

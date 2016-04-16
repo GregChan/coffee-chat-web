@@ -1,7 +1,7 @@
 var exports = module.exports = {};
 var dbConn = require("../../elf/db/dbConn.js");
 
-exports.path = 'cat/community/:communityID/analytics/';
+exports.path = 'cat/community/:communityID/commanalytics/';
 
 exports.getHandle = function(req, res) {
     // console.log('cat/community/:communityID/users: communityID: request received');

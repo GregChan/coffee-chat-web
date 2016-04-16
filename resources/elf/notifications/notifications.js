@@ -35,6 +35,44 @@ function getUserInformationForMatchForUsers(userA, userB, callback) {
 	});
 }
 
+function getUserProfileForMatchForUsers(userA, userB, callback) {
+	async.parallel([
+		function(callback) {
+			var p = dbConn.getUser(userA);
+			doPromise(p, callback);
+		},
+		function(callback) {
+			var p = dbConn.getUserPositions(userA);
+			doPromise(p, callback);
+		},
+		function(callback) {
+			var p = dbConn.getUser(userB);
+			doPromise(p, callback);
+		},
+		function(callback) {
+			var p = dbConn.getUserPositions(userB);
+			doPromise(p, callback);
+		}
+	], function(err, results) {
+		if (err) {
+			console.log(err);
+		} else {
+			var userAProfile = results[0];
+			userAProfile['positions'] = results[1];
+			var userBProfile = results[2];
+			userBProfile['positions'] = results[3];
+
+			console.log(userAProfile);
+			console.log(userBProfile);
+
+			callback({
+				userA: userAProfile,
+				userB: userBProfile
+			});
+		}
+	});
+}
+
 function getMatch(matchId, callback) {
 	doPromise(dbConn.getMatch(matchId), callback);
 }
@@ -55,6 +93,22 @@ exports.sendMatchNotification = function(userAId, userBId) {
 	getUserInformationForMatchForUsers(userAId, userBId, function(data) {
 		mail.sendNotificationEmail(formatData(data.userA, data.userB.email), matchNotificationTemplateId);
 		mail.sendNotificationEmail(formatData(data.userB, data.userA.email), matchNotificationTemplateId);
+	});
+}
+
+exports.sendMatchNotificationFromJade = function(userAId, userBId) {
+	var formatData = function(match, to) {
+		return {
+			data: {
+				match: match
+			},
+			emails: [to]
+		};
+	};
+
+	getUserProfileForMatchForUsers(userAId, userBId, function(data) {
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email));
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userB, data.userA.email));
 	});
 }
 

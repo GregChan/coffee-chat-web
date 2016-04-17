@@ -59,4 +59,5 @@ html
     script(src="/public/js/index.js")
     if (matchHist.matches)
         script var pastMatchData = !{JSON.stringify(matchHist.matches)}
-    script(src="/public/js/past-matches.js")
+        script(src="/public/js/past-matches.js")
+    include ./includes/google-analytics.jade

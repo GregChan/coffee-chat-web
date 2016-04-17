@@ -37,6 +37,131 @@ exports.clearup = function() {
     });
 }
 
+exports.generateRandMatch = function(userID, communityID) {
+    return new Promise(function(resolve, reject) {
+
+        var sql = 'SELECT * FROM user_community where userID =? and communityID = ?';
+
+        sql = mysql.format(sql, [userID, communityID]);
+
+        console.log('generateRandMatch: going to query db with sql: ' + sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+
+                if (rows.length < 1) {
+                    reject({
+                         error: '401',
+                         message: 'invalid userID'
+                    });
+                    return;
+                }
+
+
+                sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus < 3) or (userB = ? and userBStatus < 3) ) order by create_at';
+
+                sql = mysql.format(sql, [communityID, userID, userID]);
+
+                console.log('generateRandMatch: going to query db with sql: ' + sql);
+
+                pool.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        console.log(err);
+                        logger.debug('Error in connection or query');
+                        reject({
+                            error: '500',
+                            message: 'DB error'
+                        });
+                    } else {
+                         if (rows.length > 0) {
+                            reject({
+                                 error: '401',
+                                 message: userID +' has already been matched!'
+                            });
+                            return;
+                         }
+
+                         sql = 'SELECT userID from user_community as c '
+                                +'where communityID=? '
+                                +'AND userid!=? '
+                                +'AND not exists ( '
+                                +'select * from user_match as m '
+                                +'where (m.userA = ? and m.userB = c.userID ) '
+                                +'or (m.userB = ? and m.userA = c.userID) '
+                                +'or (m.userA = c.userID and m.userAStatus < 3) '
+                                +'or (m.userB = c.userID and m.userBStatus < 3)) '
+                                +'order by rand() '
+                                +'limit 1';
+
+                        sql = mysql.format(sql, [communityID, userID, userID, userID]);
+
+                        console.log('generateRandMatch: going to query db with sql: ' + sql);
+                        pool.query(sql, function(err, rows, fields) {
+                            if (err) {
+                                console.log(err);
+                                logger.debug('Error in connection or query');
+                                reject({
+                                    error: '500',
+                                    message: 'DB error'
+                                });
+                            } else {
+                                 if (rows.length < 1) {
+                                    resolve({
+                                         message: 'There is currently no match available for ' + userID + '.'
+                                    });
+                                    return;
+                                 }
+
+                                console.log("row length: "+rows.length);
+                                var uid = rows[0].userID;
+
+                                sql = "INSERT INTO user_match (userA, userB, communityID) VALUES ( ?, ? ,?) " ;
+
+                                values = [userID, uid, communityID];
+
+                                sql = mysql.format(sql, values);
+                                console.log('generateRandMatch: going to insert with sql: ' + sql);
+                                pool.query(sql, function(err, rows, fields) {
+                                    if (err) {
+                                        logger.debug('Error in connection or query:');
+                                        logger.debug(err);
+                                        reject({
+                                            'error': 500,
+                                            'message': 'DB Error'
+                                        });
+                                    } else {
+                                        if (rows.affectedRows > 0) {
+                                            resolve({
+                                                'matchID':rows.insertId,
+                                                'userID':uid
+
+                                            });
+                                        } else {
+                                            reject({
+                                                'error': 500,
+                                                'message': 'unable to create random match for user '+userID+' .'
+                                            });
+                                        }
+
+                                    }
+                                });
+                            }
+
+                        });             
+                    }
+                });
+             }
+        });
+    });
+}
+
 exports.getMatch = function(matchId) {
     return new Promise(function(resolve, reject){
         var sql = 'select id, userA, userB, communityID, userAStatus, userBStatus, create_at from user_match where id = ?';

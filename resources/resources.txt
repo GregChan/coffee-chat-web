@@ -26,6 +26,7 @@
 ./resources/cat/match/feedbackMatch.js
 ./resources/cat/match/updateUserFeedbackForMatch.js
 ./resources/cat/match/getUserFeedbackForMatch.js
+./resources/cat/match/generateRandMatch.js
 ./resources/cat/dev/getUserCookie.js
 ./resources/wild/oauth/auth.js
 ./resources/wild/oauth/callBack.js

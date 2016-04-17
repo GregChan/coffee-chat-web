@@ -107,8 +107,8 @@ exports.sendMatchNotificationFromJade = function(userAId, userBId) {
 	};
 
 	getUserProfileForMatchForUsers(userAId, userBId, function(data) {
-		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email));
-		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userB, data.userA.email));
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email), 'match-notification.jade');
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userB, data.userA.email), 'match-notification.jade');
 	});
 }
 
@@ -131,6 +131,27 @@ exports.sendFeedbackNotification = function(matchId) {
 			emailDataB['emails'] = [userData.userB.email];
 			mail.sendNotificationEmail(emailDataA, feedbackNotificationTemplateId);
 			mail.sendNotificationEmail(emailDataB, feedbackNotificationTemplateId);
+		});
+	});
+}
+
+exports.sendFeedbackNotificationFromJade = function(matchId) {
+	console.log('send email notification');
+	getMatch(matchId, function(err, data) {
+		var formatData = function(match, to) {
+			return {
+				data: {
+					match: match
+				},
+				emails: [to]
+			};
+		};
+		// data.userA and data.userB are both ids returned by the getMatch end point
+		getUserProfileForMatchForUsers(data.userA, data.userB, function(userData) {
+			console.log(userData);
+
+			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userA, userData.userB.email), 'feedback-notification.jade');
+			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userB, userData.userA.email), 'feedback-notification.jade');
 		});
 	});
 }

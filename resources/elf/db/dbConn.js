@@ -244,7 +244,7 @@ exports.getUserAnalytics = function(userID, communityID) {
      *     id for a user
      */
 
-return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         pool.getConnection(function(err, connection) {
             if (err) {
                 logger.debug('DB connection error');

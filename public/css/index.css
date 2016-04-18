@@ -353,3 +353,21 @@ textarea {
 .dropdown-content li>a, .dropdown-content li>span {
   color: #EC6445;
 }
+
+@media(max-width: 600px) {
+  .past-match {
+    height: 320px;
+  }
+}
+
+@media(min-width: 600px, max-width: 993px) {
+  .past-match {
+    height: 300px;
+  }
+}
+
+@media(min-width: 994px) {
+ .past-match {
+    height: 340px;
+  } 
+}

@@ -46,23 +46,30 @@
                         fieldData.choices = $(this).val();
                     }
                 })
-
-                data.data.push(fieldData);
+                if(fieldData.choices.length != 0){
+                     data.data.push(fieldData);
+                }
+               
             });
 
-            console.log(data);
+            console.log(data.data.length);
+            if(data.data.length != fields.length){
+                $('#errorMessage').html('Please fill out all fields');
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/cat/user/community/1/update',
+                    success: function(data) {
+                        Materialize.toast('Success!', 2000);
+                        $('[data-save-prompt]').hide();
 
-            $.ajax({
-                type: 'POST',
-                url: '/cat/user/community/1/update',
-                success: function(data) {
-                    Materialize.toast('Success!', 2000);
-                    $('[data-save-prompt]').hide();
-
-                    finishedCallback();
-                },
-                data: data
-            });
+                        finishedCallback();
+                    },
+                    data: data
+                });
+            }
+            
         });
 
         $('[data-edit]').hide();

@@ -158,7 +158,7 @@ app.use(myLogger);
 app.use(cookieParser());
 app.use(authenticator);
 app.use(interalServerError);
-app.use(adminRedirect);
+// app.use(adminRedirect);
 
 var resource = null;
 fs.readFile('./resources/resources.txt', function(err, data) {

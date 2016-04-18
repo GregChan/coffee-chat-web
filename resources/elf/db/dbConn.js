@@ -1077,7 +1077,7 @@ exports.getCommunityFeedback = function(communityID) {
 
 exports.getUserPositions = function(userID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id as positionID, a.companyID as companyID, a.title, a.isEdu, a.startDate, a.endDate, b.name, a.isCurrent from user_position as a left join company_desc as b on a.companyID=b.id where userID = ?';
+        var sql = 'select a.id as positionID, a.companyID as companyID, a.title, a.isEdu, a.startDate, a.endDate, b.name, a.isCurrent from user_position as a left join company_desc as b on a.companyID=b.id where userID = ? and a.deleted = 0';
         var values = [userID];
         sql = mysql.format(sql, values);
 
@@ -1180,13 +1180,13 @@ exports.updateUserPositions = function(userID, positions) {
                     values = [];
                     for (var i = 0; i < positions.positions.length; i++) {
                         var position = positions.positions[i];
-                        var subQuery = '(?, ?, (select id from company_desc where name = ?), 0, ?, ?)';
+                        var subQuery = '(?, ?, (select id from company_desc where name = ?), 0, ?, ?, ?)';
                         console.log(position.isEdu);
-                        subQuery = mysql.format(subQuery, [position.positionID, userID, position.company, position.title, position.isEdu]);
+                        subQuery = mysql.format(subQuery, [position.positionID, userID, position.company, position.title, position.isEdu, position.deleted]);
                         values.push(subQuery);
                     }
 
-                    var sql = 'insert into user_position (id, userID, companyID, isCurrent, title, isEdu) values ?? on duplicate key update companyID=values(companyID), title=values(title), isEdu=values(isEdu)';
+                    var sql = 'insert into user_position (id, userID, companyID, isCurrent, title, isEdu, deleted) values ?? on duplicate key update companyID=values(companyID), title=values(title), isEdu=values(isEdu), deleted=values(deleted)';
                     sql = mysql.format(sql, [values]);
                     // this line is hella sketch... don't know how to fix it though
                     sql = sql.replace(/\`/g, '');

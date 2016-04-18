@@ -47,7 +47,7 @@
                     } else if (type == 'select' && $(this).val()) {
                         fieldData.choices = $(this).val();
                     }
-                })
+                });
 
                 data.data.push(fieldData);
             });
@@ -70,6 +70,7 @@
         $('[data-edit]').hide();
         $('[data-edit-icon]').hide();
         $('[data-survey]').hide();
+        $('[data-delete-icon]').hide();
 
         var hideEdit = function(selector) {
                 var parentEditable = $(selector).closest('[data-editable]');
@@ -77,6 +78,10 @@
                 parentEditable.find('[data-display]').show();
             },
             processWorkAndEducationData = function(selector, postData, isEdu) {
+                var deleted = 0;
+                if ($(selector).is(':hidden')) {
+                    deleted = 1;
+                }
                 var positionElement = $(selector).find('[data-position]');
                 var companyElement = $(selector).find('[data-company]');
                 if (companyElement.val() != "" && positionElement.val() != "") {
@@ -84,7 +89,8 @@
                         positionID: positionElement.attr('data-id'),
                         company: companyElement.val(),
                         title: positionElement.val(),
-                        isEdu: isEdu
+                        isEdu: isEdu,
+                        deleted: deleted
                     });
                     postData.companies.push({
                         companyID: companyElement.attr('data-id'),
@@ -97,9 +103,11 @@
                     $(this).css('background-color', '#FAFAFA');
                     $(this).find('[data-edit-icon]').show();
                     $(this).find('[data-add-icon]').show();
+                    $(this).find('[data-delete-icon]').show();
                 }, function(e) {
                     $(this).find('[data-edit-icon]').hide();
                     $(this).find('[data-add-icon]').hide();
+                    $(this).find('[data-delete-icon]').hide();
                     $(this).css('background-color', 'white');
                 });
 
@@ -123,6 +131,12 @@
                     parentEditable.find('[data-edit-input]').val(value);
                     hideEdit(this);
                 });
+
+                $('[data-delete-icon]').click(function() {
+                    var parentEditable = $(this).closest('[data-position-pair]');
+                    parentEditable.hide();
+                    $('[data-save-prompt]').show();
+                });                
             };
 
         $('[data-add-icon]').click(function() {
@@ -149,7 +163,7 @@
             $('[data-education]').each(function() {
                 processWorkAndEducationData(this, postData, 1);
             });
-            // console.log(postData);
+            console.log(postData);
             $.ajax({
                 type: 'POST',
                 url: '/settings',

@@ -354,6 +354,12 @@ textarea {
   color: #EC6445;
 }
 
+.delete-icon {
+  position:relative;
+  left: -18px;
+  top: 18px;
+}
+
 @media(max-width: 600px) {
   .past-match {
     height: 320px;

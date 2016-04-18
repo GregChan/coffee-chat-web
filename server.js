@@ -18,18 +18,50 @@ var express = require('express'),
         logger.debug('myLogger - new request: ' + req.path);
         next();
     },
+    checkUserExists = function(decryptedID, req, res, callback) {
+        console.log('server.js: encryptedID ' + decryptedID);
+        var p1 = dbConn.getUser(decryptedID);
+        return p1.then(
+            function(data) {
+                var obj = data;
+                console.log("serverjs: validated user: " + obj.userId);
+                req.loginUserID = obj.userId;
+                callback();
+                return;
+            }
+        ).catch(
+            function(reason) {
+                console.log(reason);
+                authenticationFailed(req, res, next);
+            }
+        );
+    },
     authenticator = function(req, res, next) {
 
         logger.debug('myLogger - user id: ' + req.cookies.userID);
-        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community" || req.path == "/feedback") {
+        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community") {
             next();
             return;
         }
-        // if(req.path.slice(1,5) != 'wild' && req.path.slice(1,5) != 'cat/')
-        // {
-        //       next();
-        //       return;
-        // }
+
+        if (req.query.access) {
+            var decryptedStr = cypher.decrypt(req.query.access).split('&');
+            console.log(decryptedStr);
+            if (decryptedStr.length > 2) {
+                checkUserExists(decryptedStr[0], req, res, function() {
+                    req['accessParams'] = {};
+                    for (var i = 2; i < decryptedStr.length; i++) {
+                        var param = decryptedStr[i].split(',');
+                        req['accessParams'][param[0]] = param[1];
+                    }
+                    // TODO: there's a security flaw here, if you obtain an access token, you should be able to access all of those users resources
+                    next();
+                    return;
+                });
+                return;
+            }
+        }
+
         if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
             authenticationFailed(req, res, next);
         } else {
@@ -40,23 +72,7 @@ var express = require('express'),
                 return;
             }
             // console.log('server.js: cookie validated for ' + (Date.now() - decryptedStr[1]).toString());
-            var decryptedID = decryptedStr[0];
-            console.log('server.js: encryptedID ' + decryptedID);
-            var p1 = dbConn.getUser(decryptedID);
-            return p1.then(
-                function(data) {
-                    var obj = data;
-                    console.log("serverjs: validated user: " + obj.userId);
-                    req.loginUserID = obj.userId;
-                    next();
-                    return;
-                }
-            ).catch(
-                function(reason) {
-                    console.log(reason);
-                    authenticationFailed(req, res, next);
-                }
-            );
+            checkUserExists(decryptedStr[0], req, res, next);
         }
     },
     authenticationFailed = function(req, res, next) {

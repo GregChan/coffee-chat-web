@@ -3,26 +3,27 @@ html
 		include ./includes/styles.jade
 	body
 		include ./includes/email-profile.jade
-		form
+		form(action="#{actionUrl}")
 			div(class="email-container light-orange-background")
 				h4(class="center text-orange") Confirmed!
 				h5(class="center text-grey") How was your chat?
 					div(class="center")
-						input(type="radio" name="rating" id="41")
+						input(type="radio" name="rating" value="41" id="41")
 						label(class="radio-circle" for="41")
-						input(type="radio" name="rating" id="31")
+						input(type="radio" name="rating" value="31" id="31")
 						label(class="radio-circle" for="31")
-						input(type="radio" name="rating" id="21")
+						input(type="radio" name="rating" value="21" id="21")
 						label(class="radio-circle" for="21")
-						input(type="radio" name="rating" id="11")
+						input(type="radio" name="rating" value="11" id="11")
 						label(class="radio-circle" for="11")
-						input(type="radio" name="rating" id="1")
+						input(type="radio" name="rating" value="1" id="1")
 						label(class="radio-circle" for="1")
 			div(class="email-container")
 				h4(class="center text-orange") How could your experience have been better?
 				div(style="padding-right: 40px; padding-left: 40px;")
 					textarea(class="materialize-textarea" id="experience" type="text")
 					label(for="experience") Response is Optional
+			input(type="hidden" name="access" value="#{accessCode}")
 			div(class="email-container" style="padding-top:10px;")
 				div(class="center")
-					a(class="btn waves-effect waves-light coffee-chat-orange" type="submit" name="action") Submit
+					button(class="btn waves-effect waves-light coffee-chat-orange" type="submit" name="action") Submit

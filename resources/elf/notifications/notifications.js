@@ -4,6 +4,7 @@ var async = require('async');
 var dbConn = require("../db/dbConn.js");
 var matchNotificationTemplateId = "7e78367c-b094-4062-849d-296a8c3c5c74";
 var feedbackNotificationTemplateId = "9ed4af6b-0b6e-499b-a18b-e66e8fae4358";
+var cypher = require('../crypto/aesCipher.js');
 
 function doPromise(p, callback) {
 	p.then(function(data) {
@@ -138,10 +139,12 @@ exports.sendFeedbackNotification = function(matchId) {
 exports.sendFeedbackNotificationFromJade = function(matchId) {
 	console.log('send email notification');
 	getMatch(matchId, function(err, data) {
-		var formatData = function(match, to) {
+		var formatData = function(match, to, accessCode) {
 			return {
 				data: {
-					match: match
+					match: match,
+					accessCode: accessCode,
+					actionUrl: process.env.BASE_URL + '/feedback'
 				},
 				emails: [to]
 			};
@@ -149,9 +152,10 @@ exports.sendFeedbackNotificationFromJade = function(matchId) {
 		// data.userA and data.userB are both ids returned by the getMatch end point
 		getUserProfileForMatchForUsers(data.userA, data.userB, function(userData) {
 			console.log(userData);
-
-			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userA, userData.userB.email), 'feedback-notification.jade');
-			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userB, userData.userA.email), 'feedback-notification.jade');
+			var accessCode = cypher.encrypt(userData.userA.userId.toString() + '&feedback' + '&matchID,' + matchId + '&communityID,' + data.communityID);
+			console.log(accessCode);
+			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userA, userData.userB.email, accessCode), 'feedback-notification.jade');
+			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userB, userData.userA.email, accessCode), 'feedback-notification.jade');
 		});
 	});
 }

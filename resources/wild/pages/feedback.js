@@ -4,9 +4,9 @@ var request = require('request');
 exports.path = 'feedback';
 
 exports.getHandle = function(req, res) {
-	var userId = req.query.userId;
-	var communityId = req.query.communityId;
-	var matchId = req.query.matchId;
+	var userId = req.loginUserID;
+	var communityId = req['accessParams']['communityID'];
+	var matchId = req['accessParams']['matchID'];
 	var rating = req.query.rating;
 
 	request({
@@ -19,8 +19,8 @@ exports.getHandle = function(req, res) {
 				choices: [rating]
 			}]
 		},
-		headers: {
-			'Cookie': 'userID=' + userId
+		qs: {
+			access: req.query.access
 		}
 	}, function(error, response, body) {
 		console.log('request sent');
@@ -33,10 +33,4 @@ exports.getHandle = function(req, res) {
 			res.render('feedback');
 		}
 	});
-	/* console.log("UserID: " + userId);
-	console.log("communityId: " + communityId);
-	console.log("matchId: " + matchId);
-	console.log("rating: " + rating);
-	*/
-
 }

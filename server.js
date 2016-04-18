@@ -112,7 +112,37 @@ var express = require('express'),
             unauthorized(res);
             return;
         };
+    },
+    adminRedirect = function(req, res, next){
+        if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
+            authenticationFailed(req, res, next);
+        }
+        else{
+            var encryptedUserID = req.cookies.userID;
+            var decryptedStr = cypher.decrypt(encryptedUserID).split('&');
+            var decryptedID = decryptedStr[0];
+            console.log('server.js: encryptedID ' + decryptedID);
+            var p1 = dbConn.getCommunityAdmin(decryptedID);
+            return p1.then(
+                    function(data) {
+                        var obj = data;
+                        console.log("P1: " + obj.length);
+                        if(obj.length > 0){
+                            res.redirect('/admin/talent');
+                        }
+                        next();
+                        return;
+                    }
+                ).catch(
+                    function(reason) {
+                        console.log(reason);
+                        authenticationFailed(req, res, next);
+                    }
+                ); 
+        }
+        
     };
+
 
 // App settings
 app.set('views', './views');
@@ -128,6 +158,7 @@ app.use(myLogger);
 app.use(cookieParser());
 app.use(authenticator);
 app.use(interalServerError);
+app.use(adminRedirect);
 
 var resource = null;
 fs.readFile('./resources/resources.txt', function(err, data) {

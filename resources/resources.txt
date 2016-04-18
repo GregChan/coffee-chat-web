@@ -7,12 +7,14 @@
 ./resources/cat/user/getUserProfileForCommunityUser.js
 ./resources/cat/user/updateUserPositions.js
 ./resources/cat/user/getUserAnalytics.js
+./resources/cat/user/getUserCommunities.js
 ./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/cat/community/getCommunityFeedback.js
 ./resources/cat/community/getCommunityUsers.js
 ./resources/cat/community/getCommunityGroups.js
 ./resources/cat/community/getCommunityGroupUsers.js
 ./resources/cat/community/getCommunityAnalytics.js
+./resources/cat/community/getCommunityAdmin.js
 ./resources/cat/community/updateCommunityGroup.js
 ./resources/cat/community/createCommunity.js
 ./resources/cat/community/updateGroupUser.js

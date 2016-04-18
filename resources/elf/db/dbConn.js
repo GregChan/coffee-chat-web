@@ -58,8 +58,8 @@ exports.generateRandMatch = function(userID, communityID) {
 
                 if (rows.length < 1) {
                     reject({
-                         error: '401',
-                         message: 'invalid userID'
+                        error: '401',
+                        message: 'invalid userID'
                     });
                     return;
                 }
@@ -80,25 +80,15 @@ exports.generateRandMatch = function(userID, communityID) {
                             message: 'DB error'
                         });
                     } else {
-                         if (rows.length > 0) {
+                        if (rows.length > 0) {
                             reject({
-                                 error: '401',
-                                 message: userID +' has already been matched!'
+                                error: '401',
+                                message: userID + ' has already been matched!'
                             });
                             return;
-                         }
+                        }
 
-                         sql = 'SELECT userID from user_community as c '
-                                +'where communityID=? '
-                                +'AND userid!=? '
-                                +'AND not exists ( '
-                                +'select * from user_match as m '
-                                +'where (m.userA = ? and m.userB = c.userID ) '
-                                +'or (m.userB = ? and m.userA = c.userID) '
-                                +'or (m.userA = c.userID and m.userAStatus < 3) '
-                                +'or (m.userB = c.userID and m.userBStatus < 3)) '
-                                +'order by rand() '
-                                +'limit 1';
+                        sql = 'SELECT userID from user_community as c ' + 'where communityID=? ' + 'AND userid!=? ' + 'AND not exists ( ' + 'select * from user_match as m ' + 'where (m.userA = ? and m.userB = c.userID ) ' + 'or (m.userB = ? and m.userA = c.userID) ' + 'or (m.userA = c.userID and m.userAStatus < 3) ' + 'or (m.userB = c.userID and m.userBStatus < 3)) ' + 'order by rand() ' + 'limit 1';
 
                         sql = mysql.format(sql, [communityID, userID, userID, userID]);
 
@@ -112,17 +102,17 @@ exports.generateRandMatch = function(userID, communityID) {
                                     message: 'DB error'
                                 });
                             } else {
-                                 if (rows.length < 1) {
+                                if (rows.length < 1) {
                                     resolve({
-                                         message: 'There is currently no match available for ' + userID + '.'
+                                        message: 'There is currently no match available for ' + userID + '.'
                                     });
                                     return;
-                                 }
+                                }
 
-                                console.log("row length: "+rows.length);
+                                console.log("row length: " + rows.length);
                                 var uid = rows[0].userID;
 
-                                sql = "INSERT INTO user_match (userA, userB, communityID) VALUES ( ?, ? ,?) " ;
+                                sql = "INSERT INTO user_match (userA, userB, communityID) VALUES ( ?, ? ,?) ";
 
                                 values = [userID, uid, communityID];
 
@@ -139,14 +129,14 @@ exports.generateRandMatch = function(userID, communityID) {
                                     } else {
                                         if (rows.affectedRows > 0) {
                                             resolve({
-                                                'matchID':rows.insertId,
-                                                'userID':uid
+                                                'matchID': rows.insertId,
+                                                'userID': uid
 
                                             });
                                         } else {
                                             reject({
                                                 'error': 500,
-                                                'message': 'unable to create random match for user '+userID+' .'
+                                                'message': 'unable to create random match for user ' + userID + ' .'
                                             });
                                         }
 
@@ -154,20 +144,20 @@ exports.generateRandMatch = function(userID, communityID) {
                                 });
                             }
 
-                        });             
+                        });
                     }
                 });
-             }
+            }
         });
     });
 }
 
 exports.getMatch = function(matchId) {
-    return new Promise(function(resolve, reject){
+    return new Promise(function(resolve, reject) {
         var sql = 'select id, userA, userB, communityID, userAStatus, userBStatus, create_at from user_match where id = ?';
         sql = mysql.format(sql, [matchId]);
         pool.query(sql, function(err, rows, fields) {
-             if (err) {
+            if (err) {
                 logger.debug('Error in connection or query, in getMatch function');
                 reject({
                     error: '500',
@@ -193,8 +183,8 @@ exports.getMatch = function(matchId) {
     });
 }
 
-exports.createCommunity = function(data){
-    return new Promise(function(resolve, reject){
+exports.createCommunity = function(data) {
+    return new Promise(function(resolve, reject) {
         var sql = 'insert into community_desc (name, adminUserID, communityCode) values (?, ?, ?)';
         sql = mysql.format(sql, [data.name, 481, data.name]);
 
@@ -215,26 +205,78 @@ exports.createCommunity = function(data){
     })
 }
 
-exports.insertUserIntoCommunity = function(data){
-    return new Promise(function(resolve, reject){
-        var sql = 'insert into user_community (userID, communityID) values (?, ?)';
-        sql = mysql.format(sql, [data.userID, data.communityID]);
-
-        pool.query(sql, function(err, rows, fields) {
+exports.insertUserIntoCommunity = function(data) {
+    console.log(data);
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
             if (err) {
-                logger.debug('Error in connection or query');
+                logger.debug('DB connection error');
+                logger.debug(err);
                 reject({
-                    error: '500',
-                    message: 'DB error'
+                    'error': '500',
+                    'message': 'DB Error'
                 });
             } else {
-                logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
-                resolve({
-                    'success': '200'
+                connection.beginTransaction(function(err) {
+
+                    var sql = 'select id from community_desc where communityCode = ?';
+
+                    sql = mysql.format(sql, [data.communityCode]);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            return connection.rollback(function() {
+                                logger.debug('Error getting communityCode');
+                                reject({
+                                    'error': 500,
+                                    'message': 'DB Error'
+                                });
+                            });
+                        }
+                        
+                        if (rows.length > 0) {
+                            var communityID = rows[0].id;
+                            var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+                            sql = mysql.format(sql, [data.userID, communityID]);
+
+                            pool.query(sql, function(err, rows, fields) {
+                                if (err) {
+                                    logger.debug('Error in connection or query');
+                                    reject({
+                                        error: '500',
+                                        message: 'DB error'
+                                    });
+                                } else {
+                                    logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
+                                    connection.commit(function(err) {
+                                        if (err) {
+                                            connection.rollback(function() {
+                                                reject({
+                                                    'error': 500,
+                                                    'message': 'db error.'
+                                                });
+                                            });
+                                        }
+
+                                        resolve({
+                                            'success': '200'
+                                        });
+                                    });
+                                }
+                            });
+                        } else {
+                            reject({
+                                error: 404,
+                                message: 'Community code not found'
+                            });
+                        }
+                    });
                 });
+
+                connection.release();
             }
         });
-    })
+    });
 }
 
 exports.updateCommunityGroup = function(communityID, data) {

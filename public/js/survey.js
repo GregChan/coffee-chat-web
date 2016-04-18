@@ -17,7 +17,9 @@
             $.ajax({
                 url: "/cat/community/join",
                 method: "PUT",
-                data: {companyCode: $('#companyCode').val()},
+                data: {
+                    communityCode: $('#companyCode').val()
+                },
                 success: function(data) {
                     console.log(data);
                 }

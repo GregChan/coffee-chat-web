@@ -1294,6 +1294,41 @@ exports.getAllMatches = function(communityID) {
     });
 }
 
+exports.getCommunityAdmin = function(userID){
+    /* Description:
+     * returns the admin for a community
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'select id from community_desc where adminUserID = ?';
+
+        sql = mysql.format(sql, [userID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+
+            if (rows.length > 0) {
+                logger.debug('getCommunityAdmin for ' + userID + ': ' + rows[0].id);
+                resolve(rows);
+            } else {
+                resolve({});
+            }
+        });
+    });
+}
+
 //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
 
 exports.getCommunityUsers = function(communityID) {
@@ -1800,13 +1835,38 @@ exports.getCommunityProfileSurvey = function(communityID) {
     });
 }
 
+exports.getUserCommunities = function(userID) {
+    return new Promise(function(resolve, reject){
+        var sql = 'select communityID from user_community where userID = ?';
+        sql = mysql.format(sql, [userID]);
+        pool.query(sql, function(err, rows, fields) {
+             if (err) {
+                logger.debug('Error in connection or query, in getUserCommunities function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    resolve(rows);
+                } else {
+                    reject({
+                        error: '404',
+                        message: 'Record not found'
+                    });
+                }
+            }
+        });
+    });
+}
+
 exports.getUser = function(userId) {
     return new Promise(function(resolve, reject) {
         var sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.headline, u.profilePicO, u.linkedInProfile, i.`name` as industry From user_basic as u LEFT JOIN industry_desc as i on u.industry = i.id WHERE u.id =?";
         sql = mysql.format(sql, [userId]);
         pool.query(sql, function(err, rows, fields) {
             if (!err) {
-                if (rows.length > 0) {
+                if(rows.length > 0) {
                     logger.debug("dbConn: found user: " + userId);
                     var result = {
                         userId: userId,
@@ -1818,11 +1878,14 @@ exports.getUser = function(userId) {
                         profilePic: rows[0].profilePicO
                     };
                     resolve(result);
-                } else {
+                } 
+                else {
                     logger.debug("dbConn: didnt find user: " + userId);
                     reject('{"error":"400", "errorMsg":"Invalid UserID"}');
                 }
-            } else {
+            }
+                
+            else {
                 logger.debug('Error in connection database');
                 logger.debug(err);
                 reject('{"error":"500","errorMsg": ' + err + '}');

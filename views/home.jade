@@ -4,7 +4,7 @@ html
     body
         include ./includes/header.jade
         div(class="current-matches")
-            div(class="row")
+            div(class="row container")
                 //- div(class="center col s12 m2 l2 valign")
                     h4(class="text-orange") Your Matching Stats
                     div(class="row")
@@ -23,7 +23,17 @@ html
                         //- img(class="responsive-img center-block" src="/public/images/brewing.png")
                         //- h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
                         //- br
-                div
+                div(class="col s12 m4 l3")
+                    div(id="donutchart" style="width:100%; height: auto")
+                div(class="col s12 m4 l3")
+                    h6(class="text-grey center") Goal Setting
+                    div(class="center") Plan the next steps for your career. Are there people in your community you want to meet? Let us know and we’ll put in a request 
+                div(class="col s12 m4 l3") 
+                    h6(class="text-grey center") Meeting Prep
+                    div(class="center") We want to help you become better connected in your community. Read our blog about mentorship, leadership and skill building.
+                div(class="col s12 m4 l3")
+                    h6(class="text-grey center") Industry News
+                    div(class="center") See what people in your company are chatting about on LinkedIn
                 //- div(class="col s12 m12 l12 valign")
                     div(class="row")
                         div(class="col s12 m4 l4")
@@ -50,8 +60,10 @@ html
         
     script(src="https://code.jquery.com/jquery-2.2.0.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")    
-    script(src="/public/js/index.js")
+    script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+    script var metrics = !{JSON.stringify(metrics)};
     if (matchHist.matches)
         script var pastMatchData = !{JSON.stringify(matchHist.matches)}
         script(src="/public/js/past-matches.js")
+    script(src="/public/js/index.js")
     include ./includes/google-analytics.jade

@@ -291,8 +291,9 @@ exports.updateCommunityGroup = function(communityID, data) {
      */
 
     return new Promise(function(resolve, reject) {
-        var sql = 'insert into community_group (communityID, name) values (?, ?)';
-        sql = mysql.format(sql, [communityID, data.name]);
+        var sql = 'insert into community_group (communityID, name, private) values (?, ?, ?)';
+        var p = data.private || 1;
+        sql = mysql.format(sql, [communityID, data.name, p]);
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {
@@ -466,7 +467,7 @@ exports.getUserAnalytics = function(userID, communityID) {
                             averageRating = ratingSum / rows.length;
                         }
 
-                        var sql = 'select name, id from community_group where communityID = ?';
+                        var sql = 'select name, id from community_group where communityID = ? and private = 0';
                         sql = mysql.format(sql, [communityID]);
 
                         connection.query(sql, function(err, rows, fields) {

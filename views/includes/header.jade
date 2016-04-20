@@ -1,8 +1,15 @@
 nav(class="white z-depth-0 clear")
-	div(class="nav-wrapper coffee-chat-grey-background coffee-chat-grey-bottom-border")
-		div(class="container")
+	div(class="nav-wrapper coffee-chat-grey-bottom-border")
+		div(class="")
 			a(href="/")
-				img(class="left brand-logo coffee-chat-logo " src="/public/images/logo.png")
-			ul(id="nav-mobile" class="right")
-				li
-					a(class="coffee-chat-grey" href="/wild/user/signout") Signout
+				img(class="coffee-chat-logo left brand-logo" src="/public/images/logo.png")
+			div(class="right")
+				a(class="dropdown-button" data-activates="dropdown")
+					img(class="account-pic circle" src=curUser.profilePic)
+				ul(id="dropdown" class="dropdown-content")
+					li
+						a(class="coffee-chat-grey" href="/") Home
+					li
+						a(class="coffee-chat-grey" href="/settings") Settings
+					li
+						a(class="coffee-chat-grey" href="/wild/user/signout") Signout

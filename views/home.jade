@@ -2,24 +2,10 @@ html
     head
         include ./includes/styles.jade
     body
-        nav(class="white z-depth-0 clear")
-            div(class="nav-wrapper coffee-chat-grey-background coffee-chat-grey-bottom-border")
-                div(class="container")
-                    a(href="/")
-                        img(class="coffee-chat-logo left brand-logo" src="/public/images/logo.png")
-                    div(class="right")
-                        a(href="/settings")
-                            img(class="account-pic circle" src=curUser.profilePic)
-                        ul(id="nav-mobile" class="right")
-                            li
-                                a(class="coffee-chat-grey" href="/wild/user/signout") Signout
-
+        include ./includes/header.jade
         div(class="current-matches")
             div(class="row")
-                div(class="center col s12 m2 l2 valign")
-                    br
-                    br
-                    br
+                //- div(class="center col s12 m2 l2 valign")
                     h4(class="text-orange") Your Matching Stats
                     div(class="row")
                         h5(class="center text-orange")=metrics.totalConnections
@@ -27,17 +13,26 @@ html
                     div(class="row")
                         h5(class="center text-orange")=metrics.avgRating
                         h5(class="center text-orange") Average Rating
-                div(class="col s12 m8 l8 valign")
+                div(class="col s12 m12 l12 valign")
                     if (curMatch.total > 0)
                         each match in [curMatch.matches[0]]
                             include ./includes/match.jade
                     else
-                        br
-                        h3(class="center text-orange" id="match-announcement") CoffeeChats are brewing...
-                        img(class="responsive-img center-block" src="/public/images/brewing.png")
-                        h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
-                        br
-                div(class="center col s12 m2 l2 valign")
+                        //- br
+                        h4(class="center text-orange" id="match-announcement") CoffeeChats are Brewing!
+                        //- img(class="responsive-img center-block" src="/public/images/brewing.png")
+                        //- h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                        //- br
+                div
+                //- div(class="col s12 m12 l12 valign")
+                    div(class="row")
+                        div(class="col s12 m4 l4")
+                            img(class="responsive-img circle coffee-chat-circle match-pic" src="public/images/circle-1.png")
+                        div(class="col s12 m4 l4")
+                            img(class="responsive-img circle coffee-chat-circle match-pic" src="public/images/circle-2.jpg")
+                        div(class="col s12 m4 l4")
+                            img(class="responsive-img circle coffee-chat-circle match-pic" src="public/images/circle-3.png")
+                //- div(class="center col s12 m2 l2 valign")
                     br
                     br
                     br
@@ -51,7 +46,6 @@ html
                 div(class="row container")
                     each pastMatch in matchHist.matches
                         include ./includes/past-match.jade
-        include ./includes/partners.jade
         include ./includes/footer.jade
         
     script(src="https://code.jquery.com/jquery-2.2.0.min.js")

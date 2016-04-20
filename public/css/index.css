@@ -1,3 +1,24 @@
+@font-face {
+  font-family: museo;
+  src: url('/public/fonts/museo.woff');
+}
+
+h1 {
+  font-family: museo;
+}
+
+h2 {
+  font-family: museo;
+}
+
+h3 {
+  font-family: museo;
+}
+
+h4 {
+  font-family: museo;
+}
+
 .linked-in-btn {
   display: inline-block;
   margin-top: 20px;
@@ -102,7 +123,7 @@
 }
 
 .text-orange {
-  color: #EC6445;
+  color: #ff7050;
 }
 
 .spacer-15 {
@@ -231,11 +252,11 @@ textarea {
 }
 
 .coffee-chat-grey {
-  color: #565a56;
+  color: #676767;
 }
 
 .coffee-chat-grey-background {
-  background: #FAFAFA;
+  background: #FDFAFA;
 }
 
 .coffee-chat-orange-background {
@@ -243,7 +264,7 @@ textarea {
 }
 
 .coffee-chat-grey-bottom-border {
-  border-bottom: 1px solid #bbbbbb;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .coffee-chat-divider:before, .coffee-chat-divider:after {

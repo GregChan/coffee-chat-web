@@ -1244,10 +1244,21 @@ exports.updateMatchStatus = function(userID, matchID, newStatus) {
                     'message': 'DB Error'
                 });
             } else {
-                logger.debug('updateMatchStatus for ' + userID + ' for match: ' + matchID);
-                resolve({
-                    'success': '200'
-                });
+                logger.debug('updated MatchStatus for ' + userID + ' for match: ' + matchID);
+
+                sql = "INSERT INTO event_match_status (userID, matchID, newStatus) VALUES (?, ?, ?)";
+                values = [userID, matchID, newStatus];
+                sql = mysql.format(sql, values);
+                console.log('updateMatchStatus: going to log event with sql: ' + sql);
+                pool.query(sql, function(err, rows, fields) {
+                     if (err) {
+                            logger.debug('Error in connection or query:');
+                            logger.debug(err);
+                        } 
+                        resolve({
+                                'success': '200'
+                        });
+                    });
             }
         });
     });

@@ -17,7 +17,9 @@ div(class="section white profile-section profile-edit")
 				div(class="spacer-15")
 				div(data-work-container)
 					for work in profile.positions.work
-						div(data-work-experience)
+						div(data-work-experience data-position-pair)
+							a(class="editable delete-icon" href="#")
+								i(class="material-icons" data-delete-icon) delete 
 							+editableTextInput(work.title, work.positionID, "title", {"data-position":"data"},"Title")
 							+editableTextInput(work.company, work.companyID, "subtitle", {"data-company":"data"},"Company / School")
 				div(class="center")
@@ -32,7 +34,9 @@ div(class="section white profile-section profile-edit")
 				div(class="spacer-15")
 				div(data-education-container)
 					for edu in profile.positions.education
-						div(data-education)
+						div(data-education data-position-pair)
+							a(class="editable delete-icon" href="#")
+								i(class="material-icons" data-delete-icon) delete
 							+editableTextInput(edu.title, edu.positionID, "title", {"data-position":"data"},"Title")
 							+editableTextInput(edu.school, edu.schoolID, "subtitle", {"data-company":"data"},"Company / School")
 				div(class="center")

@@ -5,7 +5,7 @@ var express = require('express'),
     request = require('request'),
     bodyParser = require('body-parser'),
     dbConn = require("./resources/elf/db/dbConn.js"),
-    cypher = require('./resources/elf/crypto/aesCipher.js');
+    cypher = require('./resources/elf/crypto/aesCipher.js'),
     logger = require("./logger.js").getLogger(),
     port = process.env.PORT || 1337,
     cookieParser = require('cookie-parser'),
@@ -35,12 +35,11 @@ var express = require('express'),
         } else {
             var encryptedUserID = req.cookies.userID;
             var decryptedStr = cypher.decrypt(encryptedUserID).split('&');
-            if(decryptedStr.length < 2 || Date.now()-decryptedStr[1]>9000000)
-            {
+            if (decryptedStr.length < 2 || Date.now() - decryptedStr[1] > 9000000) {
                 authenticationFailed(req, res, next);
                 return;
             }
-           // console.log('server.js: cookie validated for ' + (Date.now() - decryptedStr[1]).toString());
+            // console.log('server.js: cookie validated for ' + (Date.now() - decryptedStr[1]).toString());
             var decryptedID = decryptedStr[0];
             console.log('server.js: encryptedID ' + decryptedID);
             var p1 = dbConn.getUser(decryptedID);
@@ -74,12 +73,7 @@ var express = require('express'),
         }
 
         // TDOO: return something other than 401...
-        res.status(401);
-        res.end();
-    },
-    interalServerError = function(err, req, res, next) {
-        logger.error(err.stack);
-        res.status(500).send('Something broke!');
+        next(new Error(401));
     },
     exitHandler = function(options, err) {
         if (options.cleanup) {
@@ -113,34 +107,31 @@ var express = require('express'),
             return;
         };
     },
-    adminRedirect = function(req, res, next){
-        if (undefined === req.cookies.userID || "undefined" == req.cookies.userID) {
-            authenticationFailed(req, res, next);
-        }
-        else{
-            var encryptedUserID = req.cookies.userID;
-            var decryptedStr = cypher.decrypt(encryptedUserID).split('&');
-            var decryptedID = decryptedStr[0];
-            console.log('server.js: encryptedID ' + decryptedID);
-            var p1 = dbConn.getCommunityAdmin(decryptedID);
-            return p1.then(
-                    function(data) {
-                        var obj = data;
-                        console.log("P1: " + obj.length);
-                        if(obj.length > 0){
-                            res.redirect('/admin/talent');
-                        }
-                        next();
-                        return;
-                    }
-                ).catch(
-                    function(reason) {
-                        console.log(reason);
-                        authenticationFailed(req, res, next);
-                    }
-                ); 
-        }
-        
+
+    errorHandler = function() {
+        // 404 not found
+        app.use(function(req, res) {
+            res.status(404);
+            res.render('error/404');
+        });
+
+        // 401 unauthorized
+        app.use(function(err, req, res, next) {
+            logger.error(err.stack);
+            if (err.message == 401) {
+                res.status(401);
+                res.render('error/401');
+            } else {
+                next(err);
+            }
+        });
+
+        // 500 internal server error
+        app.use(function(err, req, res, next) {
+            logger.error(err.stack);
+            res.status(500);
+            res.render('error/500');
+        });
     };
 
 
@@ -157,8 +148,6 @@ app.use(bodyParser.urlencoded({
 app.use(myLogger);
 app.use(cookieParser());
 app.use(authenticator);
-app.use(interalServerError);
-// app.use(adminRedirect);
 
 var resource = null;
 fs.readFile('./resources/resources.txt', function(err, data) {
@@ -186,8 +175,9 @@ fs.readFile('./resources/resources.txt', function(err, data) {
             app.put('/' + resource.path, resource.putHandle);
         }
     }
-});
 
+    errorHandler();
+});
 
 app.listen(port, function() {
     logger.debug('Example app listening on port %s!', port);

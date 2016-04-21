@@ -131,7 +131,11 @@
 }
 
 .text-grey {
-  color: #635A5D;
+  color: #7a7a7a;
+}
+
+.text-light-grey {
+  color: #a1a1a1;
 }
 
 .chip {
@@ -348,4 +352,28 @@ textarea {
 
 .dropdown-content li>a, .dropdown-content li>span {
   color: #EC6445;
+}
+
+.delete-icon {
+  position:relative;
+  left: -18px;
+  top: 18px;
+}
+
+@media(max-width: 600px) {
+  .past-match {
+    height: 320px;
+  }
+}
+
+@media(min-width: 600px, max-width: 993px) {
+  .past-match {
+    height: 300px;
+  }
+}
+
+@media(min-width: 994px) {
+ .past-match {
+    height: 340px;
+  } 
 }

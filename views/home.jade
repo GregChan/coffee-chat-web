@@ -27,7 +27,7 @@ html
                     div(class="row")
                         h5(class="center text-orange")=metrics.avgRating
                         h5(class="center text-orange") Average Rating
-                div(class="center col s12 m8 l8 valign")
+                div(class="col s12 m8 l8 valign")
                     if (curMatch.total > 0)
                         each match in [curMatch.matches[0]]
                             include ./includes/match.jade
@@ -60,3 +60,4 @@ html
     if (matchHist.matches)
         script var pastMatchData = !{JSON.stringify(matchHist.matches)}
         script(src="/public/js/past-matches.js")
+    include ./includes/google-analytics.jade

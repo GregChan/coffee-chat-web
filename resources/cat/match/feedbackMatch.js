@@ -15,7 +15,7 @@ exports.postHandle = function(req, res) {
 function feedbackMatch(userId, res, req) {
     var matchId = req.body.matchID;
     console.log('match/feedbackMatch: matchId: ' + matchId);
-    var p1 = dbConn.updateMatchStatus(userId,matchId,5);
+    var p1 = dbConn.updateMatchStatus(userId,matchId,4);
     return p1.then(
         function(val) {
             console.log("feedbackMatch: done ");

@@ -15,7 +15,7 @@ exports.postHandle = function(req, res) {
 function rejectMatch(userId, res, req) {
     var matchId = req.body.matchID;
     console.log('match/rejectMatch: matchId: ' + matchId);
-    var p1 = dbConn.updateMatchStatus(userId,matchId,4);
+    var p1 = dbConn.updateMatchStatus(userId,matchId,3);
     return p1.then(
         function(val) {
             console.log("rejectMatch: done ");

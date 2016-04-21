@@ -28,14 +28,33 @@ exports.getHandle = function(req, res) {
                     }, function(error, response, body) {
                         callback(error, JSON.parse(body));
                     });
-                }
+                },
+                function(callback) {
+                    request({
+                        url: process.env.BASE_URL + '/cat/user/community/1/profile',
+                        method: 'GET',
+                        headers: {
+                            'Cookie': 'userID=' + req.cookies.userID
+                        }
+                    }, function(error, response, body) {
+                        callback(error, JSON.parse(body));
+                    });
+                },
             ],
             function(err, results) {
+                var hasFilledOutSurvery = Object.keys(results[1]).length > 0;
                 if (!err) {
-                    res.render('survey', {
-                        profile: results[0],
-                        survey: results[1]
-                    });
+                    var hasFilledOutSurvery = Object.keys(results[1]).length > 0;
+                    if (hasFilledOutSurvery) {
+                        res.redirect('/');
+                    }
+                    else
+                    {
+                        res.render('survey', {
+                            profile: results[0],
+                            survey: results[1]
+                        });
+                    }
                 } else {
                     res.status(500);
                 }

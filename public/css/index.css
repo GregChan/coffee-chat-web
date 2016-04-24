@@ -114,6 +114,7 @@ h6 {
 
 .admin-talent .side-nav {
   margin-top: 40px;
+  width: 180px;
 }
 
 .admin-talent .row {
@@ -156,6 +157,16 @@ h6 {
 .admin-list-element {
   line-height: 40px !important;
   height: 40px !important;
+  display: inline-block !important;
+}
+
+.admin-talent .side-nav li {
+  line-height: 40px;
+}
+
+.admin-talent .settings {
+  position: absolute;
+  right: 0px;
 }
 
 .text-orange {

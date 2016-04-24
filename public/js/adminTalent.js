@@ -16,6 +16,7 @@
 			groupElement.html(groupName);
 			groupElement.attr('href', '#' + groupName.split(' ').join('-').toLowerCase());
 			$('[data-groups]').append(newTemplate);
+
 			var settingsElement = newTemplate.find('[data-group-settings]');
 			settingsElement.attr('data-target', 'settings-' + hyphenatedName + '-' + groupID);
 			settingsElement.attr('href', '#settings-' + hyphenatedName + '-' + groupID);
@@ -126,6 +127,8 @@
 				data: data,
 				success: function(data) {
 					var newTemplate = createGroupListItemFromTemplate(0, $('[data-group-name]').val());
+					$('#new-group').closeModal();
+					location.reload();
 				}
 			});
 		});

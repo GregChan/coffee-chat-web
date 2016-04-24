@@ -1,23 +1,7 @@
 div(class="section white profile-section match#{match.userID}" id="match-profile")
     h4(class="center text-orange") CoffeeChat Connected!
-    div(class="row container profile-container")
-        div(class="col s6 offset-s3 m3 offset-m0 l3 offset-l0")
-            a(href="" id="match-link")
-                img(class="responsive-img circle coffee-chat-circle" id="match-pic" src="public/images/generic-profile.png")
-                h5(class="center text-grey" id="match-name") Match Name
-                h6(class="center text-grey" id="match-title") Match Title
-        div(class="col s12 m3 l3")
-            h5(class="section-title text-orange") Work Experience
-            div(class="spacer-15")
-            div(id="work-container")
-        div(class="col s12 m3 l3")
-            h5(class="section-title text-orange") Education
-            div(class="spacer-15")
-            div(id="education-container")
-        div(class="col s12 m3 l3")
-            h5(class="section-title text-orange") Interests
-            div(class="spacer-15")
-            div(id="interests-container")
+    div(class="container")
+        include ./profile.jade
 div(class="section coffee-chat-orange-background #{match.userID}" id="match-reasons")
     div(class="center")
         h4(class="section-title text-orange") Why Did We Match?
@@ -71,7 +55,7 @@ div(class="section white #{match.userID}" id="match-rate")
             
 
 script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-script. 
+script.
     var matchId = !{match.userID}
     var matchNumber = !{match.id}
     var matchStatus = !{match.myStatus}

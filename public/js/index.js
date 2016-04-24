@@ -1,7 +1,7 @@
 (function() {
 	$(document).ready(function() {
 		$('.parallax').parallax();
-		$('.modal-trigger').leanModal();
+		$('[data-modal-trigger]').leanModal();
 	});
 
 	google.charts.load("current", {

@@ -112,36 +112,50 @@ h6 {
   height: 600px;
 }
 
-.talent .row {
+.admin-talent .side-nav {
+  margin-top: 40px;
+}
+
+.admin-talent .row {
   margin-bottom: 0px;
 }
 
-.talent .no-padding {
+.admin-talent .no-padding {
   padding: 0px;
 }
 
-.talent .admin-talent-img {
+.admin-talent .profile-pic {
+  width: 100%;
+  height: auto;
+  margin-right: 20px;
+  max-width: 60px;
+  max-height: 60px;
+}
+
+.admin-talent .description {
+  display: block;
+  min-width: 230px;
+  max-width: 250px;
+  font-size: 12px;
+}
+
+.admin-talent .past-matches {
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.admin-talent .admin-talent-past-img {
   width: 100%;
   height: auto;
 
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 40px;
+  max-height: 40px;
 }
 
-.talent .admin-talent-past-img {
-  width: 100%;
-  height: auto;
-
-  max-width: 75px;
-  max-height: 75px;
-}
-
-.admin-talent-nav-text {
-  font-size: 18px !important;
-}
-
-.talent .admin-talent-column {
-  min-width: 350px;
+.admin-list-element {
+  line-height: 40px !important;
+  height: 40px !important;
 }
 
 .text-orange {
@@ -257,8 +271,7 @@ textarea {
 }
 
 .side-nav {
-  background: #FAFAFA !important;
-  border-right: 1px solid #bbbbbb;
+  border-right: 1px solid #eeeeee;
 }
 
 .page-footer {
@@ -336,7 +349,16 @@ textarea {
   margin-top: 13px !important;
 }
 
+.navbar-fixed {
+  height: 40px;
+}
+
 .nav-wrapper {
+  line-height: 40px;
+}
+
+nav {
+  height: 40px;
 }
 
 /* materialize overrides */
@@ -414,5 +436,11 @@ textarea {
 @media(min-width: 601px) and (max-width: 899px) {
   .past-match {
     height: 320px;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .side-nav.fixed {
+    left: 0%;
   }
 }

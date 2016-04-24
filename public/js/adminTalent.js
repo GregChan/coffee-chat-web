@@ -1,8 +1,22 @@
 (function() {
 	$(document).ready(function() {
+		$('select').material_select();
+		$('[data-modal-trigger]').leanModal();
+
 		$(".button-collapse").sideNav();
 		var groupsTemplate = $('[data-group-template]');
 		groupsTemplate.removeAttr('data-group-template');
+
+		var createGroupListItemFromTemplate = function(groupID, groupName) {
+			var newTemplate = groupsTemplate.clone();
+			var groupElement = newTemplate.find('[data-group]');
+			groupElement.attr('data-id', groupID);
+			groupElement.html(groupName);
+			groupElement.attr('href', '#' + groupName.split(' ').join('-').toLowerCase());
+			$('[data-groups]').append(newTemplate);
+
+			return newTemplate;
+		}
 
 		var groups = {};
 
@@ -11,12 +25,7 @@
 			url: '/cat/community/1/group',
 			success: function(groups) {
 				for (var i = 0; i < groups.length; i++) {
-					var newTemplate = groupsTemplate.clone();
-					var groupElement = newTemplate.find('[data-group]');
-					groupElement.attr('data-id', groups[i].groupID);
-					groupElement.html(groups[i].groupName);
-					groupElement.attr('href', '#' + groups[i].groupName.split(' ').join('-').toLowerCase());
-					$('[data-groups]').append(newTemplate);
+					var newTemplate = createGroupListItemFromTemplate(groups[i].groupID, groups[i].groupName);
 
 					(function(newTemplate) {
 						$.ajax({
@@ -44,9 +53,22 @@
 			$('[data-user]').show();
 		});
 
-		$('[data-add-group]').click(function(e) {
-			
-			$('[data-groups]')
+		$('[data-delete-group]').click(function(e) {
+			$('[data-group]')
+		});
+
+		$('[data-create-group]').click(function(e) {
+			var data = {
+				name: $('[data-group-name]').val()
+			};
+			$.ajax({
+				type: 'POST',
+				url: '/cat/community/1/group/update',
+				data: data,
+				success: function(data) {
+					var newTemplate = createGroupListItemFromTemplate(0, $('[data-group-name]').val());
+				}
+			});
 		});
 
 		var pastMatchTemplate = $('[data-past-match-template]');

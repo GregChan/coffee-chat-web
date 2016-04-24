@@ -1,19 +1,17 @@
 html
 	head
 		include ./includes/styles.jade
-	body
+	body(class="admin-talent")
 		header
 			include ./includes/admin-header.jade
 			ul(class="side-nav fixed z-depth-0" id="slide-out")
 				li
-					a(href="#")
-				li
 					h4(class="text-orange") Groups
 				li
-					a(class="admin-talent-nav-text" href="#all" data-all) All
+					a(class="admin-list-element" href="#all" data-all) All
 				div(data-groups)
 				li
-					a(data-add-group) 
+					a(data-add-group data-modal-trigger data-target="new-group" href="#new-group") 
 						div(class="valign-wrapper")
 							span(class="icon")
 								i(class="material-icons") add_circle_outline
@@ -23,25 +21,50 @@ html
 				a(data-past-match-link)
 					img(class="admin-talent-past-img circle" data-past-match-image)
 			li(data-group-template)
-				a(class="admin-talent-nav-text" data-id data-group) 
-
-		div(class="row" style="margin-left: 250px;")
+				a(class="admin-list-element" data-id data-group) 
+		div(class="row" style="margin-left: 240px;")
+			//- div(data-edit-group-nav)
+				nav(class="z-depth-0")
+					div(class="nav-wrapper white coffee-chat-grey-bottom-border")
+						ul(class="right hide-on-small-and-down fixed")
+							li
+								a(class="coffee-chat-grey" data-group-settings data-modal-trigger data-target="group-settings" href="#group-settings") Group Settings
 			div(class="col s12 m12 l12")
 				div(class="talent collection")
 					for user in users
 						div(href="#" class="#{user.id} collection-item" data-user)
 							div(class="row valign-wrapper no-padding")
-								div(class="row col s3 m3 l3 admin-talent-column no-padding")
-									div(class="col s5 m5 l5 no-padding")
-										img(class="admin-talent-img circle" src=user.profilePic || '/public/images/generic-profile.png')
-									div(class="col s7 m7 l7 no-padding")
-										h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
-										h6(class="coffee-chat-grey") #{user.title}
-										h6(class="coffee-chat-grey") #{user.company}
-								div(class="col s12 m6 l6 hide-on-small-only valign")
-									div(class="row" data-past-matches)
-								div(class="col s12 m3 l3 hide-on-small-only valign")
-	
+								img(class="profile-pic circle" src=user.profilePic || '/public/images/generic-profile.png')
+								div(class="description")
+									h6(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
+									div(class="coffee-chat-grey") #{user.title}
+									div(class="coffee-chat-grey") #{user.company}
+								div(class="past-matches" data-past-matches)
+								div(class="col s12 m3 l6 hide-on-small-only valign")
+		div(class="modal" id="new-group")
+			div(class="modal-content")
+				div(class="input-field")
+					input(data-group-name id="groupName" type="text")
+					label(for="groupName") Group Name
+			div(class="modal-footer")
+				a(class="modal-action modal-close btn-flat" href="#") cancel
+				a(class="modal-action btn-flat" data-create-group href="#") create
+		div(class="modal" id="group-settings")
+			div(class="modal-content")
+				div(class="input-field")
+					select
+						option(value="1") Option 1
+						option(value="1") Option 2
+						option(value="1") Option 3
+				div(class="input-field")
+					input(type="checkbox" id="private")
+					label(for="private") Private
+				div(class="input-field")
+					a(class="btn" data-delete-group) Delete Group
+			div(class="modal-footer")
+				a(class="modal-action modal-close btn-flat" href="#") cancel
+				a(class="modal-action btn-flat" data-save-group-settings href="#") save
+
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script var users = !{JSON.stringify(users)}
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")

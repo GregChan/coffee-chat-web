@@ -57,6 +57,7 @@ exports.getHandle = function(req, res) {
             if (!err) {
                 console.log(results[1]);
                 var data = {
+                    curUser: results[0],
                     profile: results[0],
                     interests: results[1],
                     survey: results[2],

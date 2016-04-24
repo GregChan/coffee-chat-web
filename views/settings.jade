@@ -4,7 +4,7 @@ html
 	body
 		include ./includes/header.jade
 			
-		include ./includes/profile.jade
+		include ./includes/editable-profile.jade
 		div(class="center" data-save-prompt style="display: none; margin-top:-30px;")
 			div It looks like you've made some changes to your profile! Don't forget to click save!
 			a(class="spacer-15 btn btn-outline z-depth-0" data-save) Save
@@ -28,4 +28,5 @@ html
 	script var pastMatches = !{JSON.stringify(pastMatches)}
 	script(src="/public/js/survey.js")
 	script(src="/public/js/settings.js")
+	include ./includes/google-analytics.jade
 						

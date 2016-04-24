@@ -55,14 +55,27 @@ function createOAuthUser(token, res) {
         } else {
             var userID = body.user;
             console.log('server.js: got userID ' + userID);
-            var encryptedID = cypher.encrypt(userID.toString()+'&'+Date.now().toString());
+            var encryptedID = cypher.encrypt(userID.toString() + '&' + Date.now().toString());
             console.log('server.js: encryptedID ' + encryptedID);
             res.cookie('userID', encryptedID, {
                 maxAge: 9000000,
                 httpOnly: false
             });
-            res.redirect('/');
-            res.end();
+
+            request({
+                method: 'GET',
+                json: true,
+                url: process.env.BASE_URL + '/cat/user/' + userID + '/admin',
+                headers: {
+                    'Cookie': 'userID=' + encryptedID
+                }
+            }, function(err, response, body) {
+                if (body.length > 0) {
+                    res.redirect('/admin/talent');
+                } else {
+                    res.redirect('/');
+                }
+            });
         }
     });
 }

@@ -2,48 +2,47 @@ html
 	head
 		include ./includes/styles.jade
 	body
-		header
-			include ./includes/admin-header.jade
-			h1(class="center text-orange") Matching Metrics
-			div(class="row text-orange")
-				h4(style="padding:0px 20px") For the Community
-				div(class="col" style="padding:0px 20px")
-					a(class='dropdown-button btn coffee-chat-orange' href='#' data-activates='dropdown1') Select Timeframe
-					ul(id='dropdown1' class='dropdown-content')
-						li()
-							a(href="javascript:displayDay()") Day
-						li()
-							a(href="javascript:displayMonth()") Month
-				div(class="col s12 m12 l12" id="curve_chart" style="height:80%")
-			div(class="row coffee-chat-grey-background text-orange")
+		include ./includes/admin-header.jade
+		h1(class="center text-orange") Matching Metrics
+		div(class="row text-orange container")
+			h4(style="padding:0px 20px") For the Community
+			div(class="col" style="padding:0px 20px")
+				a(class='dropdown-button btn coffee-chat-orange' href='#' data-activates='dropdown1') Select Timeframe
+				ul(id='dropdown1' class='dropdown-content')
+					li()
+						a(href="javascript:displayDay()") Day
+					li()
+						a(href="javascript:displayMonth()") Month
+			div(class="col s12 m12 l12" id="curve_chart" style="height:80%")
+		div(class="row coffee-chat-grey-background text-orange")
+			div(class="container")
 				div(class="row valign-wrapper ")
-					div(class="center col s12 m4 l6 valign")
+					div(class="center col s12 m4 l4 valign")
 						h1(class="center")=metrics.totalConnections
 						h3(class="center") Total Connections
-					div(class="center col s12 m4 l6 valign")
+					div(class="center col s12 m4 l4 valign")
 						h1(class="center" id="totAvg")
 						h3(class="center") Average Rating
 					div(class="center col s12 m4 l4 valign")
 						h1(class="center")=users.length
 						h3(class="center") Total Users		
-			br
-			div(class="row text-orange")
-				h4(style="padding:0px 20px") For Groups				
-			div(class="row" style="padding:0px 100px")
-				table(class="responsive-table highlight")
-					thead(class="text-grey")
+		div(class="row text-orange container")
+			h4(class="center") For Groups				
+		div(class="row container" style="padding:0px 100px")
+			table(class="responsive-table highlight")
+				thead(class="text-grey")
+					tr
+						th(data-field="Group") Group
+						th(data-field="Total Connections") Total Connections
+						th(data-field="Average Rating") Average Rating
+						//th(data-field="Connection Rate") Connecton Rate
+				tbody(class="text-orange")
+					for group in metrics.groups
 						tr
-							th(data-field="Group") Group
-							th(data-field="Total Connections") Total Connections
-							th(data-field="Average Rating") Average Rating
-							//th(data-field="Connection Rate") Connecton Rate
-					tbody(class="text-orange")
-						for group in metrics.groups
-							tr
-								td=group.groupName
-								td=group.totalConnections
-								td=group.avgRating
-								//td=group.connectionRate
+							td=group.groupName
+							td=group.totalConnections
+							td=group.avgRating
+							//td=group.connectionRate
 	include ./includes/footer.jade
 	meta(http-equiv="content-type" content="text/html; charset=utf-8")
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
@@ -52,3 +51,4 @@ html
 	script var metrics = !{JSON.stringify(metrics)}
 	script var matches = !{JSON.stringify(matches.matches)}
 	script(src="/public/js/admin-metrics.js")
+	include ./includes/google-analytics.jade

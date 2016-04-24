@@ -1,49 +1,67 @@
 html
 	head
 		include ./includes/styles.jade
-	body
+	body(class="admin-talent")
 		header
 			include ./includes/admin-header.jade
 			ul(class="side-nav fixed z-depth-0" id="slide-out")
 				li
-					a(href="#")
+					h5(class="text-orange") Groups
 				li
-					h4(class="text-orange") Groups
-				li
-					a(class="admin-talent-nav-text" href="#all" data-all) All
+					div(style="display:inline-block")
+						a(class="admin-list-element" href="#all" data-all) All
 				div(data-groups)
 				li
-					a(data-add-group) 
-						div(class="valign-wrapper")
-							span(class="icon")
-								i(class="material-icons") add_circle_outline
-							span(class="valign") ADD GROUP
+					a(data-add-group data-modal-trigger data-target="new-group" href="#new-group" class="admin-list-element center" style="display:block !important;") 
+						i(class="material-icons" style="margin-top:10px;") add_circle_outline
 		div(data-templates style="display: none;")
 			div(class="col m4 l4" data-past-match-template data-past-match)
 				a(data-past-match-link)
 					img(class="admin-talent-past-img circle" data-past-match-image)
 			li(data-group-template)
-				a(class="admin-talent-nav-text" data-id data-group) 
-
-		div(class="row" style="margin-left: 250px;")
+				div(style="display:inline-block")
+					a(class="admin-list-element" data-id data-group) 
+					a(class="admin-list-element settings material-icons" data-group-settings data-modal-trigger) settings
+			div(class="modal modal-fixed-footer" data-modal-template)
+				div(class="modal-content")
+					div(class="row")
+						div(class="input-field col s10")
+							select(data-user)
+								option(value="" selected)="Choose a user to add to this group"
+								for user in users
+									option(data-icon=user.profilePic class="circle" value=user.id)=user.firstName+' '+user.lastName
+						div(class="input-field col s2")
+							a(class="btn coffee-chat-orange" data-add-group-user) add
+					div(class="input-field center")
+						a(class="btn coffee-chat-orange" data-delete-group) Delete Group
+				div(class="modal-footer")
+					a(class="modal-action modal-close btn-flat" href="#") done
+		div(class="row" style="margin-left: 180px;")
 			div(class="col s12 m12 l12")
 				div(class="talent collection")
 					for user in users
 						div(href="#" class="#{user.id} collection-item" data-user)
 							div(class="row valign-wrapper no-padding")
-								div(class="row col s3 m3 l3 admin-talent-column no-padding")
-									div(class="col s5 m5 l5 no-padding")
-										img(class="admin-talent-img circle" src=user.profilePic || '/public/images/generic-profile.png')
-									div(class="col s7 m7 l7 no-padding")
-										h5(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
-										h6(class="coffee-chat-grey") #{user.title}
-										h6(class="coffee-chat-grey") #{user.company}
-								div(class="col s12 m6 l6 hide-on-small-only valign")
-									div(class="row" data-past-matches)
-								div(class="col s12 m3 l3 hide-on-small-only valign")
-	
+								img(class="profile-pic circle" src=user.profilePic || '/public/images/generic-profile.png')
+								div(class="description")
+									h6(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
+									div(class="coffee-chat-grey") #{user.title}
+									div(class="coffee-chat-grey") #{user.company}
+								div(class="past-matches" data-past-matches)
+								div(class="col s12 m3 l6 hide-on-small-only valign")
+		div(class="modal" id="new-group")
+			div(class="modal-content")
+				div(class="input-field")
+					input(data-group-name id="groupName" type="text")
+					label(for="groupName") Group Name
+			div(class="modal-footer")
+				a(class="modal-action modal-close btn-flat" href="#") cancel
+				a(class="modal-action btn-flat" data-create-group href="#") create
+		div(data-modals)
+
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script var users = !{JSON.stringify(users)}
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
 	script(src="/public/js/adminTalent.js")
+	include ./includes/google-analytics.jade	
 						

@@ -1,8 +1,76 @@
 (function() {
 	$(document).ready(function() {
+		$('[data-modal-trigger]').leanModal();
+
 		$(".button-collapse").sideNav();
 		var groupsTemplate = $('[data-group-template]');
+		var modalTemplate = $('[data-modal-template]');
 		groupsTemplate.removeAttr('data-group-template');
+		modalTemplate.removeAttr('data-modal-template');
+
+		var createGroupListItemFromTemplate = function(groupID, groupName) {
+			var newTemplate = groupsTemplate.clone();
+			var groupElement = newTemplate.find('[data-group]');
+			var hyphenatedName = groupName.split(' ').join('-').toLowerCase();
+			groupElement.attr('data-id', groupID);
+			groupElement.html(groupName);
+			groupElement.attr('href', '#' + groupName.split(' ').join('-').toLowerCase());
+			$('[data-groups]').append(newTemplate);
+
+			var settingsElement = newTemplate.find('[data-group-settings]');
+			settingsElement.attr('data-target', 'settings-' + hyphenatedName + '-' + groupID);
+			settingsElement.attr('href', '#settings-' + hyphenatedName + '-' + groupID);
+
+			return newTemplate;
+		};
+
+		var createModalFromTemplate = function(groupID, groupName, listTemplate) {
+			var newModalTemplate = modalTemplate.clone();
+			var hyphenatedName = groupName.split(' ').join('-').toLowerCase();
+			var deleteButton = newModalTemplate.find('[data-delete-group]');
+			var addUserButton = newModalTemplate.find('[data-add-group-user]');
+
+			newModalTemplate.attr('id', 'settings-' + hyphenatedName + '-' + groupID);
+
+			addUserButton.attr('data-id', groupID);
+
+			deleteButton.attr('data-id', groupID);
+			deleteButton.html('Delete ' + groupName + ' Group');
+			deleteButton.attr('href', '#delete-' + hyphenatedName);
+
+			(function(listTemplate, modalTemplate) {
+				deleteButton.click(function(e) {
+					$.ajax({
+						type: 'POST',
+						url: '/cat/community/1/group/delete',
+						data: {
+							id: deleteButton.attr('data-id')
+						},
+						success: function(data) {
+							listTemplate.hide();
+							modalTemplate.closeModal();
+						}
+					});
+				});
+
+				addUserButton.click(function(e) {
+					console.log("add user");
+					$.ajax({
+						type: 'POST',
+						url: '/cat/community/1/group/' + addUserButton.attr('data-id') + '/insert',
+						data: {
+							userID: modalTemplate.find('[data-user]').val()
+						},
+						success: function(data) {
+							location.reload();
+						}
+					});
+				});
+			})(listTemplate, newModalTemplate);
+
+			$('[data-modals]').append(newModalTemplate);
+			return newModalTemplate;
+		};
 
 		var groups = {};
 
@@ -11,20 +79,18 @@
 			url: '/cat/community/1/group',
 			success: function(groups) {
 				for (var i = 0; i < groups.length; i++) {
-					var newTemplate = groupsTemplate.clone();
-					var groupElement = newTemplate.find('[data-group]');
-					groupElement.attr('data-id', groups[i].groupID);
-					groupElement.html(groups[i].groupName);
-					groupElement.attr('href', '#' + groups[i].groupName.split(' ').join('-').toLowerCase());
-					$('[data-groups]').append(newTemplate);
+					var newListTemplate = createGroupListItemFromTemplate(groups[i].groupID, groups[i].groupName);
+					var newModalTemplate = createModalFromTemplate(groups[i].groupID, groups[i].groupName, newListTemplate);
 
-					(function(newTemplate) {
+					console.log(newListTemplate);
+
+					(function(newListTemplate) {
 						$.ajax({
 							type: 'GET',
 							url: '/cat/community/1/group/' + groups[i].groupID + '/users',
 							success: function(groupUsers) {
-								(function(users, newTemplate) {
-									newTemplate.click(function(e) {
+								(function(users, newListTemplate) {
+									newListTemplate.click(function(e) {
 										$('[data-user]').hide();
 										if (users) {
 											for (var i = 0; i < users.length; i++) {
@@ -32,11 +98,14 @@
 											}
 										}
 									});
-								})(groupUsers.users, newTemplate);
+								})(groupUsers.users, newListTemplate);
 							}
 						});
-					})(newTemplate);
+					})(newListTemplate);
 				}
+
+				$('select').material_select();
+				$('[data-modal-trigger]').leanModal();
 			}
 		});
 
@@ -44,9 +113,24 @@
 			$('[data-user]').show();
 		});
 
-		$('[data-add-group]').click(function(e) {
-			
-			$('[data-groups]')
+		$('[data-delete-group]').click(function(e) {
+			$('[data-group]')
+		});
+
+		$('[data-create-group]').click(function(e) {
+			var data = {
+				name: $('[data-group-name]').val()
+			};
+			$.ajax({
+				type: 'POST',
+				url: '/cat/community/1/group/update',
+				data: data,
+				success: function(data) {
+					var newTemplate = createGroupListItemFromTemplate(0, $('[data-group-name]').val());
+					$('#new-group').closeModal();
+					location.reload();
+				}
+			});
 		});
 
 		var pastMatchTemplate = $('[data-past-match-template]');

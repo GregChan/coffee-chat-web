@@ -18,7 +18,7 @@ function doPromise(p, callback) {
 function insertUserIntoCommunity(req, res) {
     var data = {
         userID: req.loginUserID, 
-        communityID: req.body.companyCode
+        communityCode: req.body.communityCode
     };
     doPromise(dbConn.insertUserIntoCommunity(data), function(error, data) {
         if (error) {

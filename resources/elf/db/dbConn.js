@@ -37,12 +37,127 @@ exports.clearup = function() {
     });
 }
 
+exports.generateRandMatch = function(userID, communityID) {
+    return new Promise(function(resolve, reject) {
+
+        var sql = 'SELECT * FROM user_community where userID =? and communityID = ?';
+
+        sql = mysql.format(sql, [userID, communityID]);
+
+        console.log('generateRandMatch: going to query db with sql: ' + sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+
+                if (rows.length < 1) {
+                    reject({
+                        error: '401',
+                        message: 'invalid userID'
+                    });
+                    return;
+                }
+
+
+                sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus < 3) or (userB = ? and userBStatus < 3) ) order by create_at';
+
+                sql = mysql.format(sql, [communityID, userID, userID]);
+
+                console.log('generateRandMatch: going to query db with sql: ' + sql);
+
+                pool.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        console.log(err);
+                        logger.debug('Error in connection or query');
+                        reject({
+                            error: '500',
+                            message: 'DB error'
+                        });
+                    } else {
+                        if (rows.length > 0) {
+                            reject({
+                                error: '401',
+                                message: userID + ' has already been matched!'
+                            });
+                            return;
+                        }
+
+                        sql = 'SELECT userID from user_community as c ' + 'where communityID=? ' + 'AND userid!=? ' + 'AND not exists ( ' + 'select * from user_match as m ' + 'where (m.userA = ? and m.userB = c.userID ) ' + 'or (m.userB = ? and m.userA = c.userID) ' + 'or (m.userA = c.userID and m.userAStatus < 3) ' + 'or (m.userB = c.userID and m.userBStatus < 3)) ' + 'order by rand() ' + 'limit 1';
+
+                        sql = mysql.format(sql, [communityID, userID, userID, userID]);
+
+                        console.log('generateRandMatch: going to query db with sql: ' + sql);
+                        pool.query(sql, function(err, rows, fields) {
+                            if (err) {
+                                console.log(err);
+                                logger.debug('Error in connection or query');
+                                reject({
+                                    error: '500',
+                                    message: 'DB error'
+                                });
+                            } else {
+                                if (rows.length < 1) {
+                                    resolve({
+                                        message: 'There is currently no match available for ' + userID + '.'
+                                    });
+                                    return;
+                                }
+
+                                console.log("row length: " + rows.length);
+                                var uid = rows[0].userID;
+
+                                sql = "INSERT INTO user_match (userA, userB, communityID) VALUES ( ?, ? ,?) ";
+
+                                values = [userID, uid, communityID];
+
+                                sql = mysql.format(sql, values);
+                                console.log('generateRandMatch: going to insert with sql: ' + sql);
+                                pool.query(sql, function(err, rows, fields) {
+                                    if (err) {
+                                        logger.debug('Error in connection or query:');
+                                        logger.debug(err);
+                                        reject({
+                                            'error': 500,
+                                            'message': 'DB Error'
+                                        });
+                                    } else {
+                                        if (rows.affectedRows > 0) {
+                                            resolve({
+                                                'matchID': rows.insertId,
+                                                'userID': uid
+
+                                            });
+                                        } else {
+                                            reject({
+                                                'error': 500,
+                                                'message': 'unable to create random match for user ' + userID + ' .'
+                                            });
+                                        }
+
+                                    }
+                                });
+                            }
+
+                        });
+                    }
+                });
+            }
+        });
+    });
+}
+
 exports.getMatch = function(matchId) {
-    return new Promise(function(resolve, reject){
+    return new Promise(function(resolve, reject) {
         var sql = 'select id, userA, userB, communityID, userAStatus, userBStatus, create_at from user_match where id = ?';
         sql = mysql.format(sql, [matchId]);
         pool.query(sql, function(err, rows, fields) {
-             if (err) {
+            if (err) {
                 logger.debug('Error in connection or query, in getMatch function');
                 reject({
                     error: '500',
@@ -68,8 +183,8 @@ exports.getMatch = function(matchId) {
     });
 }
 
-exports.createCommunity = function(data){
-    return new Promise(function(resolve, reject){
+exports.createCommunity = function(data) {
+    return new Promise(function(resolve, reject) {
         var sql = 'insert into community_desc (name, adminUserID, communityCode) values (?, ?, ?)';
         sql = mysql.format(sql, [data.name, 481, data.name]);
 
@@ -90,10 +205,98 @@ exports.createCommunity = function(data){
     })
 }
 
-exports.insertUserIntoCommunity = function(data){
-    return new Promise(function(resolve, reject){
-        var sql = 'insert into user_community (userID, communityID) values (?, ?)';
-        sql = mysql.format(sql, [data.userID, data.communityID]);
+exports.insertUserIntoCommunity = function(data) {
+    console.log(data);
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                connection.beginTransaction(function(err) {
+
+                    var sql = 'select id from community_desc where communityCode = ?';
+
+                    sql = mysql.format(sql, [data.communityCode]);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            return connection.rollback(function() {
+                                logger.debug('Error getting communityCode');
+                                reject({
+                                    'error': 500,
+                                    'message': 'DB Error'
+                                });
+                            });
+                        }
+
+                        if (rows.length > 0) {
+                            var communityID = rows[0].id;
+                            var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+                            sql = mysql.format(sql, [data.userID, communityID]);
+
+                            pool.query(sql, function(err, rows, fields) {
+                                if (err) {
+                                    logger.debug('Error in connection or query');
+                                    reject({
+                                        error: '500',
+                                        message: 'DB error'
+                                    });
+                                } else {
+                                    logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
+                                    connection.commit(function(err) {
+                                        if (err) {
+                                            connection.rollback(function() {
+                                                reject({
+                                                    'error': 500,
+                                                    'message': 'db error.'
+                                                });
+                                            });
+                                        }
+
+                                        resolve({
+                                            'success': '200'
+                                        });
+                                    });
+                                }
+                            });
+                        } else {
+                            reject({
+                                error: 404,
+                                message: 'Community code not found'
+                            });
+                        }
+                    });
+                });
+
+                connection.release();
+            }
+        });
+    });
+}
+
+exports.insertUserIntoGroup = function(communityID, groupID, data) {
+    /* Description:
+     * inserts a user into a group
+     * 
+     * Parameters:
+     * groupID : int
+     *     id for a group
+     * data : object
+     *     object containing userID
+     */
+
+    // TODO: check if the group is in the community before inserting 
+    return new Promise(function(resolve, reject) {
+        var sql = 'insert into user_group (groupID, userID) values (?, ?)';
+        var p = data.private || 1;
+        sql = mysql.format(sql, [groupID, data.userID]);
+
+        console.log(sql);
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {
@@ -103,13 +306,48 @@ exports.insertUserIntoCommunity = function(data){
                     message: 'DB error'
                 });
             } else {
-                logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
+                logger.debug('inserted new group in ' + communityID);
                 resolve({
                     'success': '200'
                 });
             }
         });
-    })
+    });
+}
+
+exports.deleteCommunityGroup = function(communityID, data) {
+    /* Description:
+     * deletes a group from a community
+     * 
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * data : object
+     *     object containing group id
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'update community_group set deleted = 1 where communityID = ? and id = ?';
+        var p = data.private || 1;
+        sql = mysql.format(sql, [communityID, data.id]);
+
+        console.log(sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new group in ' + communityID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    });
 }
 
 exports.updateCommunityGroup = function(communityID, data) {
@@ -124,8 +362,11 @@ exports.updateCommunityGroup = function(communityID, data) {
      */
 
     return new Promise(function(resolve, reject) {
-        var sql = 'insert into community_group (communityID, name) values (?, ?)';
-        sql = mysql.format(sql, [communityID, data.name]);
+        var sql = 'insert into community_group (communityID, name, private) values (?, ?, ?)';
+        var p = data.private || 1;
+        sql = mysql.format(sql, [communityID, data.name, p]);
+
+        console.log(sql);
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {
@@ -244,7 +485,7 @@ exports.getUserAnalytics = function(userID, communityID) {
      *     id for a user
      */
 
-return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
         pool.getConnection(function(err, connection) {
             if (err) {
                 logger.debug('DB connection error');
@@ -299,7 +540,7 @@ return new Promise(function(resolve, reject) {
                             averageRating = ratingSum / rows.length;
                         }
 
-                        var sql = 'select name, id from community_group where communityID = ?';
+                        var sql = 'select name, id from community_group where communityID = ? and private = 0';
                         sql = mysql.format(sql, [communityID]);
 
                         connection.query(sql, function(err, rows, fields) {
@@ -910,7 +1151,7 @@ exports.getCommunityFeedback = function(communityID) {
 
 exports.getUserPositions = function(userID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id as positionID, a.companyID as companyID, a.title, a.isEdu, a.startDate, a.endDate, b.name, a.isCurrent from user_position as a left join company_desc as b on a.companyID=b.id where userID = ?';
+        var sql = 'select a.id as positionID, a.companyID as companyID, a.title, a.isEdu, a.startDate, a.endDate, b.name, a.isCurrent from user_position as a left join company_desc as b on a.companyID=b.id where userID = ? and a.deleted = 0';
         var values = [userID];
         sql = mysql.format(sql, values);
 
@@ -1013,13 +1254,13 @@ exports.updateUserPositions = function(userID, positions) {
                     values = [];
                     for (var i = 0; i < positions.positions.length; i++) {
                         var position = positions.positions[i];
-                        var subQuery = '(?, ?, (select id from company_desc where name = ?), 0, ?, ?)';
+                        var subQuery = '(?, ?, (select id from company_desc where name = ?), 0, ?, ?, ?)';
                         console.log(position.isEdu);
-                        subQuery = mysql.format(subQuery, [position.positionID, userID, position.company, position.title, position.isEdu]);
+                        subQuery = mysql.format(subQuery, [position.positionID, userID, position.company, position.title, position.isEdu, position.deleted]);
                         values.push(subQuery);
                     }
 
-                    var sql = 'insert into user_position (id, userID, companyID, isCurrent, title, isEdu) values ?? on duplicate key update companyID=values(companyID), title=values(title), isEdu=values(isEdu)';
+                    var sql = 'insert into user_position (id, userID, companyID, isCurrent, title, isEdu, deleted) values ?? on duplicate key update companyID=values(companyID), title=values(title), isEdu=values(isEdu), deleted=values(deleted)';
                     sql = mysql.format(sql, [values]);
                     // this line is hella sketch... don't know how to fix it though
                     sql = sql.replace(/\`/g, '');
@@ -1077,10 +1318,21 @@ exports.updateMatchStatus = function(userID, matchID, newStatus) {
                     'message': 'DB Error'
                 });
             } else {
-                logger.debug('updateMatchStatus for ' + userID + ' for match: ' + matchID);
-                resolve({
-                    'success': '200'
-                });
+                logger.debug('updated MatchStatus for ' + userID + ' for match: ' + matchID);
+
+                sql = "INSERT INTO event_match_status (userID, matchID, newStatus) VALUES (?, ?, ?)";
+                values = [userID, matchID, newStatus];
+                sql = mysql.format(sql, values);
+                console.log('updateMatchStatus: going to log event with sql: ' + sql);
+                pool.query(sql, function(err, rows, fields) {
+                     if (err) {
+                            logger.debug('Error in connection or query:');
+                            logger.debug(err);
+                        } 
+                        resolve({
+                                'success': '200'
+                        });
+                    });
             }
         });
     });
@@ -1127,12 +1379,47 @@ exports.getAllMatches = function(communityID) {
     });
 }
 
+exports.getCommunityAdmin = function(userID) {
+    /* Description:
+     * returns the admin for a community
+     *
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'select id from community_desc where adminUserID = ?';
+
+        sql = mysql.format(sql, [userID]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+
+            if (rows.length > 0) {
+                logger.debug('getCommunityAdmin for ' + userID + ': ' + rows[0].id);
+                resolve(rows);
+            } else {
+                resolve({});
+            }
+        });
+    });
+}
+
 //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
 
 exports.getCommunityUsers = function(communityID) {
     //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_community as d on a.id = d.userID left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id where d.communityID = ?';
+        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu, b.deleted from user_basic as a left join user_community as d on a.id = d.userID left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id where d.communityID = ?';
 
         sql = mysql.format(sql, [communityID])
 
@@ -1150,14 +1437,21 @@ exports.getCommunityUsers = function(communityID) {
                     // map reduce users by id
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        map[row.id] = {
-                            id: row.id,
-                            firstName: row.firstName,
-                            lastName: row.lastName,
-                            title: row.title,
-                            company: row.name,
-                            profilePic: row.profilePicO
-                        };
+                        if (!map[row.id]) {
+                            map[row.id] = {
+                                id: row.id,
+                                firstName: row.firstName,
+                                lastName: row.lastName,
+                                // title: row.title,
+                                // company: row.name,
+                                profilePic: row.profilePicO
+                            };
+                        }
+
+                        if (row.deleted == 0) {
+                            map[row.id].title = row.title;
+                            map[row.id].company = row.name;
+                        }
                     }
 
                     var ids = Object.keys(map);
@@ -1629,6 +1923,31 @@ exports.getCommunityProfileSurvey = function(communityID) {
                 reject('{"error":"500","errorMsg": "Error in connection database"}');
 
             });
+        });
+    });
+}
+
+exports.getUserCommunities = function(userID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'select communityID from user_community where userID = ?';
+        sql = mysql.format(sql, [userID]);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query, in getUserCommunities function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    resolve(rows);
+                } else {
+                    reject({
+                        error: '404',
+                        message: 'Record not found'
+                    });
+                }
+            }
         });
     });
 }

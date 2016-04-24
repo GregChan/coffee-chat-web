@@ -6,23 +6,37 @@ html
 			include ./includes/admin-header.jade
 			ul(class="side-nav fixed z-depth-0" id="slide-out")
 				li
-					h4(class="text-orange") Groups
+					h5(class="text-orange") Groups
 				li
-					a(class="admin-list-element" href="#all" data-all) All
+					div(style="display:inline-block")
+						a(class="admin-list-element" href="#all" data-all) All
 				div(data-groups)
 				li
-					a(data-add-group data-modal-trigger data-target="new-group" href="#new-group") 
-						div(class="valign-wrapper")
-							span(class="icon")
-								i(class="material-icons") add_circle_outline
-							span(class="valign") ADD GROUP
+					a(data-add-group data-modal-trigger data-target="new-group" href="#new-group" class="admin-list-element center" style="display:block !important;") 
+						i(class="material-icons" style="margin-top:10px;") add_circle_outline
 		div(data-templates style="display: none;")
 			div(class="col m4 l4" data-past-match-template data-past-match)
 				a(data-past-match-link)
 					img(class="admin-talent-past-img circle" data-past-match-image)
 			li(data-group-template)
-				a(class="admin-list-element" data-id data-group) 
-		div(class="row" style="margin-left: 240px;")
+				div(style="display:inline-block")
+					a(class="admin-list-element" data-id data-group) 
+					a(class="admin-list-element settings material-icons" data-group-settings data-modal-trigger) settings
+			div(class="modal modal-fixed-footer" data-modal-template)
+				div(class="modal-content")
+					div(class="row")
+						div(class="input-field col s10")
+							select(data-user)
+								option(value="" selected)="Choose a user to add to this group"
+								for user in users
+									option(data-icon=user.profilePic class="circle" value=user.id)=user.firstName+' '+user.lastName
+						div(class="input-field col s2")
+							a(class="btn coffee-chat-orange" data-add-group-user) add
+					div(class="input-field center")
+						a(class="btn coffee-chat-orange" data-delete-group) Delete Group
+				div(class="modal-footer")
+					a(class="modal-action modal-close btn-flat" href="#") done
+		div(class="row" style="margin-left: 180px;")
 			//- div(data-edit-group-nav)
 				nav(class="z-depth-0")
 					div(class="nav-wrapper white coffee-chat-grey-bottom-border")
@@ -49,21 +63,7 @@ html
 			div(class="modal-footer")
 				a(class="modal-action modal-close btn-flat" href="#") cancel
 				a(class="modal-action btn-flat" data-create-group href="#") create
-		div(class="modal" id="group-settings")
-			div(class="modal-content")
-				div(class="input-field")
-					select
-						option(value="1") Option 1
-						option(value="1") Option 2
-						option(value="1") Option 3
-				div(class="input-field")
-					input(type="checkbox" id="private")
-					label(for="private") Private
-				div(class="input-field")
-					a(class="btn" data-delete-group) Delete Group
-			div(class="modal-footer")
-				a(class="modal-action modal-close btn-flat" href="#") cancel
-				a(class="modal-action btn-flat" data-save-group-settings href="#") save
+		div(data-modals)
 
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
 	script var users = !{JSON.stringify(users)}

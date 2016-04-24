@@ -233,7 +233,7 @@ exports.insertUserIntoCommunity = function(data) {
                                 });
                             });
                         }
-                        
+
                         if (rows.length > 0) {
                             var communityID = rows[0].id;
                             var sql = 'insert into user_community (userID, communityID) values (?, ?)';
@@ -274,6 +274,77 @@ exports.insertUserIntoCommunity = function(data) {
                 });
 
                 connection.release();
+            }
+        });
+    });
+}
+
+exports.insertUserIntoGroup = function(communityID, groupID, data) {
+    /* Description:
+     * inserts a user into a group
+     * 
+     * Parameters:
+     * groupID : int
+     *     id for a group
+     * data : object
+     *     object containing userID
+     */
+
+    // TODO: check if the group is in the community before inserting 
+    return new Promise(function(resolve, reject) {
+        var sql = 'insert into user_group (groupID, userID) values (?, ?)';
+        var p = data.private || 1;
+        sql = mysql.format(sql, [groupID, data.userID]);
+
+        console.log(sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new group in ' + communityID);
+                resolve({
+                    'success': '200'
+                });
+            }
+        });
+    });
+}
+
+exports.deleteCommunityGroup = function(communityID, data) {
+    /* Description:
+     * deletes a group from a community
+     * 
+     * Parameters:
+     * communityID : int
+     *     id for a community
+     * data : object
+     *     object containing group id
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'update community_group set deleted = 1 where communityID = ? and id = ?';
+        var p = data.private || 1;
+        sql = mysql.format(sql, [communityID, data.id]);
+
+        console.log(sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new group in ' + communityID);
+                resolve({
+                    'success': '200'
+                });
             }
         });
     });
@@ -1308,7 +1379,7 @@ exports.getAllMatches = function(communityID) {
     });
 }
 
-exports.getCommunityAdmin = function(userID){
+exports.getCommunityAdmin = function(userID) {
     /* Description:
      * returns the admin for a community
      *
@@ -1348,7 +1419,7 @@ exports.getCommunityAdmin = function(userID){
 exports.getCommunityUsers = function(communityID) {
     //select a.id, a.userA, a.userB, b.firstName, b.lastName, b.profilePicO, a.userAStatus, a.userBStatus, a.create_at, c.title from user_match as a right join user_basic as b on a.userA = b.id or a.userB = b.id left join user_position as c on b.id = c.userID where isCurrent=1 and communityID = 1 order by create_at;
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu from user_basic as a left join user_community as d on a.id = d.userID left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id where d.communityID = ? and b.deleted = 0';
+        var sql = 'select a.id, a.profilePicO, a.firstName, a.lastName, b.title, c.name, b.isEdu, b.deleted from user_basic as a left join user_community as d on a.id = d.userID left join user_position as b on a.id = b.userID left join company_desc as c on b.companyID = c.id where d.communityID = ?';
 
         sql = mysql.format(sql, [communityID])
 
@@ -1366,14 +1437,21 @@ exports.getCommunityUsers = function(communityID) {
                     // map reduce users by id
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
-                        map[row.id] = {
-                            id: row.id,
-                            firstName: row.firstName,
-                            lastName: row.lastName,
-                            title: row.title,
-                            company: row.name,
-                            profilePic: row.profilePicO
-                        };
+                        if (!map[row.id]) {
+                            map[row.id] = {
+                                id: row.id,
+                                firstName: row.firstName,
+                                lastName: row.lastName,
+                                // title: row.title,
+                                // company: row.name,
+                                profilePic: row.profilePicO
+                            };
+                        }
+
+                        if (row.deleted == 0) {
+                            map[row.id].title = row.title;
+                            map[row.id].company = row.name;
+                        }
                     }
 
                     var ids = Object.keys(map);
@@ -1850,11 +1928,11 @@ exports.getCommunityProfileSurvey = function(communityID) {
 }
 
 exports.getUserCommunities = function(userID) {
-    return new Promise(function(resolve, reject){
+    return new Promise(function(resolve, reject) {
         var sql = 'select communityID from user_community where userID = ?';
         sql = mysql.format(sql, [userID]);
         pool.query(sql, function(err, rows, fields) {
-             if (err) {
+            if (err) {
                 logger.debug('Error in connection or query, in getUserCommunities function');
                 reject({
                     error: '500',
@@ -1880,7 +1958,7 @@ exports.getUser = function(userId) {
         sql = mysql.format(sql, [userId]);
         pool.query(sql, function(err, rows, fields) {
             if (!err) {
-                if(rows.length > 0) {
+                if (rows.length > 0) {
                     logger.debug("dbConn: found user: " + userId);
                     var result = {
                         userId: userId,
@@ -1892,14 +1970,11 @@ exports.getUser = function(userId) {
                         profilePic: rows[0].profilePicO
                     };
                     resolve(result);
-                } 
-                else {
+                } else {
                     logger.debug("dbConn: didnt find user: " + userId);
                     reject('{"error":"400", "errorMsg":"Invalid UserID"}');
                 }
-            }
-                
-            else {
+            } else {
                 logger.debug('Error in connection database');
                 logger.debug(err);
                 reject('{"error":"500","errorMsg": ' + err + '}');

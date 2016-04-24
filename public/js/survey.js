@@ -3,7 +3,6 @@
         var survey = false;
         var code = false;
         var profile = false;
-
             finishedCallback = function() {
                 console.log(survey);
                 console.log(code);
@@ -27,6 +26,7 @@
                 success: function(data) {
                     console.log(data);
                     code = true;
+                    $('#code').empty();
                     finishedCallback();
                 }
             });
@@ -57,7 +57,7 @@
 
                 });
                 if(fieldData.choices.length == 0){
-                     $('#errorMessage').html('Please fill out all fields');
+                     $('#errorMessage').html('Please fill out all three fields');
                      error = 1;
                 }
                 else{
@@ -67,7 +67,6 @@
             });
             console.log(data.data);
             if(error == 0){
-                console.log("Made it");
                 $.ajax({
                     type: 'POST',
                     url: '/cat/user/community/1/update',
@@ -75,6 +74,7 @@
                         Materialize.toast('Success!', 2000);
                         $('[data-save-prompt]').hide();
                         survey = true;
+                        $('#errorMessage').empty();
                         finishedCallback();
                     },
                     data: data

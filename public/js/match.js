@@ -10,6 +10,7 @@
                 $(".current-matches .match" + matchId + " #match-title").text(match.headLine);
                 $(".current-matches .match" + matchId + " #match-link").attr("href",match.linkedInProfile);
                 $(".current-matches .match" + matchId + " #match-pic").attr("src",match.profilePic);
+                // $(".current-matches .match" + matchId + " #match-link").attr("data-id",match.userID);
                 if (match.positions.work) {
                     for (var i = 0; i < match.positions.work.length; i++) {
                         $(".current-matches .match" + matchId + " #work-container").append("<div class='title'>"+match.positions.work[i].title+"</div><div class='subtitle'>"+match.positions.work[i].company+"</div>");
@@ -43,7 +44,7 @@
         } else if (matchStatus == 2) {
             $('#match-rate').show();
         }
-        
+
         $('#submit-rating').click(function(event){
             $.ajax({
                 type: 'POST',

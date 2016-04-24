@@ -3,8 +3,8 @@ html
         include ./includes/styles.jade
     body
         include ./includes/header.jade
-        div(class="current-matches")
-            div(class="row container")
+        div(class="current-matches") 
+            div(class="row")
                 //- div(class="center col s12 m2 l2 valign")
                     h4(class="text-orange") Your Matching Stats
                     div(class="row")
@@ -13,7 +13,7 @@ html
                     div(class="row")
                         h5(class="center text-orange")=metrics.avgRating
                         h5(class="center text-orange") Average Rating
-                div(class="col s12 m12 l12 valign")
+                div(class="col s12 m12 l12 valign no-padding")
                     if (curMatch.total > 0)
                         each match in [curMatch.matches[0]]
                             include ./includes/match.jade
@@ -23,17 +23,17 @@ html
                         //- img(class="responsive-img center-block" src="/public/images/brewing.png")
                         //- h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
                         //- br
-                div(class="col s12 m4 l3")
-                    div(id="donutchart" style="width:100%; height: auto")
-                div(class="col s12 m4 l3")
-                    h6(class="text-grey center") Goal Setting
-                    div(class="center") Plan the next steps for your career. Are there people in your community you want to meet? Let us know and we’ll put in a request 
-                div(class="col s12 m4 l3") 
-                    h6(class="text-grey center") Meeting Prep
-                    div(class="center") We want to help you become better connected in your community. Read our blog about mentorship, leadership and skill building.
-                div(class="col s12 m4 l3")
-                    h6(class="text-grey center") Industry News
-                    div(class="center") See what people in your company are chatting about on LinkedIn
+                        div(class="col s12 m4 l3")
+                            div(id="donutchart" style="width:100%; height: auto")
+                        div(class="col s12 m4 l3")
+                            h6(class="text-grey center") Goal Setting
+                            div(class="center") Plan the next steps for your career. Are there people in your community you want to meet? Let us know and we’ll put in a request 
+                        div(class="col s12 m4 l3") 
+                            h6(class="text-grey center") Meeting Prep
+                            div(class="center") We want to help you become better connected in your community. Read our blog about mentorship, leadership and skill building.
+                        div(class="col s12 m4 l3")
+                            h6(class="text-grey center") Industry News
+                            div(class="center") See what people in your company are chatting about on LinkedIn
                 //- div(class="col s12 m12 l12 valign")
                     div(class="row")
                         div(class="col s12 m4 l4")
@@ -57,7 +57,12 @@ html
                     each pastMatch in matchHist.matches
                         include ./includes/past-match.jade
         include ./includes/footer.jade
-        
+
+        div(class="modal" id="profile")
+            div(class="modal-content")
+                include ./includes/profile.jade
+            div(class="modal-footer modal-fixed-footer")
+                a(class="modal-action modal-close btn-flat" href="#") close
     script(src="https://code.jquery.com/jquery-2.2.0.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")    
     script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")

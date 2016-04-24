@@ -295,6 +295,8 @@ exports.updateCommunityGroup = function(communityID, data) {
         var p = data.private || 1;
         sql = mysql.format(sql, [communityID, data.name, p]);
 
+        console.log(sql);
+
         pool.query(sql, function(err, rows, fields) {
             if (err) {
                 logger.debug('Error in connection or query');

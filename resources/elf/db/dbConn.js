@@ -1954,7 +1954,7 @@ exports.getUserCommunities = function(userID) {
 
 exports.getUser = function(userId) {
     return new Promise(function(resolve, reject) {
-        var sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.headline, u.profilePicO, u.linkedInProfile, i.`name` as industry From user_basic as u LEFT JOIN industry_desc as i on u.industry = i.id WHERE u.id =?";
+        var sql = "SELECT u.id, u.firstName, u.lastName, u.email, u.headline, u.profilePicO, u.linkedInProfile, i.`name` as industry, c.communityID From user_basic as u LEFT JOIN industry_desc as i on u.industry = i.id  LEFT JOIN  user_community as c on u.id = c.userID WHERE u.id =? limit 1";
         sql = mysql.format(sql, [userId]);
         pool.query(sql, function(err, rows, fields) {
             if (!err) {
@@ -1967,7 +1967,8 @@ exports.getUser = function(userId) {
                         email: rows[0].email,
                         headLine: rows[0].headline,
                         linkedInProfile: rows[0].linkedInProfile,
-                        profilePic: rows[0].profilePicO
+                        profilePic: rows[0].profilePicO,
+                        communityID: rows[0].communityID
                     };
                     resolve(result);
                 } else {

@@ -19,43 +19,58 @@ html
                             include ./includes/match.jade
                     else
                         //- br
-                        h4(class="center text-orange" id="match-announcement") CoffeeChats are Brewing!
+                        h3(class="center text-orange" id="match-announcement") CoffeeChats are Brewing!
+                        h4(class="center text-orange" id="match-announcement") Welcome to the CoffeeChat Community
                         //- img(class="responsive-img center-block" src="/public/images/brewing.png")
                         //- h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
                         //- br
-                        div(class="container")
-                            div(class="col s12 m4 l3")
-                                div(id="donutchart" style="width:100%; height: auto")
-                            div(class="col s12 m4 l3")
-                                h6(class="text-grey center") Goal Setting
-                                div(class="center") Plan the next steps for your career. Are there people in your community you want to meet? Let us know and we’ll put in a request 
-                            div(class="col s12 m4 l3") 
-                                h6(class="text-grey center") Meeting Prep
-                                div(class="center") We want to help you become better connected in your community. Read our blog about mentorship, leadership and skill building.
-                                img(class="responsive-img center-block" src="/public/images/brewing-prep.png")
-                            div(class="col s12 m4 l3")
-                                h6(class="text-grey center") Industry News
-                                div(class="center") See what people in your company are chatting about on LinkedIn
-                                img(class="responsive-img center-block" src="/public/images/brewing-news.png")
-                //- div(class="col s12 m12 l12 valign")
-                    div(class="row")
-                        div(class="col s12 m4 l4")
-                            img(class="responsive-img circle coffee-chat-circle match-pic" src="public/images/circle-1.png")
-                        div(class="col s12 m4 l4")
-                            img(class="responsive-img circle coffee-chat-circle match-pic" src="public/images/circle-2.jpg")
-                        div(class="col s12 m4 l4")
-                            img(class="responsive-img circle coffee-chat-circle match-pic" src="public/images/circle-3.png")
+                        div(class="section row profile-section valign-wrapper")
+                            div(class="container")
+                                div(class="col s6 offset-s3 m3 offset-m0 l3 offset-l0 profile-container")
+                                    a(href="#" id="match-link")
+                                        img(class="responsive-img circle coffee-chat-circle" id="match-pic" src="public/images/generic-profile.png" data-profile-pic)
+                                div(class="col s12 m9 l9")
+                                    div(style="font-size: 18px;") You currently have no CofeeChat matches. You will be matched every week. Check back for your new CofeeChat match soon!
+                        div(class="section row coffee-chat-grey-background")
+                            div(class="container")
+                                h4(class="center text-orange") How It Works
+                                div(class="col s12 m3 l3" style="margin-right: 12.5%")
+                                    img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_1.jpg")
+                                    div(class="text-grey center") Set aside convenient times to meet
+                                div(class="col s12 m3 l3" style="margin-right: 12.5%")
+                                    img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_2.jpg")
+                                    div(class="text-grey center") Connect with similar people at all levels of your company
+                                div(class="col s12 m3 l3")
+                                    img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_3.jpg")
+                                    div(class="text-grey center") Develop Professionally
+                                    div(class="text-grey center") Meet mentors
+                        div(class="section row")
+                            div(class="container")
+                                h4(class="center text-orange") Track Your Progress
+                                div(class="col s12 m3 l3")
+                                    div(id="donutchart" style="width:100%; height: auto")
+                                div(class="col s12 m3 l3")
+                                    h6(class="text-grey center") Goal Setting
+                                    div(class="center") Plan the next steps for your career. Are there people in your community you want to meet? Let us know and we’ll put in a request 
+                                div(class="col s12 m3 l3") 
+                                    h6(class="text-grey center") Meeting Prep
+                                    div(class="center") We want to help you become better connected in your community. Read our blog about mentorship, leadership and skill building.
+                                    img(class="responsive-img center-block" src="/public/images/brewing-prep.png")
+                                div(class="col s12 m3 l3")
+                                    h6(class="text-grey center") Industry News
+                                    div(class="center") See what people in your company are chatting about on LinkedIn
+                                    img(class="responsive-img center-block" src="/public/images/brewing-news.png")
                 //- div(class="center col s12 m2 l2 valign")
                     br
                     br
                     br
                     h4(class="text-orange") You have been matched with
                     each group in metrics.groups
-                        h5(class="center text-orange")=group.totalConnections
-                        h5(class="center text-orange")=group.groupName
+                        h4(class="center text-orange")=group.totalConnections
+                        h4(class="center text-orange")=group.groupName
         if (matchHist.matches)
             div(class="section coffee-chat-grey-background  past-matches" id="previous-matches")
-                h5(class="center text-orange") Past CoffeeChats
+                h4(class="center text-orange") Past CoffeeChats
                 div(class="row container")
                     each pastMatch in matchHist.matches
                         include ./includes/past-match.jade

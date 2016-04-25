@@ -10,6 +10,7 @@ exports.getHandle = function(req, res) {
     var commID = req.params.commID;
     var userId = req.loginUserID;
     console.log('match/getCurrentMatches: getCurrentMatches: ' + userId);
+    console.log('match/getMatchHistory: getMatchHistory - communityID: ' + req.communityID);
     getCurrentMatches(userId,commID, res, req);
 }
 

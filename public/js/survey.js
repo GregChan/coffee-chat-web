@@ -1,10 +1,13 @@
 (function() {
     $(document).ready(function() {
-        var submitted = false,
+        var survey = false;
+        var code = false;
+        var profile = false;
             finishedCallback = function() {
-                if (submitted == false) {
-                    submitted = true;
-                } else {
+                console.log(survey);
+                console.log(code);
+                console.log(profile);
+                if (survey && code && profile){
                     window.location.href = "/";
                 }
             };
@@ -22,8 +25,12 @@
                 },
                 success: function(data) {
                     console.log(data);
+                    code = true;
+                    $('#code').empty();
+                    finishedCallback();
                 }
             });
+            $('#code').html('Please enter a valid company code');
         });
 
         $('[data-submit]').click(function(e) {
@@ -31,7 +38,7 @@
             var data = {
                 data: []
             };
-
+            var error = 0;
             $('[data-field]').each(function() {
                 var fieldId = $(this).attr('data-field-id'),
                     fieldData = {
@@ -47,24 +54,34 @@
                     } else if (type == 'select' && $(this).val()) {
                         fieldData.choices = $(this).val();
                     }
+
                 });
-
-                data.data.push(fieldData);
+                if(fieldData.choices.length == 0){
+                     $('#errorMessage').html('Please fill out all three fields');
+                     error = 1;
+                }
+                else{
+                    data.data.push(fieldData);
+                }
+                
             });
-
-            console.log(data);
-
-            $.ajax({
-                type: 'POST',
-                url: '/cat/user/community/1/update',
-                success: function(data) {
-                    Materialize.toast('Success!', 2000);
-                    $('[data-save-prompt]').hide();
-
-                    finishedCallback();
-                },
-                data: data
-            });
+            console.log(data.data);
+            if(error == 0){
+                $.ajax({
+                    type: 'POST',
+                    url: '/cat/user/community/1/update',
+                    success: function(data) {
+                        Materialize.toast('Success!', 2000);
+                        $('[data-save-prompt]').hide();
+                        survey = true;
+                        $('#errorMessage').empty();
+                        finishedCallback();
+                    },
+                    data: data
+                });
+            }
+            
+            
         });
 
         $('[data-edit]').hide();
@@ -171,7 +188,7 @@
                 success: function(data) {
                     Materialize.toast('Success!', 2000);
                     $('[data-save-prompt]').hide();
-
+                    profile = true;
                     finishedCallback();
                 }
             });

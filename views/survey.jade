@@ -10,15 +10,18 @@ html
 		div(class="container text-orange")
 			h4(class="center text-orange") #{"Profile Survey for " + profile.firstName}
 				h5(class="center text-orange") Help us improve your matches!
-		div(class="row center")
+
+		div(class="row container left-align")
+			h6(class="red-text bold" id="code")
 			div(class="input-field col s12 m6 l4")
-				input(class="validate" id="companyCode" type="text" required="")
+				input(class="validate" id="companyCode" type="text")
 				label(for="companyCode") Company Code
 		include ./includes/editable-profile.jade	
 		div(class="row text-orange coffee-chat-grey-background")
 			div(class="row container")
 				include ./includes/survey.jade
 			div(class="row center")
+				h6(class="red-text bold" id="errorMessage")
 				a(class="btn waves-effect waves-light coffee-chat-orange" data-submit data-save data-companycode type="submit" name="action") Submit
 	include ./includes/footer.jade
 	script(src="https://code.jquery.com/jquery-2.2.0.min.js")

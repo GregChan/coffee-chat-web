@@ -2,6 +2,7 @@ var mysql = require("mysql");
 var Promise = require('promise');
 var logger = require("../../../logger.js").getLogger();
 var async = require('async');
+var md5 = require('MD5');
 
 var exports = module.exports = {};
 
@@ -34,6 +35,40 @@ exports.clearup = function() {
     logger.debug('Going to release DB connection pool');
     pool.end(function(err) { //release all connections
         logger.debug('Error in release pool ' + err);
+    });
+}
+
+exports.validatePassword = function(email, pw)
+{
+    return new Promise(function(resolve, reject) {
+        var sql = 'select id, password from user_basic where email = ?';
+        sql = mysql.format(sql, [email]);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query, in getMatch function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    console.log('pw from db' + rows[0].password);
+                    console.log('pw from user ' + md5(pw));
+                    if( rows[0].password == md5(pw))
+                    {
+                        resolve({
+                            userID: rows[0].id
+                        });
+                        return;
+                    }
+                }        
+                reject({
+                    error: '401',
+                    message: 'not valid user.'
+                });
+                
+            }
+        });
     });
 }
 

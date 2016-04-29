@@ -5,68 +5,80 @@ html
 		include ./includes/home-header.jade
 		div(class="parallax-container valign-wrapper")
 			div(class="parallax")
-				img(src="/public/images/background.png")
-			
-			//- include ./includes/header.jade				
-			div(class="row container valign" style="text-shadow: 0px 2px 5px rgba(0,0,0,.16)")
-				h3(class="center header white-text") Professional conversations in your workplace made simple
-				//- h3(class="center header text-orange") Real Advice from
-				//- h3(class="center header text-orange") Real Industry Leaders
-				h5(class="center white-text") Building great organizations one connection at a time
-
-				p(class="spacer-75")
-				//- h5(class="center white-text") The fastest-growing network for professional millenials.
-				div(class="center")
-					if (!curUser)
-						h5(class="center white-text") Start connecting today!
-						a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
-					else
-						a(class="btn btn-outline" href="/survey") We'd like to know more about you.
+				img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")			
+			div(class="container valign" style="text-shadow: 0px 2px 15px rgba(0,0,0,.5)")
+				div(class="row spacer-75" style="margin-bottom: 0px")
+					div(class="left col s12 m10 l8")
+						h2(class="header white-text") Building great organizations one conversation at a time
+				div(class="row")
+					div(class="left col s12 m12 l12")
+						h5(class="white-text spacer-0") Make connections.
+						h5(class="white-text spacer-0") Manage development. 
+						h5(class="white-text spacer-0") Improve performance.
+						p(class="spacer-45")
+						if (!curUser)
+							a(class="waves btn sign-up-btn" href="/wild/oauth/auth") Sign In With LinkedIn
+							a(class="waves btn learn-more-btn clear" href="#About") Learn More
+						else
+							a(class="waves btn learn-more-btn clear" href="/survey") We'd like to know more about you.
+						p(class="spacer-45")
+		a(name="About")
 		div(class="section white")
-			div(class="")
-				h3(class="center") How it Works
-				a(name="About")
-				p(class="spacer-30")
-				div(class="row valign-wrapper")
-					div(class="center col s12 m4 l4 valign")
-						img(class="responsive-img" style="width:60%;" src="/public/images/join.png")
-					div(class="center col s12 m4 l4 valign")
-						img(class="responsive-img" style="width:60%;" src="/public/images/start-connecting.png")
-					div(class="center col s12 m4 l4 valign")
-						img(class="responsive-img" style="width:60%;" src="/public/images/value.png")
-				div(class="row")
-					div(class="center col s12 m4 l4")
-						h5(class="center") Join CoffeeChat
-						p Sign up your organization with CoffeeChat and we’ll help you discover the best features to start building one-on-one connections within your community.
-					div(class="center col s12 m4 l4")
-						h5(class="center") Start Connecting
-						p Using an algorithm, the CoffeeChat platform will send you the best pairings of people to have conversations for personal and professional development.
-					div(class="center col s12 m4 l4")
-						h5(class="center") Create Value
-						p After the CoffeeChats, the built-in feedback will give you more insights about your team’s dynamics. Have regular CoffeeChats in your company to build connections and culture.
+			h4(class="center text-orange") How It Works
+			p(class="spacer-30")
+			div(class="row")
+				div(class="center col s12 m4 l4")
+					img(class="circle" style="width:200px;" src="/public/images/circle-1.jpg")
+					h5(class="center") Join
+					p Sign up your organization with CoffeeChat and we’ll help you discover the best features to start building one-on-one connections within your community.
+				div(class="center col s12 m4 l4")
+					img(class="circle" style="width:200px;" src="/public/images/circle-2.jpg")
+					h5(class="center") Connect
+					p Using an algorithm, the CoffeeChat platform will send you the best pairings of people to have conversations for personal and professional development.
+				div(class="center col s12 m4 l4")
+					img(class="circle" style="width:200px;" src="/public/images/circle-3.jpg")
+					h5(class="center") See Results
+					p After the CoffeeChats, the built-in feedback will give you more insights about your team’s dynamics. Have regular CoffeeChats in your company to build connections and culture.
 		div(class="section coffee-chat-grey-background")
-			div(class="")
-				h3(class="center") Saved Time and Money
-				p(class="spacer-30")
-				div(class="row valign-wrapper")
-					div(class="center col s12 m4 l4 valign")
-						img(class="responsive-img" style="width:60%;" src="/public/images/continuity.png")
-					div(class="center col s12 m4 l4 valign")
-						img(class="responsive-img" style="width:60%;" src="/public/images/company-growth.png")
-					div(class="center col s12 m4 l4 valign")
-						img(class="responsive-img" style="width:60%;" src="/public/images/consolidation.png")
-				div(class="row")
-					div(class="center col s12 m4 l4")
-						h5(class="center") Continuity
-						p Employees stay at firms 18% longer when they have a sense of community
-
-					div(class="center col s12 m4 l4")
-						h5(class="center") Company Growth
-						p 59% of US Firms offer career development programs to help retain and grow their talent
-					div(class="center col s12 m4 l4")
-						h5(class="center") Consolidation
-						p Avoid tedious manual matching and save hours of employee time for your organization
-
+			h4(class="center text-orange") Develop a stronger workforce while saving time and resources
+			p(class="spacer-30")
+			div(class="row")
+				div(class="left col s12 m4 l4")
+					h6(class="left") Automation
+					p 
+						br
+						| Employees stay at firms 18% longer when they have a sense of community
+				div(class="left col s12 m4 l4")
+					h6(class="left") Development
+					p 
+						br 
+						| 59% of US Firms offer career development programs to help retain and grow their talent
+				div(class="left col s12 m4 l4")
+					h6(class="left") Community
+					p 
+						br
+						| Avoid tedious manual matching and save hours of employee time for your organization
+		div(class="section white")
+			p(class="spacer-30")
+			div(class="row")
+				div(class="center valign col s6 m4 l2")
+					img(class="" style="max-width:100px;max-height:100px;" src="/public/images/1.png")
+					h6(class="center") Matching Algorithm
+				div(class="center col s6 m4 l2")
+					img(class="" style="max-width:100px;max-height:100px;" src="/public/images/2.png")
+					h6(class="center") Easy Set Up
+				div(class="center col s6 m4 l2")
+					img(class="" style="max-width:100px;max-height:100px;" src="/public/images/3.png")
+					h6(class="center") Customization
+				div(class="center valign col s6 m4 l2")
+					img(class="" style="max-width:100px;max-height:100px;" src="/public/images/4.png")
+					h6(class="center") Automated Alerts
+				div(class="center col s6 m4 l2")
+					img(class="" style="max-width:100px;max-height:100px;" src="/public/images/5.png")
+					h6(class="center") Scheduling & Planning
+				div(class="center col s6 m4 l2")
+					img(class="" style="max-width:100px;max-height:100px;" src="/public/images/6.png")
+					h6(class="center") Management Tools
 		include ./includes/partners.jade
 		include ./includes/footer.jade
 

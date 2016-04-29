@@ -9,6 +9,7 @@
 ./resources/cat/user/getUserAnalytics.js
 ./resources/cat/user/getUserCommunities.js
 ./resources/cat/user/auth.js
+./resources/cat/user/createUser.js
 ./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/cat/community/getCommunityFeedback.js
 ./resources/cat/community/getCommunityUsers.js

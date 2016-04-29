@@ -62,7 +62,7 @@ var express = require('express'),
     },
     authenticationFailed = function(req, res, next) {
         var path = req.path;
-        if (path == "/" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID" || path == "/enterprise" || path == "/wild/user/login" || path == "/cat/user/auth") {
+        if (path == "/" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID" || path == "/enterprise" || path == "/wild/user/login" || path == "/cat/user/auth" || path =="/cat/user/createUser") {
             logger.debug("authenticationFailed : path matched ");
             next();
             return;

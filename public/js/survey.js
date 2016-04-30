@@ -8,6 +8,7 @@
             ready: function() { alert('Ready'); }, // Callback for Modal open
             complete: function() { alert('Closed'); } // Callback for Modal close
         });
+        $('#company').dismissible = false;
         $('#company').openModal();
         var survey = false;
         var code = false;

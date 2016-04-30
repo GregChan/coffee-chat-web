@@ -29,4 +29,19 @@
 		var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
 		chart.draw(data, options);
 	}
+
+	 $('[data-submit]').click(function(e) {
+            $.ajax({
+                url: "/wild/user/login",
+                method: "POST",
+                data: {
+					email: $('#email').val(),
+					password: $('#password').val()
+                },
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+            $('#code').html('Please enter a valid company code');
+        });
 })();

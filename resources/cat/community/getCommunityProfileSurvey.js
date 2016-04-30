@@ -7,7 +7,7 @@ var dbConn = require("../../elf/db/dbConn.js");
 exports.path='cat/community/:commID/profile-survey';
 
 exports.getHandle=function (req,res) {
-    var commID =req.params.commID;
+    var commID =req.communityID;
 	getCommunityProfileSurvey(commID,res);
 }
 

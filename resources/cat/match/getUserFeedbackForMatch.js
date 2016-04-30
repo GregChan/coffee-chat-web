@@ -4,7 +4,7 @@ var dbConn = require('../../elf/db/dbConn.js');
 exports.path = 'cat/user/community/feedback/:commID/:matchID/query';
 
 exports.getHandle = function(req, res) {
-     var commID = req.params.commID;
+     var commID = req.communityID;
     var matchID = req.params.matchID;
     var userId = req.loginUserID;
     getUserFeedbackForMatch(userId, commID,matchID, res);

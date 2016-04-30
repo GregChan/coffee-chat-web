@@ -30,6 +30,7 @@ function insertMatch( commID, res, req) {
                 status: 'success',
                 url: '/'
             });
+            // TODO: send notification email on match
         }
     ).catch(
         function(reason) {

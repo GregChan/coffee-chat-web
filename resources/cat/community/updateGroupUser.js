@@ -5,7 +5,7 @@ exports.path = 'cat/community/:communityID/group/:groupID/user/update';
 
 exports.postHandle = function(req, res) {
     console.log(exports.path);
-    var communityID = req.params.communityID;
+    var communityID = req.communityID;
     var groupID = req.params.groupID;
     updateGroupUser(communityID, groupID, req, res);
 }

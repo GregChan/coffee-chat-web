@@ -65,7 +65,7 @@
                     } else if (type == 'select' && $(this).val()) {
                         fieldData.choices = $(this).val();
                     }
-
+                    
                 });
                 if(fieldData.choices.length == 0){
                      $('#errorMessage').html('Please fill out all three fields');

@@ -8,6 +8,8 @@
 ./resources/cat/user/updateUserPositions.js
 ./resources/cat/user/getUserAnalytics.js
 ./resources/cat/user/getUserCommunities.js
+./resources/cat/user/auth.js
+./resources/cat/user/createUser.js
 ./resources/cat/community/getCommunityProfileSurvey.js
 ./resources/cat/community/getCommunityFeedback.js
 ./resources/cat/community/getCommunityUsers.js
@@ -44,6 +46,7 @@
 ./resources/wild/pages/email.js
 ./resources/wild/pages/enterprise.js
 ./resources/wild/user/signout.js
+./resources/wild/user/login.js
 ./resources/wild/pages/admin/adminTalent.js
 ./resources/wild/pages/admin/adminMatch.js
 ./resources/wild/pages/admin/adminMetrics.js

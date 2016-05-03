@@ -2,6 +2,7 @@ var mysql = require("mysql");
 var Promise = require('promise');
 var logger = require("../../../logger.js").getLogger();
 var async = require('async');
+var md5 = require('MD5');
 
 var exports = module.exports = {};
 
@@ -34,6 +35,82 @@ exports.clearup = function() {
     logger.debug('Going to release DB connection pool');
     pool.end(function(err) { //release all connections
         logger.debug('Error in release pool ' + err);
+    });
+}
+
+exports.createUser = function(obj) {
+    return new Promise(function(resolve, reject) {
+        if (obj.firstName === undefined || obj.firstName == '' || obj.lastName === undefined || obj.lastName == ''|| obj.email === undefined || obj.email == ''|| obj.password === undefined || obj.password == '') {
+             reject({
+                    error: '400',
+                    message: 'Invalid request with missing parameter(s)'
+             });
+             return;
+        }
+        var sql = 'insert into user_basic (firstName, lastName, email, headline, profilePicS, profilePicO, password) values (?, ?, ?, ?, ?, ?, ?)';
+        var headline="";
+        var profilePicS="";
+        var profilePicO="";
+        if (obj.headline !== undefined ) {
+            headline= obj.headline;
+        }
+        if (obj.profilePicS !== undefined ) {
+            headline= obj.profilePicS;
+        }
+        if (obj.profilePicO !== undefined ) {
+            headline= obj.profilePicO;
+        }
+        sql = mysql.format(sql, [obj.firstName,obj.lastName,obj.email,headline,profilePicS,profilePicO,md5(obj.password)]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                logger.debug('inserted new user ' + obj.email);
+                resolve({
+                    'userID': rows.insertId
+                });
+            }
+        });
+    })
+}
+
+
+exports.validatePassword = function(email, pw)
+{
+    return new Promise(function(resolve, reject) {
+        var sql = 'select id, password from user_basic where email = ?';
+        sql = mysql.format(sql, [email]);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query, in getMatch function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    console.log('pw from db' + rows[0].password);
+                    console.log('pw from user ' + md5(pw));
+                    if( rows[0].password == md5(pw))
+                    {
+                        resolve({
+                            userID: rows[0].id
+                        });
+                        return;
+                    }
+                }        
+                reject({
+                    error: '401',
+                    message: 'not valid user.'
+                });
+                
+            }
+        });
     });
 }
 

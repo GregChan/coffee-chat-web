@@ -1,7 +1,5 @@
 (function() {
 	$(document).ready(function() {
-		$('.modal-trigger').leanModal();
-
 		$.ajax({
 			type: 'GET',
 			url: '/cat/user/community/1/profile',

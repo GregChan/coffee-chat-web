@@ -50,4 +50,5 @@
 ./resources/wild/user/login.js
 ./resources/wild/pages/admin/adminTalent.js
 ./resources/wild/pages/admin/adminMatch.js
-./resources/wild/pages/admin/adminMetrics.js./resources/wild/pages/feedback.js
+./resources/wild/pages/admin/adminMetrics.js
+./resources/wild/pages/feedback.js

@@ -21,7 +21,7 @@ var express = require('express'),
     authenticator = function(req, res, next) {
 
         logger.debug('myLogger - user id: ' + req.cookies.userID);
-        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community" || req.path == "/feedback") {
+        if (req.path.slice(1, 5) == "team" || req.path.slice(1, 6) == "tools" || req.path.slice(1, 5) == "Kell" || req.path == "/cat/community" || req.path == "/feedback" ) {
             next();
             return;
         }
@@ -62,7 +62,7 @@ var express = require('express'),
     },
     authenticationFailed = function(req, res, next) {
         var path = req.path;
-        if (path == "/" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID" || path == "/enterprise") {
+        if (path == "/" || path == "/callback" || path == "/wild/oauth/auth" || path == "/cat/oauth/getUserID" || path == "/enterprise" || path == "/wild/user/login" || path == "/cat/user/auth" || path =="/cat/user/createUser") {
             logger.debug("authenticationFailed : path matched ");
             next();
             return;

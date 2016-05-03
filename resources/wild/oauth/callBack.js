@@ -49,7 +49,7 @@ function createOAuthUser(token, res) {
         }
     }, function(error, response, body) {
         if (error || body.user=== undefined) {
-            console.log('server.js: createOAuthUser met error ' + e);
+            console.log('server.js: createOAuthUser met error ' );
             res.redirect('/');
             res.end();
         } else {

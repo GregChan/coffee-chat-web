@@ -31,7 +31,7 @@
                     finishedCallback();
                 }, 
                 error: function(data) {
-                    $('#code').html('Please enter a valid company code');
+                    $('#code').html('Please enter a valid community code');
                 }
             });
         });

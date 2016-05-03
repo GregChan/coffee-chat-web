@@ -2,7 +2,7 @@ div(class="section white profile-section match#{match.userID}" id="match-profile
     h4(class="center text-orange") CoffeeChat Connected!
     div(class="container")
         include ./profile.jade
-div(class="section coffee-chat-orange-background #{match.userID}" id="match-reasons")
+//- div(class="section coffee-chat-orange-background #{match.userID}" id="match-reasons")
     div(class="center")
         h4(class="section-title text-orange") Why Did We Match?
     div(class="row container")
@@ -17,31 +17,25 @@ div(class="section coffee-chat-orange-background #{match.userID}" id="match-reas
             p(class="text-grey flow-text") You both have a passion for outdoor sports!
 div(class="section white #{match.userID}" id="match-accept")
     div(class="container center")
-        h5(class="section-title text-orange") Match Details
+        h5(class="section-title text-orange") Would you like to meet #{match.firstName}?
         div(class="row center-align valign-wrapper")
-            div(class="right-align col s6 m3 l4")
+            //- div(class="right-align col s6 m3 l4")
                 i(class="material-icons large text-grey valign") date_range
-            div(class="left-align col s6 m3 l2")
-                h5(class="text-grey") May 10
-                h6(class="text-grey") 12:30 PM
-                h6(class="text-grey") Tech Express
-            div(class="right-align col s6 m3 l2")
+            div(class="col s6 m6 l6")
                 a(class="waves-effect waves-orange right match-btn valign" id="accept-match")
                     i(class="material-icons large text-orange") done  
-            div(class="left-align col s6 m3 l4")
+            div(class="col s6 m6 l6")
                 a(class="waves-effect left match-btn valign" id="decline-match")
                     i(class="material-icons large text-grey") clear    
 div(class="section white #{match.userID}" id="match-rate")
     div(class="container center")
-        h4(class="section-title text-orange") CoffeeChat Confirmed!
+        h4(class="section-title text-orange") CoffeeChat Accepted!
         div(class="row center-align valign-wrapper")
-            div(class="right-align col s6 m6 s6")
+            div(class="center-align col s12 m12 l12")
                 i(class="material-icons large text-grey valign") date_range
-            div(class="left-align col s6 m6 s6")
-                h5(class="text-grey") March 10
-                h6(class="text-grey") 12:30 PM
-                h6(class="text-grey") Tech Express
-        h5(class="text-grey") How was your chat?
+            //- div(class="left-align col s6 m6 s6")
+        h5(class="text-grey") Contact #{match.firstName} at #{match.email} and schedule a time to chat!
+        h5(class="text-grey") Come back and tell us how was your chat?
         div(class="rating text-orange")
             a(class="text-orange" id="one") &#9675;
             a(class="text-orange" id="two") &#9675;

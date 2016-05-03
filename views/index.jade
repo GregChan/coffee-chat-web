@@ -5,7 +5,7 @@ html
 		include ./includes/home-header.jade
 		div(class="parallax-container valign-wrapper")
 			div(class="parallax")
-				img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")			
+				img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")
 			div(class="container valign" style="text-shadow: 0px 2px 15px rgba(0,0,0,.5)")
 				div(class="row spacer-75" style="margin-bottom: 0px")
 					div(class="left col s12 m10 l8")
@@ -40,6 +40,28 @@ html
 					img(class="circle" style="width:200px;" src="/public/images/circle-3.jpg")
 					h5(class="center") See Results
 					p Manage your program, see the success of the connections, and easily make changes to meet your objectives
+					//- if (!curUser)
+						div(class="row center-align")
+							//- div(class="col s12 m12 l8 offset-l2 white text-orange")
+							//-	ul(class="tabs")
+							//-		li(class="tab col s3 l3")
+							//-			a(href="#user") Users
+							//-		li(class="tab col s3 l3")
+							//-			a(class="active" href="#admin") Admins
+							//-div(id="user" class="col s12 m12 l8 offset-l2 white text-orange")
+								//-h5 Click the link below to sign in as a user
+							a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
+							//-div(id="admin" class="col s12 m12 l8 offset-l2 white text-orange")
+								//-h5 Sign in as a community administrator
+								//-div(class="input-field col s12 m12 l6 offset-l3")
+							//-		input(id="email" type="email" class="validate")
+							//-		label(for="email") Email
+							//-	div(class="input-field col s12 m12 l6 offset-l3")
+							//-		input(id="password" type="password" class="validate")
+							//-		label(for="password") Password
+							//-		a(class="btn waves-effect waves-light coffee-chat-orange" data-submit type="submit" name="action") Submit
+					//- else
+						a(class="btn btn-outline" href="/survey") We'd like to know more about you.
 		div(class="section coffee-chat-grey-background")
 			p(class="spacer-15")
 			h4(class="center container text-orange") Develop a stronger workforce while saving time and resources

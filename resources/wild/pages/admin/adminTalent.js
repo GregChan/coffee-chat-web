@@ -14,20 +14,26 @@ exports.getHandle = function(req, res) {
 						'Cookie': 'userID=' + req.cookies.userID
 					}
 				}, function(error, response, body) {
-					callback(error, JSON.parse(body));
+					if (response.statusCode == 200) {
+						callback(error, JSON.parse(body));
+					} else {
+						callback(new Error("Error"), null);
+					}
 				});
 			},
 		],
 		function(err, results) {
+			console.log(err);
 			if (!err) {
-				console.log(results[0]);
 				var data = {
 					users: results[0],
-				}
+				};
 
 				res.render('admin-talent', data);
 			} else {
-				res.sendStatus(500);
+				res.render('admin-talent', {
+					users: []
+				});
 			}
 		});
 }

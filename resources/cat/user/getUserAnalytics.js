@@ -6,7 +6,7 @@ exports.path = 'cat/user/:userId/community/:commID/useranalytics/';
 exports.getHandle = function(req, res) {
     // console.log('cat/user/:userId/users: userID: request received');
     var userID = req.params.userId;
-    var commID = req.params.commID;
+    var commID = req.communityID;
     // console.log('cat/user/:userId/users: userID: ' + req.params.userId);
     getUserAnalytics(userID, commID, req, res);
 }

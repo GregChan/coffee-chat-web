@@ -8,6 +8,21 @@
   src: url('/public/fonts/lato-regular.woff');
 }
 
+.sticky-nav {
+  position: fixed !important;
+  width: 100%;
+  height: 62px !important;
+  top: 0;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(170,165,165,0.0);
+} 
+
+.sticky-contents {
+  position: relative !important;
+  right: 0;
+}   
+
 @font-face {
   font-family: latoLight;
   src: url('/public/fonts/lato-light.woff');
@@ -200,8 +215,13 @@ h6 {
 }
 
 .brand-logo {
-  margin-top: 5px;
-  margin-left: 5px;
+  margin-top: 5px !important;
+  margin-left: 5px !important;
+  position: relative !important;
+}
+
+.coffee-chat-home-logo {
+  height: 52px !important;
 }
 
 .text-grey {
@@ -304,7 +324,7 @@ textarea {
 }
 
 .coffee-chat-grey-background {
-  background: #FDFAFA;
+  background: #FAF5F5;
 }
 
 .coffee-chat-orange-background {
@@ -409,7 +429,7 @@ textarea {
 }
 
 .navbar-fixed {
-  height: 40px;
+  height: 62px;
 }
 
 .nav-wrapper {

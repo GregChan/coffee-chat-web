@@ -25,13 +25,15 @@
                 },
                 success: function(data) {
                     console.log(data);
+                    $('#code').empty();
                     code = true;
                     $('#company').closeModal();
-                    $('#code').empty();
                     finishedCallback();
+                }, 
+                error: function(data) {
+                    $('#code').html('Please enter a valid company code');
                 }
             });
-            $('#code').html('Please enter a valid company code');
         });
 
         $('[data-submit]').click(function(e) {

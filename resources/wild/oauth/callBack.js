@@ -48,7 +48,7 @@ function createOAuthUser(token, res) {
             accessToken: token
         }
     }, function(error, response, body) {
-        if (error) {
+        if (error || body.user=== undefined) {
             console.log('server.js: createOAuthUser met error ' + e);
             res.redirect('/');
             res.end();

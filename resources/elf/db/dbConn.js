@@ -306,7 +306,7 @@ exports.insertUserIntoCommunity = function(data) {
                                 logger.debug('Error getting communityCode');
                                 reject({
                                     'error': 500,
-                                    'message': 'DB Error'
+                                    'message': 'Please enter a valid community code'
                                 });
                             });
                         }
@@ -321,7 +321,7 @@ exports.insertUserIntoCommunity = function(data) {
                                     logger.debug('Error in connection or query');
                                     reject({
                                         error: '500',
-                                        message: 'DB error'
+                                        message: 'You are already a member of this community'
                                     });
                                 } else {
                                     logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);

@@ -8,8 +8,12 @@
             ready: function() { alert('Ready'); }, // Callback for Modal open
             complete: function() { alert('Closed'); } // Callback for Modal close
         });
-        $('#company').dismissible = false;
-        $('#company').openModal();
+        $('#company').openModal({
+            dismissible: false, // Modal can be dismissed by clicking outside of the modal
+            opacity: .5, // Opacity of modal background
+            in_duration: 300, // Transition in duration
+            out_duration: 200, // Transition out duration
+        });
         var survey = false;
         var code = false;
         var profile = false;
@@ -40,6 +44,7 @@
                     $('#code').empty();
                     finishedCallback();
                 }
+                
             });
             $('#code').html('Please enter a valid company code');
         });
@@ -65,7 +70,7 @@
                     } else if (type == 'select' && $(this).val()) {
                         fieldData.choices = $(this).val();
                     }
-                    
+
                 });
                 if(fieldData.choices.length == 0){
                      $('#errorMessage').html('Please fill out all three fields');

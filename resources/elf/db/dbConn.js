@@ -2138,20 +2138,11 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                         }
                         var linkedinID = obj.id;
 
-                        var post = {
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-                            headline: headline,
-                            profilePicS: profilePicS,
-                            profilePicO: profilePicO,
-                            industry: industryId,
-                            linkedInProfile: linkedInProfile,
-                            linkedinID: linkedinID,
-                            LinkedInToken: accessToken
-                        };
+                        var insertSQL = 'insert into user_basic (firstName, lastName, email, headline, profilePicS, profilePicO, industry, linkedInProfile, linkedinID, LinkedInToken) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-                        connection.query("INSERT INTO user_basic SET ?", post, function(err, result) {
+                        inertSQL = mysql.format(insertSQL, [firstName, lastName, email, headline, profilePicS, profilePicO, industryId, linkedInProfile, linkedinID, accessToken]);
+
+                        connection.query(inertSQL, function(err, result) {
                             logger.debug("createUserIfNotExist: inside the  insert callback: " + err + " ... " + result);
 
                             if (!err) {

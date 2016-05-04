@@ -14,16 +14,16 @@ exports.postHandle = function(req, res) {
 function validateUser(email, pw, res) {
 	var p1 = dbConn.validatePassword(email, pw);
 	return p1.then(
-	function(val) {
-		logger.debug("user/auth: getUserID: get user id: " + val.userID);
-		res.json(val);
-	}
+		function(val) {
+			logger.debug("user/auth: getUserID: get user id: " + val.userID);
+			res.json(val);
+		}
 	).catch(
-	function(reason) {
-		logger.debug("user/auth: getUserID: invalid user");
-		// var obj=JSON.parse(reason)
-		res.status(401).end();
-	}
+		function(reason) {
+			logger.debug("user/auth: getUserID: invalid user");
+			// var obj=JSON.parse(reason)
+			res.status(401).end();
+		}
 
 	);
 	return;

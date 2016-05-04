@@ -26,6 +26,7 @@ function getLinkedInBasicProfie(accessToken, res) {
 		},
 		method: 'GET'
 	}, function(error, response, body) {
+		console.log(error);
 		if (!error || body != undefined) {
 			var parsed = JSON.parse(body);
 			if (parsed.id == undefined) {
@@ -55,8 +56,7 @@ function createUserIfNotExist(parsed, accessToken, res) {
 		}
 	).catch(
 		function(reason) {
-			var obj = JSON.parse(reason)
-			res.status(obj.error);
+			res.send(reason);
 		}
 
 	);

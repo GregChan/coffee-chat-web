@@ -2149,25 +2149,22 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                                 userId = result.insertId;
                                 logger.debug("createUserIfNotExist: created user: " + userId);
                                 addPositions(userId, obj.positions, connection, resolve, reject);
-                                // resolve(userId);
-                                // return;
                             } else {
-                                connection.release();
                                 logger.debug('Error in connection database');
-                                reject('{"error":"500","errorMsg": ' + err + '}');
+                                reject({error: 500, message: err});
                             }
                         });
 
                     } else {
-                        connection.release();
                         logger.debug('Error in connection database');
-                        reject('{"error":"500","errorMsg": ' + err + '}');
+                        reject({error: 500, message: err})
                     }
 
                 });
 
             });
 
+            connection.release();
         });
 
     });

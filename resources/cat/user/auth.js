@@ -22,7 +22,7 @@ function validateUser(email, pw, res) {
 		function(reason) {
 			logger.debug("user/auth: getUserID: invalid user");
 			// var obj=JSON.parse(reason)
-			res.status(401).end();
+			res.sendStatus(500);
 		}
 
 	);

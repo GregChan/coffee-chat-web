@@ -2151,20 +2151,20 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                                 addPositions(userId, obj.positions, connection, resolve, reject);
                             } else {
                                 logger.debug('Error in connection database');
+                                connection.release();
                                 reject({error: 500, message: err});
                             }
                         });
 
                     } else {
                         logger.debug('Error in connection database');
+                        connection.release();
                         reject({error: 500, message: err})
                     }
 
                 });
 
             });
-
-            connection.release();
         });
 
     });

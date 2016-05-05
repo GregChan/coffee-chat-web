@@ -38,6 +38,27 @@ exports.clearup = function() {
     });
 }
 
+exports.logError = function(obj) {
+    try{
+        if (obj.type === undefined || obj.type == '' || obj.data === undefined ) {
+             return;
+        }
+        var sql = 'insert into log_error (type, errorData) values (?, ?)';
+       
+        sql = mysql.format(sql, [obj.type,obj.data]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query to record error '+ obj.type +', '+obj.data);
+            } 
+        });
+    }
+    catch(err)
+    {
+        logger.debug('Error in connection or query to record error '+ err);
+    }
+}
+
 exports.createUser = function(obj) {
     return new Promise(function(resolve, reject) {
         if (obj.firstName === undefined || obj.firstName == '' || obj.lastName === undefined || obj.lastName == ''|| obj.email === undefined || obj.email == ''|| obj.password === undefined || obj.password == '') {
@@ -1235,9 +1256,10 @@ exports.getUserPositions = function(userID) {
         pool.query(sql, function(err, rows, fields) {
             if (!err) {
                 logger.debug('Error in connection or query:');
+                 var education = [],
+                     work = [];
                 if (rows.length > 0) {
-                    var education = [],
-                        work = [];
+                   
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         position = {
@@ -1263,21 +1285,15 @@ exports.getUserPositions = function(userID) {
                             position['companyID'] = row.companyID,
                                 work.push(position);
                         }
-
                         console.log(position);
                     }
-
-                    resolve({
-                        work: work,
-                        education: education
-                    });
-                } else {
-                    reject({
-                        error: 404,
-                        message: 'Record not found'
-                    });
-                }
+                } 
+                resolve({
+                    work: work,
+                    education: education
+                });
             }
+            
         });
     });
 }
@@ -2148,7 +2164,8 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                             if (!err) {
                                 userId = result.insertId;
                                 logger.debug("createUserIfNotExist: created user: " + userId);
-                                addPositions(userId, obj.positions, connection, resolve, reject);
+                                addPositions(userId, obj.positions, connection);
+                                resolve(userId);
                             } else {
                                 logger.debug('Error in connection database');
                                 connection.release();
@@ -2171,42 +2188,43 @@ exports.createUserIfNotExist = function(obj, accessToken) {
 
 }
 
-function addPositions(userId, positions, connection, resolve, reject) {
+function addPositions(userId, positions, connection) {
     if (positions === undefined || positions == "undefined" || positions._total == 0) {
         connection.release();
         return;
     }
-    positions.values.forEach(function(obj) {
-        logger.debug("going to add position " + obj.title);
+    try{
+        positions.values.forEach(function(obj) {
+            logger.debug("going to add position " + obj.title);
 
-        var endDateYear;
-        var endDateMonth;
-        if (obj.endDate === undefined || obj.endDate == 'undefined') {
-            endDateYear = 0;
-            endDateMonth = 0;
-        } else {
-            endDateYear = obj.endDate.year;
-            endDateMonth = obj.endDate.month;
-        }
-        var sql = "CALL sp_add_position(?,?,?,?,?,?,?,?,?,?,?)";
-        var inserts = [userId, obj.company.industry, obj.company.name, obj.company.size, obj.company.type, obj.isCurrent, obj.startDate.year, obj.startDate.month, endDateYear, endDateMonth, obj.title];
-        var query = mysql.format(sql, inserts);
-
-        logger.debug("addPositions: going to add position with query: " + query);
-
-        connection.query(query, function(err, rows) {
-            connection.release();
-            logger.debug("addPositions: inside the callback: " + err + " ... " + rows);
-            if (!err) {
-                resolve(userId);
-                return;
+            var endDateYear;
+            var endDateMonth;
+            if (obj.endDate === undefined || obj.endDate == 'undefined') {
+                endDateYear = 0;
+                endDateMonth = 0;
             } else {
-                logger.debug("addPositions: err in adding position: " + err + " ... ");
-                reject('{"error":"500","errorMsg": ' + err + '}');
-                return;
+                endDateYear = obj.endDate.year;
+                endDateMonth = obj.endDate.month;
             }
-        });
+            var sql = "CALL sp_add_position(?,?,?,?,?,?,?,?,?,?,?)";
+            var inserts = [userId, obj.company.industry, obj.company.name, obj.company.size, obj.company.type, obj.isCurrent, obj.startDate.year, obj.startDate.month, endDateYear, endDateMonth, obj.title];
+            var query = mysql.format(sql, inserts);
 
-    });
+            logger.debug("addPositions: going to add position with query: " + query);
+
+            connection.query(query, function(err, rows) {
+                connection.release();
+                logger.debug("addPositions: inside the callback: " + err + " ... " + rows);
+                if (err){
+                    logger.debug("addPositions: err in adding position: " + err + " ... ");
+                }
+            });
+
+        });
+    }
+    catch(err)
+    {   
+        logger.debug("addPositions: err in adding position: " + err );
+    }
 
 }

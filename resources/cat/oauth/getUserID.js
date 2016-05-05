@@ -30,6 +30,12 @@ function getLinkedInBasicProfie(accessToken, res) {
 		if (!error || body != undefined) {
 			var parsed = JSON.parse(body);
 			if (parsed.id == undefined) {
+				logger.debug('failed to getBasicProfie: '+body);
+				var obj = {
+					type:1,
+					data:accessToken
+				}
+				dbConn.logError(obj);
 				res.json({
 					error: parsed.message
 				});

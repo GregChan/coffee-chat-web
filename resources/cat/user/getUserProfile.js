@@ -33,6 +33,7 @@ function getUserProfile(userId, res) {
         if (err) {
             console.log(err);
             res.status(err.error);
+            res.end();
         } else {
             var data = results[0];
             data['positions'] = results[1];

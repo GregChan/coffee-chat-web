@@ -28,7 +28,7 @@ function getCommunityProfileSurvey(commID,res)
   
         }
     );
-	return;
+	//return;
 }
 
 

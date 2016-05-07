@@ -284,24 +284,75 @@ exports.getMatch = function(matchId) {
 
 exports.createCommunity = function(data) {
     return new Promise(function(resolve, reject) {
-        var sql = 'insert into community_desc (name, adminUserID, communityCode) values (?, ?, ?)';
-        sql = mysql.format(sql, [data.name, 481, data.name]);
-
-        pool.query(sql, function(err, rows, fields) {
+        pool.getConnection(function(err, connection) {
             if (err) {
-                logger.debug('Error in connection or query');
+                logger.debug('DB connection error');
+                logger.debug(err);
                 reject({
-                    error: '500',
-                    message: 'DB error'
+                    'error': '500',
+                    'message': 'DB Error'
                 });
             } else {
-                logger.debug('inserted new community ' + data.name);
-                resolve({
-                    'success': '200'
+                connection.beginTransaction(function(err) {
+
+                    var sql = 'select id from user_basic where email=?';
+
+                    sql = mysql.format(sql, [data.email]);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            return connection.rollback(function() {
+                                logger.debug('Error getting user ID');
+                                reject({
+                                    'error': 500,
+                                    'message': 'DB Error'
+                                });
+                            });
+                        }
+
+                        if (rows.length > 0) {
+                            var userID = rows[0].id;
+                            var sql = 'insert into community_desc (name, adminUserID, communityCode) values (?, ?, ?)';
+                            sql = mysql.format(sql, [data.name, userID, data.name]);
+
+                            pool.query(sql, function(err, rows, fields) {
+                                if (err) {
+                                    logger.debug('Error in connection or query');
+                                    reject({
+                                        error: '500',
+                                        message: 'DB error'
+                                    });
+                                } else {
+                                    logger.debug('created community ' + data.name + ' with admin ' + userID);
+                                    connection.commit(function(err) {
+                                        if (err) {
+                                            connection.rollback(function() {
+                                                reject({
+                                                    'error': 500,
+                                                    'message': 'db error.'
+                                                });
+                                            });
+                                        }
+
+                                        resolve({
+                                            'success': '200'
+                                        });
+                                    });
+                                }
+                            });
+                        } else {
+                            reject({
+                                error: 404,
+                                message: 'Failed to create community'
+                            });
+                        }
+                    });
                 });
+
+                connection.release();
             }
         });
-    })
+    });
 }
 
 exports.insertUserIntoCommunity = function(data) {

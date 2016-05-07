@@ -1,0 +1,40 @@
+div(class="row" style="border-style:solid")
+			form(class="col s12 l12")
+				div(class="row")
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="fName" type="text" required="")
+						label(for="fName") First Name
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="lName" type="text" required="")
+						label(for="lName") Last Name
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="email" type="email" required="")
+						label(for="email") Email
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="pwd" type="text" required="")
+						label(for="pwd") Password
+					div(class="input-field col s12 m6 l4")
+						input(class="validate" id="comp" type="text" required="")
+						label(for="comp") Company
+					div(class="input-field col s12 m6 l4")
+						p Do you have a similar in program in place already?
+						form(action="#")
+							input(name="group1" type="radio" id="exists")
+							label(for="exists") Yes
+							br
+							input(name="group1" type="radio" id="nExist")
+							label(for="nExist") No
+					div(class="input-field col s12 m6 l4 center")
+						p How many people do you expect to invite to CoffeeChat?
+						a(class="dropdown-button coffee-chat-orange btn" data-activates="numParticip") Number of Participants
+						- var n = 10
+						ul(id="numParticip" class="dropdown-content")
+							while n < 500
+								li= n++
+					div(class="input-field col s12 m6 l4")
+						p Do you have any questions for us?
+						input(class="validate" placeholder="Questions" id="ques" type="text" required="")
+						label(for="ques") 
+			div(class="center col s12 m6 l12")
+				button(class="btn waves-effect waves-light coffee-chat-orange submit" type="submit" name="action") Submit
+script(src="/public/js/enterprise.js")

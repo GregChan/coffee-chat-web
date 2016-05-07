@@ -25,12 +25,15 @@
                 },
                 success: function(data) {
                     console.log(data);
-                    code = true;
                     $('#code').empty();
+                    code = true;
+                    $('#company').closeModal();
                     finishedCallback();
+                }, 
+                error: function(data) {
+                    $('#code').html('Please enter a valid community code');
                 }
             });
-            $('#code').html('Please enter a valid company code');
         });
 
         $('[data-submit]').click(function(e) {
@@ -54,7 +57,6 @@
                     } else if (type == 'select' && $(this).val()) {
                         fieldData.choices = $(this).val();
                     }
-
                 });
                 if(fieldData.choices.length == 0){
                      $('#errorMessage').html('Please fill out all three fields');

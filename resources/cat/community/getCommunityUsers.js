@@ -5,7 +5,7 @@ exports.path = 'cat/community/:communityID/users';
 
 exports.getHandle = function(req, res) {
     console.log('cat/community/:communityID/users: communityID: request received');
-    var communityID = req.params.communityID;
+    var communityID = req.communityID;
     console.log('cat/community/:communityID/users: communityID: ' + req.params.communityID);
     getCommunityUsers(communityID, req, res);
 }

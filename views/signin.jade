@@ -1,0 +1,33 @@
+html
+	head
+		include ./includes/styles.jade
+	body
+		//- include ./includes/home-header.jade
+		div(calss="section container")
+			div(class="row center-align")
+				div(class="col s12 m12 l4 offset-l4 white text-orange")
+					ul(class="tabs")
+						li(class="tab col s3 l3")
+							a(href="#user" class="active text-orange") Users
+						li(class="tab col s3 l3")
+							a(class="text-orange" href="#admin") Admins
+				div(id="user" class="col s12 m12 l4 offset-l4 white text-orange")
+					h5 Click the link below to sign in as a user
+					//- a(class="linked-in-btn" href="/wild/oauth/auth" title="Login with LinkedIn")
+					a(class="waves btn sign-up-btn" href="/wild/oauth/auth") Sign In With LinkedIn
+				div(id="admin" class="col s12 m12 l4 offset-l4 white text-orange")
+					h5 Sign in as a community administrator
+					div(class="input-field col s12 m12 l12")
+						input(id="email" type="email" class="validate")
+						label(for="email") Email
+					div(class="input-field col s12 m12 l12")
+						input(id="password" type="password" class="validate")
+						label(for="password") Password
+						a(class="btn waves-effect waves-light coffee-chat-orange" data-submit type="submit" name="action") Submit
+	include ./includes/partners.jade
+	include ./includes/footer.jade
+
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="/public/js/signin.js")
+	include ./includes/google-analytics.jade

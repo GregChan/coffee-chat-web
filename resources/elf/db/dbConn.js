@@ -38,6 +38,27 @@ exports.clearup = function() {
     });
 }
 
+exports.logError = function(obj) {
+    try{
+        if (obj.type === undefined || obj.type == '' || obj.data === undefined ) {
+             return;
+        }
+        var sql = 'insert into log_error (type, errorData) values (?, ?)';
+       
+        sql = mysql.format(sql, [obj.type,obj.data]);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query to record error '+ obj.type +', '+obj.data);
+            } 
+        });
+    }
+    catch(err)
+    {
+        logger.debug('Error in connection or query to record error '+ err);
+    }
+}
+
 exports.createUser = function(obj) {
     return new Promise(function(resolve, reject) {
         if (obj.firstName === undefined || obj.firstName == '' || obj.lastName === undefined || obj.lastName == ''|| obj.email === undefined || obj.email == ''|| obj.password === undefined || obj.password == '') {
@@ -745,6 +766,198 @@ exports.getUserAnalytics = function(userID, communityID) {
     });
 }
 
+exports.getUserAnalytics = function(userID, communityID) {
+    /* Description:
+     * returns basic analytics for a user with information about matches
+     *
+     * Parameters:
+     * userID : int
+     *     id for a user
+     */
+
+    return new Promise(function(resolve, reject) {
+        pool.getConnection(function(err, connection) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+            } else {
+                // all users in accepted or feedback state
+                var sql = 'select id from user_match where (userA = ? or userB = ?) and ((userAStatus = 2 and userBStatus = 2) or (userAStatus = 4 or userBStatus = 4)) and communityID = ?';
+                sql = mysql.format(sql, [userID, userID, communityID]);
+
+                connection.query(sql, function(err, rows, fields) {
+                    if (err) {
+                        logger.debug('Error in connection database');
+                        reject({
+                            error: 500,
+                            msg: 'Query error'
+                        });
+                        return;
+                    }
+
+                    var totalConnections = rows.length;
+
+                    // get all ratings submitted by users to compute the average this is a hack
+                    var sql = 'select name from user_match_feedback as umf left join match_feedback_field_items as mffi on umf.itemID = mffi.id where umf.userID = ? and umf.communityID = ? and umf.fieldID = 1';
+                    sql = mysql.format(sql, [userID, communityID]);
+
+                    connection.query(sql, function(err, rows, fields) {
+                        if (err) {
+                            logger.debug('Error in connection database');
+                            reject({
+                                error: 500,
+                                msg: 'Query error'
+                            });
+                            return;
+                        }
+
+                        var averageRating = 0;
+
+                        console.log(rows.length);
+
+                        if (rows.length > 0) {
+                            var ratingSum = 0;
+
+                            for (var i = 0; i < rows.length; i++) {
+                                // this is also a hack
+                                ratingSum += getValueFromRating(rows[i].name);
+                            }
+
+                            averageRating = ratingSum / rows.length;
+                        }
+
+                        var sql = 'select name, id from community_group where communityID = ? and private = 0';
+                        sql = mysql.format(sql, [communityID]);
+
+                        connection.query(sql, function(err, rows, fields) {
+                            if (err) {
+                                logger.debug('Error in connection database');
+                                reject({
+                                    error: 500,
+                                    msg: 'Query error'
+                                });
+                                return;
+                            }
+
+                            var calls = [];
+
+                            for (var i = 0; i < rows.length; i++) {
+                                calls.push((function(index) {
+                                    return function(cb) {
+                                        var sql = 'select name from user_match_feedback as umf left join match_feedback_field_items as mffi on umf.itemID = mffi.id left join user_group as ug on ug.userID = umf.userID where umf.communityID = ? and ug.userID = ? and umf.fieldID = 1 and ug.groupID = ?';
+                                        sql = mysql.format(sql, [communityID, userID, rows[index].id]);
+
+                                        connection.query(sql, function(err, rs, fields) {
+                                            if (err) {
+                                                logger.debug('Error in connection database');
+                                                reject({
+                                                    error: 500,
+                                                    msg: 'Query error'
+                                                });
+                                                cb(err, null);
+                                                return;
+                                            }
+
+                                            var averageRating = 0;
+
+                                            if (rs.length > 0) {
+                                                var ratingSum = 0;
+
+                                                for (var j = 0; j < rs.length; j++) {
+                                                    // this is also a hack
+                                                    ratingSum += getValueFromRating(rs[j].name);
+                                                }
+
+                                                averageRating = ratingSum / rs.length;
+                                            }
+
+                                            cb(null, {
+                                                type: 0,
+                                                groupID: rows[index].id,
+                                                groupName: rows[index].name,
+                                                value: averageRating
+                                            });
+                                        });
+                                    }
+                                })(i));
+
+                                calls.push((function(index) {
+                                    return function(cb) {
+                                        var sql = 'select distinct id from ((select userA, userB, id from user_match where ((userAStatus = 2 and userBStatus = 2) or (userAStatus = 4 or userBStatus = 4)) and communityID = ?) as um left join (select userID from user_group where groupID = ?) as ug on ug.userID = ? and ug.userID = um.userA or ug.userID = um.userB) where userID is not null';
+                                        sql = mysql.format(sql, [communityID, rows[index].id, userID]);
+
+                                        connection.query(sql, function(err, rs, fields) {
+                                            if (err) {
+                                                logger.debug('Error in connection database');
+                                                reject({
+                                                    error: 500,
+                                                    msg: 'Query error'
+                                                });
+                                                cb(err, null);
+                                                return;
+                                            }
+
+                                            cb(null, {
+                                                type: 1,
+                                                groupID: rows[index].id,
+                                                groupName: rows[index].name,
+                                                value: rs.length
+                                            });
+                                        });
+                                    }
+                                })(i));
+                            }
+
+                            async.parallel(calls,
+                                function(err, results) {
+                                    var groupMap = {};
+
+                                    for (var i = 0; i < results.length; i++) {
+                                        if (!(results[i].groupID in groupMap)) {
+                                            groupMap[results[i].groupID] = {
+                                                groupName: results[i].groupName
+                                            };
+                                        }
+
+                                        var key = null;
+                                        if (results[i].type == 0) {
+                                            key = 'avgRating';
+                                        } else if (results[i].type == 1) {
+                                            key = 'totalConnections';
+                                        }
+
+                                        if (key != null) {
+                                            groupMap[results[i].groupID][key] = results[i].value;
+                                        }
+                                    }
+                                    var groups = [];
+                                    var keys = Object.keys(groupMap);
+                                    for (var i = 0; i < keys.length; i++) {
+                                        groups.push(groupMap[keys[i]]);
+                                    }
+
+                                    resolve({
+                                        community: communityID,
+                                        user: userID,
+                                        totalConnections: totalConnections,
+                                        avgRating: averageRating,
+                                        groups: groups
+                                    });
+                                });
+                        });
+                    });
+                });
+
+                connection.release();
+            }
+        });
+    });
+}
+
 exports.getCommunityAnalytics = function(communityID) {
     /* Description:
      * returns basic analytics for a community with information about users and groups
@@ -1235,9 +1448,10 @@ exports.getUserPositions = function(userID) {
         pool.query(sql, function(err, rows, fields) {
             if (!err) {
                 logger.debug('Error in connection or query:');
+                 var education = [],
+                     work = [];
                 if (rows.length > 0) {
-                    var education = [],
-                        work = [];
+                   
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         position = {
@@ -1263,21 +1477,15 @@ exports.getUserPositions = function(userID) {
                             position['companyID'] = row.companyID,
                                 work.push(position);
                         }
-
                         console.log(position);
                     }
-
-                    resolve({
-                        work: work,
-                        education: education
-                    });
-                } else {
-                    reject({
-                        error: 404,
-                        message: 'Record not found'
-                    });
-                }
+                } 
+                resolve({
+                    work: work,
+                    education: education
+                });
             }
+            
         });
     });
 }
@@ -1605,9 +1813,9 @@ exports.getMatchHistory = function(userID, communityID) {
 
 exports.getCurrentMatches = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'SELECT * FROM coffeechat.user_match Where communityID = ? and ((userA = ? and userAStatus < 3) or (userB = ? and userBStatus < 3) ) order by create_at';
+        var sql = 'select a.id, b.id as userID, b.firstName, b.email, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at from user_match as a inner join user_basic as b on (a.userA = b.id or a.userB = b.id) Where communityID = ? and ((userA = ? and userAStatus < 3) or (userB = ? and userBStatus < 3) ) and b.id != ? order by create_at';
 
-        sql = mysql.format(sql, [communityID, userID, userID]);
+        sql = mysql.format(sql, [communityID, userID, userID, userID]);
 
         console.log('getCurrentMatches: going to query db with sql: ' + sql);
 
@@ -1640,6 +1848,12 @@ exports.getCurrentMatches = function(userID, communityID) {
                             match["myStatus"] = rows[i].userBStatus;
 
                         }
+                        match["matchTime"] = rows[i].create_at;
+                        match['firstName'] = rows[i].firstName;
+                        match['lastName'] = rows[i].lastName;
+                        match['profilePic'] = rows[i].profilePicO;
+                        match['linkedInProfile'] = rows[i].linkedInProfile;
+                        match['email'] = rows[i].email;
                         match["matchTime"] = rows[i].create_at;
                         result["matches"].push(match);
                     }
@@ -2132,87 +2346,77 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                         }
                         var linkedinID = obj.id;
 
-                        var post = {
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-                            headline: headline,
-                            profilePicS: profilePicS,
-                            profilePicO: profilePicO,
-                            industry: industryId,
-                            linkedInProfile: linkedInProfile,
-                            linkedinID: linkedinID,
-                            LinkedInToken: accessToken
-                        };
+                        var insertSQL = 'insert into user_basic (firstName, lastName, email, headline, profilePicS, profilePicO, industry, linkedInProfile, linkedinID, LinkedInToken) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-                        connection.query("INSERT INTO user_basic SET ?", post, function(err, result) {
+                        inertSQL = mysql.format(insertSQL, [firstName, lastName, email, headline, profilePicS, profilePicO, industryId, linkedInProfile, linkedinID, accessToken]);
+
+                        connection.query(inertSQL, function(err, result) {
                             logger.debug("createUserIfNotExist: inside the  insert callback: " + err + " ... " + result);
 
                             if (!err) {
                                 userId = result.insertId;
                                 logger.debug("createUserIfNotExist: created user: " + userId);
-                                addPositions(userId, obj.positions, connection, resolve, reject);
-                                // resolve(userId);
-                                // return;
+                                addPositions(userId, obj.positions, connection);
+                                resolve(userId);
                             } else {
-                                connection.release();
                                 logger.debug('Error in connection database');
-                                reject('{"error":"500","errorMsg": ' + err + '}');
+                                connection.release();
+                                reject({error: 500, message: err});
                             }
                         });
 
                     } else {
-                        connection.release();
                         logger.debug('Error in connection database');
-                        reject('{"error":"500","errorMsg": ' + err + '}');
+                        connection.release();
+                        reject({error: 500, message: err})
                     }
 
                 });
 
             });
-
         });
 
     });
 
 }
 
-function addPositions(userId, positions, connection, resolve, reject) {
+function addPositions(userId, positions, connection) {
     if (positions === undefined || positions == "undefined" || positions._total == 0) {
         connection.release();
         return;
     }
-    positions.values.forEach(function(obj) {
-        logger.debug("going to add position " + obj.title);
+    try{
+        positions.values.forEach(function(obj) {
+            logger.debug("going to add position " + obj.title);
 
-        var endDateYear;
-        var endDateMonth;
-        if (obj.endDate === undefined || obj.endDate == 'undefined') {
-            endDateYear = 0;
-            endDateMonth = 0;
-        } else {
-            endDateYear = obj.endDate.year;
-            endDateMonth = obj.endDate.month;
-        }
-        var sql = "CALL sp_add_position(?,?,?,?,?,?,?,?,?,?,?)";
-        var inserts = [userId, obj.company.industry, obj.company.name, obj.company.size, obj.company.type, obj.isCurrent, obj.startDate.year, obj.startDate.month, endDateYear, endDateMonth, obj.title];
-        var query = mysql.format(sql, inserts);
-
-        logger.debug("addPositions: going to add position with query: " + query);
-
-        connection.query(query, function(err, rows) {
-            connection.release();
-            logger.debug("addPositions: inside the callback: " + err + " ... " + rows);
-            if (!err) {
-                resolve(userId);
-                return;
+            var endDateYear;
+            var endDateMonth;
+            if (obj.endDate === undefined || obj.endDate == 'undefined') {
+                endDateYear = 0;
+                endDateMonth = 0;
             } else {
-                logger.debug("addPositions: err in adding position: " + err + " ... ");
-                reject('{"error":"500","errorMsg": ' + err + '}');
-                return;
+                endDateYear = obj.endDate.year;
+                endDateMonth = obj.endDate.month;
             }
-        });
+            var sql = "CALL sp_add_position(?,?,?,?,?,?,?,?,?,?,?)";
+            var inserts = [userId, obj.company.industry, obj.company.name, obj.company.size, obj.company.type, obj.isCurrent, obj.startDate.year, obj.startDate.month, endDateYear, endDateMonth, obj.title];
+            var query = mysql.format(sql, inserts);
 
-    });
+            logger.debug("addPositions: going to add position with query: " + query);
+
+            connection.query(query, function(err, rows) {
+                connection.release();
+                logger.debug("addPositions: inside the callback: " + err + " ... " + rows);
+                if (err){
+                    logger.debug("addPositions: err in adding position: " + err + " ... ");
+                }
+            });
+
+        });
+    }
+    catch(err)
+    {   
+        logger.debug("addPositions: err in adding position: " + err );
+    }
 
 }

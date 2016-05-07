@@ -4,7 +4,7 @@ var dbConn = require("../../elf/db/dbConn.js");
 exports.path = 'cat/community/:communityID/group/:groupID/users';
 
 exports.getHandle = function(req, res) {
-    var communityID = req.params.communityID;
+    var communityID = req.communityID;
     var groupID = req.params.groupID;
     getCommunityGroupUsers(communityID, groupID, req, res);
 }

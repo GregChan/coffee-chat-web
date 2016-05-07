@@ -7,7 +7,7 @@ var dbConn = require("../../elf/db/dbConn.js");
 exports.path = 'cat/user/:userID/community/:commID/match/history';
 
 exports.getHandle = function(req, res) {
-    var commID = req.params.commID;
+    var commID = req.communityID;
     var userId = req.params.userID;
     console.log('match/getMatchHistory: getMatchHistory: ' + userId);
     getMatchHistory(userId,commID, res, req);

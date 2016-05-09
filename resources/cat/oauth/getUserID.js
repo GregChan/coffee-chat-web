@@ -14,10 +14,10 @@ exports.postHandle = function(req, res) {
 	req.accepts('application/json');
 	var accessToken = req.body.accessToken;
 	logger.debug('oAuth/getUserId: accessToken: ' + accessToken);
-	getLinkedInBasicProfie(accessToken, res);
+	getLinkedInBasicProfie(accessToken, res,1);
 }
 
-function getLinkedInBasicProfie(accessToken, res) {
+function getLinkedInBasicProfie(accessToken, res, num) {
 	request({
 		url: 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,picture-urls::(original),email-address,industry,headline,specialties,positions,picture-url,public-profile-url)',
 		qs: {
@@ -32,13 +32,23 @@ function getLinkedInBasicProfie(accessToken, res) {
 			if (parsed.id == undefined) {
 				logger.debug('failed to getBasicProfie: '+body);
 				var obj = {
-					type:1,
+					type:num,
 					data:accessToken
 				}
 				dbConn.logError(obj);
-				res.json({
-					error: parsed.message
-				});
+				if(num<3) // retry (twice) to pull user info from LinkedIn
+				{
+					setTimeout(function() {
+						logger.debug('cat/oauth/getUserID.getLinkedInBasicProfie: sleep before retrying ');
+						 getLinkedInBasicProfie(accessToken,res,num+1);
+					}, 1000*num); //sleep for 1s / 2s before the second / third try.	
+				}
+				else
+				{
+					res.json({
+						error: parsed.message
+					});
+				}
 			} else {
 				createUserIfNotExist(parsed, accessToken, res);
 			}

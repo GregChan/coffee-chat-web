@@ -17,6 +17,7 @@ function doPromise(p, callback) {
 
 function createCommunity(req, res) {
     var obj = req.body;
+    console.log(obj);
     if (obj.firstName === undefined || obj.firstName == '' || obj.lastName === undefined || obj.lastName == ''|| obj.email === undefined || obj.email == ''|| obj.password === undefined || obj.password == '') {
        res.sendStatus(400);
        return;

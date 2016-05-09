@@ -14,7 +14,11 @@ exports.getHandle = function(req, res) {
 						'Cookie': 'userID=' + req.cookies.userID
 					}
 				}, function(error, response, body) {
-					callback(error, JSON.parse(body));
+					if (response.statusCode == 200) {
+						callback(error, JSON.parse(body));
+					} else {
+						callback(new Error("Error"), null);
+					}
 				});
 			},
 		],

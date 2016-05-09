@@ -14,10 +14,14 @@ exports.getHandle = function(req, res) {
 						'Cookie': 'userID=' + req.cookies.userID
 					}
 				}, function(error, response, body) {
-					callback(error, JSON.parse(body));
+					if (response.statusCode == 200) {
+						callback(error, JSON.parse(body));
+					} else {
+						callback(new Error("Error"), null);
+					}
 				});
 			},
-                        function(callback) {
+			function(callback) {
 				request({
 					url: process.env.BASE_URL + '/cat/community/1/commanalytics',
 					method: 'GET',
@@ -28,8 +32,8 @@ exports.getHandle = function(req, res) {
 					callback(error, JSON.parse(body));
 				});
 			},
-			
-                        function(callback) {
+
+			function(callback) {
 				request({
 					url: process.env.BASE_URL + '/cat/user/community/1/match/all',
 					method: 'GET',
@@ -46,8 +50,8 @@ exports.getHandle = function(req, res) {
 				console.log(results[0]);
 				var data = {
 					users: results[0],
-                    metrics: results[1],
-                    matches: results[2],
+					metrics: results[1],
+					matches: results[2],
 				}
 
 				res.render('admin-metrics', data);

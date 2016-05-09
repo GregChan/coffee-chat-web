@@ -8,9 +8,11 @@ exports.path = '';
 
 exports.getHandle = function(req, res) {
 	if (req.communityID == null && req.loginUserID != null) {
-		res.render('index', {
-			curUser: req.loginUserID
-		});
+		// res.render('index', {
+		// 	curUser: req.loginUserID
+		// });
+
+		res.redirect('/survey');
 	} else if (req.communityID != null && req.loginUserID != null) {
 		async.parallel([
 				function(callback) {

@@ -42,7 +42,8 @@ html
 					for user in users
 						div(href="#" class="#{user.id} collection-item" data-user)
 							div(class="row valign-wrapper no-padding")
-								img(class="profile-pic circle" src=user.profilePic || '/public/images/generic-profile.png')
+								a(href="#{user.linkedInProfile}")
+									img(class="profile-pic circle" src=user.profilePic || '/public/images/generic-profile.png')
 								div(class="description")
 									h6(class="coffee-chat-grey") #{user.firstName}  #{user.lastName}
 									div(class="coffee-chat-grey") #{user.title}

@@ -120,7 +120,7 @@ h6 {
 }
 
 .coffee-chat-logo {
-  height: 100%;
+  height: auto;
   margin: 0px !important;
 }
 
@@ -228,12 +228,12 @@ h6 {
 
 .brand-logo {
   margin-top: 5px !important;
-  margin-left: 5px !important;
+  margin-left: 15px !important;
   position: relative !important;
 }
 
 .coffee-chat-home-logo {
-  height: 52px !important;
+  width: 200px !important;
 }
 
 .text-grey {

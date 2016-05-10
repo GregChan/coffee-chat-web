@@ -2072,6 +2072,7 @@ exports.getUser = function(userId) {
                     resolve(result);
                 } else {
                     logger.debug("dbConn: didnt find user: " + userId);
+                    console.log(userId);
                     reject('{"error":"400", "errorMsg":"Invalid UserID"}');
                 }
             } else {

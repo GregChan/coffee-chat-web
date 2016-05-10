@@ -97,6 +97,7 @@ exports.sendMatchNotification = function(userAId, userBId) {
 }
 
 exports.sendMatchNotificationFromJade = function(userAId, userBId) {
+	console.log("Something something soemthing...");
 	var formatData = function(match, to) {
 		return {
 			data: {
@@ -106,9 +107,11 @@ exports.sendMatchNotificationFromJade = function(userAId, userBId) {
 		};
 	};
 
+	console.log("Something something soemthing... 2");
 	getUserProfileForMatchForUsers(userAId, userBId, function(data) {
-		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email), 'match-notification.jade');
-		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userB, data.userA.email), 'match-notification.jade');
+		console.log("Something something soemthing... 3");
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email), 'match-notification.jade', 'You have a new CoffeeChat Match!');
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userB, data.userA.email), 'match-notification.jade', 'You have a new CoffeeChat Match!');
 	});
 }
 
@@ -150,8 +153,8 @@ exports.sendFeedbackNotificationFromJade = function(matchId) {
 		getUserProfileForMatchForUsers(data.userA, data.userB, function(userData) {
 			console.log(userData);
 
-			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userA, userData.userB.email), 'feedback-notification.jade');
-			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userB, userData.userA.email), 'feedback-notification.jade');
+			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userA, userData.userB.email), 'feedback-notification.jade', 'Rate your CoffeeChat Match!');
+			mail.sendNotificationEmailFromJadeTemplate(formatData(userData.userB, userData.userA.email), 'feedback-notification.jade', 'Rate your CoffeeChat Match!');
 		});
 	});
 }

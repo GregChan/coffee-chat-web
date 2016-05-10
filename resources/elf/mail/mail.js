@@ -47,7 +47,7 @@ exports.sendTemplate = function(to, from, subject, templateId, substitutions, ca
 }
 
 // TODO: abstract this to work with any jade template
-exports.sendNotificationEmailFromJadeTemplate = function(data, templateFilename) {
+exports.sendNotificationEmailFromJadeTemplate = function(data, templateFilename, subject) {
 	var templatePath = path.join(emailPath, templateFilename);
 	fs.readFile(templatePath, 'utf8', function(err, templateData) {
 
@@ -64,7 +64,7 @@ exports.sendNotificationEmailFromJadeTemplate = function(data, templateFilename)
 		var inlineHtml = juice(templateHtml);
 		console.log(inlineHtml);
 
-		sendEmail(data.emails, coffeeChatEmail, ' ', inlineHtml, function(err, json) {
+		sendEmail(data.emails, coffeeChatEmail, subject, inlineHtml, function(err, json) {
 			if (err) {
 				console.log(err);
 				// TODO: return error

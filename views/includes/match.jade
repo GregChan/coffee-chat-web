@@ -34,7 +34,10 @@ div(class="section white #{match.userID}" id="match-rate")
             div(class="center-align col s12 m12 l12")
                 i(class="material-icons large text-grey valign") date_range
             //- div(class="left-align col s6 m6 s6")
-        h5(class="text-grey") Contact #{match.firstName} at #{match.email} and schedule a time to chat!
+        h5(class="text-grey") 
+            div Contact #{match.firstName} at 
+                a(href="mailto:#{match.email}") #{match.email} 
+                and schedule a time to chat!
         h5(class="text-grey") Come back and tell us how was your chat?
         div(class="rating text-orange")
             a(class="text-orange" id="one") &#9675;

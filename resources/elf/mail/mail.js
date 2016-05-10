@@ -7,7 +7,7 @@ var exports = module.exports = {},
 	juice = require('juice'),
 	emailPath = path.join(__dirname, '../../../views/email-templates/');
 
-var coffeeChatEmail = 'no-reply@gocoffeechat.com';
+var coffeeChatEmail = 'coffeechat@gocoffeechat.com';
 
 var sendTemplate = function(to, from, subject, templateId, substitutions, callback) {
 	var email = new sendgrid.Email();

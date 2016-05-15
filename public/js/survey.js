@@ -25,6 +25,7 @@
                 },
                 success: function(data) {
                     console.log(data);
+                    mixpanel.track("join-community " + $('#companyCode').val());
                     $('#code').empty();
                     code = true;
                     $('#company').closeModal();
@@ -73,6 +74,7 @@
                     type: 'POST',
                     url: '/cat/user/community/1/update',
                     success: function(data) {
+                        mixpanel.track("save-survey");
                         Materialize.toast('Success!', 2000);
                         $('[data-save-prompt]').hide();
                         survey = true;
@@ -188,6 +190,7 @@
                 url: '/settings',
                 data: postData,
                 success: function(data) {
+                    mixpanel.track("save-profile");
                     Materialize.toast('Success!', 2000);
                     $('[data-save-prompt]').hide();
                     profile = true;

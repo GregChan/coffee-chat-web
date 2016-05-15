@@ -22,11 +22,9 @@ html
 				div(id="cy" style="width: 100%; height: 50%;")
 
 	include ./includes/footer.jade
-	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	include ./includes/js.jade
 	script(src="http://js.cytoscape.org/js/cytoscape.min.js")
 	script var pastMatches = !{JSON.stringify(pastMatches)}
 	script(src="/public/js/survey.js")
 	script(src="/public/js/settings.js")
-	include ./includes/google-analytics.jade
 						

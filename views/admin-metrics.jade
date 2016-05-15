@@ -45,10 +45,8 @@ html
 							//td=group.connectionRate
 	include ./includes/footer.jade
 	meta(http-equiv="content-type" content="text/html; charset=utf-8")
-	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
-	script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+	include ./includes/js.jade
 	script var metrics = !{JSON.stringify(metrics)}
 	script var matches = !{JSON.stringify(matches.matches)}
 	script(src="/public/js/admin-metrics.js")
-	include ./includes/google-analytics.jade
+	

@@ -54,6 +54,7 @@
                         type: 'POST',
                         url: '/cat/user/community/1/match/feedback',
                         success: function(data) {
+                            mixpanel.track('feedback-rating ' + $('#feedback_rating').val());
                             window.location.reload();
                         },
                         data: {
@@ -74,6 +75,7 @@
                 type: 'POST',
                 url: '/cat/user/community/1/match/accept',
                 success: function(data) {
+                    mixpanel.track('accept-match');
                     window.location.reload();
                 },
                 data: {
@@ -86,6 +88,7 @@
                 type: 'POST',
                 url: '/cat/user/community/1/match/reject',
                 success: function(data) {
+                    mixpanel.track('reject-match');
                     window.location.reload();
                 },
                 data: {
@@ -114,7 +117,6 @@
                     $('#feedback_rating').val('41');
                     break;
             }
-            
         });
 	});
 }());

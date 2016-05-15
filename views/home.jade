@@ -81,12 +81,9 @@ html
                 include ./includes/profile.jade
             div(class="modal-footer modal-fixed-footer")
                 a(class="modal-action modal-close btn-flat" href="#") close
-    script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")    
-    script(type="text/javascript" src="https://www.gstatic.com/charts/loader.js")
+    include ./includes/js.jade
     script var metrics = !{JSON.stringify(metrics)};
     if (matchHist.matches)
         script var pastMatchData = !{JSON.stringify(matchHist.matches)}
         script(src="/public/js/past-matches.js")
     script(src="/public/js/home.js")
-    include ./includes/google-analytics.jade

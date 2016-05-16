@@ -304,7 +304,7 @@ exports.createCommunity = function(data) {
                                 logger.debug('Error getting user ID');
                                 reject({
                                     'error': 500,
-                                    'message': 'DB Error'
+                                    'message': 'Error getting user ID'
                                 });
                             });
                         }
@@ -318,10 +318,11 @@ exports.createCommunity = function(data) {
                                 if (err) {
                                     logger.debug('Error in connection or query');
                                     reject({
-                                        error: '500',
+                                        error: 500,
                                         message: 'DB error'
                                     });
                                 } else {
+                                    insertUserIntoCommunity(userID, data.name);
                                     logger.debug('created community ' + data.name + ' with admin ' + userID);
                                     connection.commit(function(err) {
                                         if (err) {

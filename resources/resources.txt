@@ -46,7 +46,9 @@
 ./resources/wild/pages/email.js
 ./resources/wild/pages/enterprise.js
 ./resources/wild/pages/signin.js
-./resources/wild/user/signout.js
+./resources/wild/pages/signup.js
+./resources/wild/pages/signup.js
+./resources/wild/pages/faq.js
 ./resources/wild/user/login.js
 ./resources/wild/pages/admin/adminTalent.js
 ./resources/wild/pages/admin/adminMatch.js

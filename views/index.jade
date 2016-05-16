@@ -16,10 +16,17 @@ html
 						h5(class="white-text spacer-0") Manage development. 
 						h5(class="white-text spacer-0") Improve performance.
 						p(class="spacer-45")
-						//-if (!curUser)
-							a(class="waves btn sign-up-btn" href="/wild/oauth/auth") Sign In With LinkedIn
+						if (!curUser)
+							a(class="waves btn sign-up-btn modal-trigger" href="#warning") Sign In With LinkedIn
+							div(id="warning" class="modal")
+								div(class="modal-content center")
+									h5 Welcome to CoffeeChat!
+									a(class="waves btn linked-in-btn" href="/wild/oauth/auth")
+								div(class="modal-footer")
+									p **If you have trouble logging in to the site, please check our 
+										a(href="/faq" class="modal-action modal-close") FAQ page
 							a(class="waves btn learn-more-btn clear" href="#About") Learn More
-						//-else
+						else
 							a(class="waves btn learn-more-btn clear" href="/survey") We'd like to know more about you.
 						//- if (!curUser)
 							div(class="row center-align")

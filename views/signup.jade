@@ -9,7 +9,7 @@ html
 				//-img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")
 			div(class="container valign")
 				div(class="row text-orange" style="padding:50px")
-					h4 Sign in to your CoffeeChat account:
+					h4 New user? Create an account here:
 					div(class="col s12 m12 l6 offset-l3" style="border-style:solid solid none solid")
 								ul(class="tabs")
 									li(class="tab col s3 l3")
@@ -26,16 +26,13 @@ html
 									p **If you have trouble logging in to the site, please check our 
 										a(href="/faq" class="modal-action modal-close") FAQ page
 					div(id="admin" class="col s12 m12 l6 offset-l3 center" style="border-style:none solid solid solid; padding:15px")
-								h5 Sign in as a community administrator
-								div(class="input-field col s12 m12 l6 offset-l3")
-									input(id="email" type="email" class="validate")
-									label(for="email") Email
-								div(class="input-field col s12 m12 l6 offset-l3")
-									input(id="password" type="password" class="validate")
-									label(for="password") Password
-									a(class="btn waves-effect waves-light coffee-chat-orange" data-submit type="submit" name="action") Submit
+								h5 Create a new community
+								include ./includes/signup.jade
 	include ./includes/partners.jade
 	include ./includes/footer.jade
 
-	include ./includes/js.jade
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
 	script(src="/public/js/signin.js")
+	script(src="/public/js/index.js")
+	include ./includes/google-analytics.jade

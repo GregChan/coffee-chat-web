@@ -1,0 +1,29 @@
+html
+	head
+		include ./includes/styles.jade
+	body
+		div(class="row")
+			include ./includes/home-header.jade
+		div(class="row valign-wrapper")
+			//-div(class="parallax")
+				//-img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")
+			div(class="container valign")
+				div(class="row text-orange" style="padding:50px")
+					h3(class="center") Frequently Asked Questions
+					h6 Why am I redirected to the same page after I authorized on LinkedIn? It seems the I am unable to log in to CoffeeChat.
+					p(class="black-text" style="padding-left: 25px") CoffeeChat uses OAuth 2.0 to log users in via their LinkedIn accounts. Occasionally, LinkedIn prevents this approach when you are logging in from a suspicious IP address or you have not logged in to your LinkedIn for a long time. To get around this problem, you can try the following steps:
+					div(class="col s12 offset-s1 black-text")
+						p 1. Use a desktop browser and avoid using the private mode.
+						p 2. Go to LinkedIn site (https://www.linkedin.com) and log in with your valid LinkedIn account.
+						p 3. Open a new tab in the same browser and go back to CoffeeChat (http://goCoffeeChat.com)
+						p 4. “Sign in via LinkedIn” button
+					p(class="black-text" style="padding-left: 25px") If you still have problem logging in to our site, please let us know via hello@coffeechat.com. We will get back to you ASAP.
+					
+	include ./includes/partners.jade
+	include ./includes/footer.jade
+
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	script(src="/public/js/faq.js")
+	script(src="/public/js/index.js")
+	include ./includes/google-analytics.jade

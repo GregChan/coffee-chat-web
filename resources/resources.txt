@@ -51,6 +51,7 @@
 ./resources/wild/pages/signup.js
 ./resources/wild/pages/faq.js
 ./resources/wild/user/login.js
+./resources/wild/user/signout.js
 ./resources/wild/pages/admin/adminTalent.js
 ./resources/wild/pages/admin/adminMatch.js
 ./resources/wild/pages/admin/adminMetrics.js

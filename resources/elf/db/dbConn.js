@@ -323,7 +323,7 @@ exports.createCommunity = function(data) {
                                         message: 'DB error'
                                     });
                                 } else {
-                                    insertUserIntoCommunity(userID, data.name);
+                                    // insertUserIntoCommunity(userID, data.name);
                                     logger.debug('created community ' + data.name + ' with admin ' + userID);
                                     connection.commit(function(err) {
                                         if (err) {

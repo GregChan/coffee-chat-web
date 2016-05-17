@@ -609,19 +609,22 @@ exports.autoMatch = function(communityID) {
                 
                 var data = [];
                 for (var i = 0; i < rows.length; i++) {
+                    // console.log(rows[i].User1, rows[i].User2, rows[i].MatchScore);
                     if (!(rows[i].User2 in uid2index)) {
-                        uid2index[rows[i].User2] = Object.keys(users).length;
-                        index2uid.push(rows[0].User2);
+                        uid2index[rows[i].User2] = Object.keys(uid2index).length;
+                        index2uid.push(rows[i].User2);
                     }
                     data.push([uid2index[rows[i].User1],uid2index[rows[i].User2],rows[i].MatchScore]);
                 }
                 
                 var autoMatches = blossom(data);
                 var successMessage = "Successfully matched users: "
+                var matchArray = [];
                 for (var i = 0; i < autoMatches.length; i++) {
                     if (autoMatches[i] > i) {
-                        sql = "INSERT INTO user_match (userA, userB, communityID) VALUES ( ?, ? ,?) ";
+                        sql = "INSERT INTO user_match (userA, userB, communityID) VALUES (?, ?, ?) ";
                         values = [index2uid[i], index2uid[autoMatches[i]], communityID];
+                        matchArray.push([index2uid[i], index2uid[autoMatches[i]]]);
                         sql = mysql.format(sql, values);
                         console.log('autoMatch: going to insert with sql: ' + sql);
                         pool.query(sql, function(err, rows, fields) {
@@ -635,7 +638,7 @@ exports.autoMatch = function(communityID) {
                             } else {
                                 logger.debug('autoMatch inserting match for ' + index2uid[i] + ' & ' + index2uid[autoMatches[i]]);
                                 if (rows.affectedRows > 0) {
-                                    successMessage.concat(toString(index2uid[i]),"+",toString(index2uid[autoMatches[i]])," ");
+                                    successMessage = successMessage.concat(index2uid[i],"+",index2uid[autoMatches[i]]," ");
                                 } else {
                                     reject({
                                         'error': 400,
@@ -648,7 +651,8 @@ exports.autoMatch = function(communityID) {
                     }
                 }
                 resolve({
-                    'success': successMessage
+                    'success': successMessage,
+                    'matches': matchArray
                 });
             }
         });

@@ -23,6 +23,7 @@
 ./resources/cat/community/createCommunity.js
 ./resources/cat/community/updateGroupUser.js
 ./resources/cat/community/insertUserIntoCommunity.js
+./resources/cat/match/autoMatch.js
 ./resources/cat/match/insertMatch.js
 ./resources/cat/match/getCurrentMatches.js
 ./resources/cat/match/getMatchHistory.js

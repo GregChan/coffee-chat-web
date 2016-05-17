@@ -12,28 +12,29 @@ exports.postHandle = function(req, res) {
     //     // TODO: a more appropriate access control -> admin of given community
     //     res.status(401).end();
     // }
-    console.log('match/insertMatch: insertMatch: ' + userId);
-    insertMatch(commID, res, req);
+    console.log('match/autoMatch: autoMatching community ' + commID);
+    autoMatch(commID, res, req);
 }
 
-function insertMatch( commID, res, req) {
+function autoMatch(commID, res, req) {
     console.log('match/autoMatch: commID: ' + commID);
     var p1 = dbConn.autoMatch(commID);
     return p1.then(
         function(val) {
-            console.log("autoMatch: done ");
+            console.log("autoMatch: " + val.success);
+            for (var i = 0; i < (val.matches).length; i++) {
+                console.log("Sending match notification for users:", val.matches[i][0],val.matches[i][1]);
+                notifications.sendMatchNotificationFromJade(val.matches[i][0], val.matches[i][1]);
+            }
             res.json({
                 status: 'success',
                 url: '/'
             });
-            // TODO: send notification email on match
         }
     ).catch(
         function(reason) {
             console.log("autoMatch: catch ");
             res.status(reason.error).json(reason);
-            return;
         }
     );
-    return;
 }

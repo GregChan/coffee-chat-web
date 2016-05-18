@@ -4,8 +4,8 @@ html
     body
         header
             include ./includes/admin-header.jade
-        h1(class="center text-orange") Add a Match
-        div(class="row")
+        h3(class="center container text-orange") Match Specific Users
+        div(class="row container")
             div(class="input-field col s12 m6 l6")
                 select(id="user1" class="icons")
                     option(value="" disabled selected)="User 1"
@@ -19,6 +19,13 @@ html
         div(class="row")
             div(class="center col s12 m12 l12" style="padding:0px 20px")
                 a(class='btn coffee-chat-orange' id='submit') Connect Users
+        p 
+        br
+        h3(class="center container text-orange") Automatch All Users
+        p
+        div(class="row")
+            div(class="center col s12 m12 l12" style="padding:0px 20px")
+                a(class='btn coffee-chat-orange' id='automatch') Connect Communty
         
     include ./includes/js.jade
     script var users = !{JSON.stringify(users)}

@@ -23,5 +23,19 @@
                 }
             });
         });
+        $('#automatch').click(function(e) {
+            $.ajax({
+                type: 'POST',
+                url: '/cat/user/community/1/match/automatch',
+                success: function(data) {
+                    console.log(data);
+                    Materialize.toast('Success!', 2000);
+                },
+                error: function(textStatus, errorThrown) {
+                    console.log(errorThrown);
+                    Materialize.toast('Automatching error!', 3000);
+                }
+            });
+        });
     });
 })();

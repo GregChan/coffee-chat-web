@@ -3,6 +3,7 @@ var Promise = require('promise');
 var logger = require("../../../logger.js").getLogger();
 var async = require('async');
 var md5 = require('MD5');
+var blossom = require('edmonds-blossom');
 
 var exports = module.exports = {};
 
@@ -572,6 +573,90 @@ exports.getCommunityGroupUsers = function(communityID, groupID) {
             }
         });
     });
+}
+
+exports.autoMatch = function(communityID) {
+    return new Promise(function(resolve, reject) {
+
+        var sql = 'select a.id as User1, b.id as User2, (select count(distinct c.itemID) from user_survey c join user_survey d on c.itemID = d.itemID where c.userID = a.id and d.userID = b.id) as MatchScore  from ((select id from user_basic as eligibleUsers where id in (select userID from user_community where communityID=?) and not exists (SELECT * FROM coffeechat.user_match where (userA = eligibleUsers.id and userAStatus < 3) or (userB = eligibleUsers.id and userBStatus < 3))) as a  join (select id from user_basic as eligibleUsers where id in (select userID from user_community where communityID=?) and not exists (SELECT * FROM coffeechat.user_match where (userA = eligibleUsers.id and userAStatus < 3) or (userB = eligibleUsers.id and userBStatus < 3))) as b)  where a.id < b.id  and not exists (SELECT * FROM coffeechat.user_match where (userA = a.id and userB = b.id) or (userA = b.id and userB = a.id)) order by User1, User2';
+        
+        var values = [communityID, communityID];
+        sql = mysql.format(sql, values);
+
+        console.log('autoMatch: going to query db with sql: ' + sql);
+
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+                logger.debug('Error in connection or query');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                
+                if (rows.length < 1) {
+                    resolve({
+                        message: 'There are no eligible matches in your community.'
+                    });
+                    return;
+                }
+                
+                var uid2index = {}
+                var index2uid = []
+                uid2index[rows[0].User1] = 0;
+                index2uid.push(rows[0].User1);
+                
+                var data = [];
+                for (var i = 0; i < rows.length; i++) {
+                    // console.log(rows[i].User1, rows[i].User2, rows[i].MatchScore);
+                    if (!(rows[i].User2 in uid2index)) {
+                        uid2index[rows[i].User2] = Object.keys(uid2index).length;
+                        index2uid.push(rows[i].User2);
+                    }
+                    data.push([uid2index[rows[i].User1],uid2index[rows[i].User2],rows[i].MatchScore]);
+                }
+                
+                var autoMatches = blossom(data);
+                var successMessage = "Successfully matched users: "
+                var matchArray = [];
+                for (var i = 0; i < autoMatches.length; i++) {
+                    if (autoMatches[i] > i) {
+                        sql = "INSERT INTO user_match (userA, userB, communityID) VALUES (?, ?, ?) ";
+                        values = [index2uid[i], index2uid[autoMatches[i]], communityID];
+                        matchArray.push([index2uid[i], index2uid[autoMatches[i]]]);
+                        sql = mysql.format(sql, values);
+                        console.log('autoMatch: going to insert with sql: ' + sql);
+                        pool.query(sql, function(err, rows, fields) {
+                            if (err) {
+                                logger.debug('Error in connection or query:');
+                                logger.debug(err);
+                                reject({
+                                    'error': 500,
+                                    'message': 'DB Error'
+                                });
+                            } else {
+                                logger.debug('autoMatch inserting match for ' + index2uid[i] + ' & ' + index2uid[autoMatches[i]]);
+                                if (rows.affectedRows > 0) {
+                                    successMessage = successMessage.concat(index2uid[i],"+",index2uid[autoMatches[i]]," ");
+                                } else {
+                                    reject({
+                                        'error': 400,
+                                        'message': 'Critical error in autoMatch insertion!'
+                                    });
+                                }
+
+                            }
+                        });
+                    }
+                }
+                resolve({
+                    'success': successMessage,
+                    'matches': matchArray
+                });
+            }
+        });
+    });  
 }
 
 exports.getUserAnalytics = function(userID, communityID) {

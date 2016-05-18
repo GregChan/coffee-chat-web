@@ -15,6 +15,7 @@
     "basic-auth": "^1.0.3",
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.1",
+    "edmonds-blossom": "^1.0.0",
     "express": "^4.13.3",
     "http-auth": "^2.2.8",
     "jade": "^1.11.0",

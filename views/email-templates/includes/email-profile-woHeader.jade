@@ -1,0 +1,42 @@
+table(class="profile-section email-container")
+	tr
+		td(style="padding: 0px;")
+			table(align="left" class="col-28")
+				tr
+					td(class="top-align")
+						img(class="responsive-img circle coffee-chat-circle" src="#{match.profilePic}")
+						h5(class="center text-light-grey name") #{match.firstName} #{match.lastName}
+						h6(class="center text-light-grey headline") #{match.headLine}	
+			table(align="left" class="col-28")
+				tr
+					td(class="top-align")
+						h5(class="section-title text-orange") Work Experience
+						div(class="spacer-15")
+						div(id="work-container")
+							if match.positions
+								if match.positions.work
+									for work in match.positions.work
+										div(class="item")
+											div(class="title text-grey") #{work.title}
+											div(class="subtitle text-light-grey") #{work.company}
+			table(align="left" class="col-28")
+				tr
+					td(class="top-align")
+						h5(class="section-title text-orange") Education
+						div(class="spacer-15")
+						div(id="education-container")
+							if match.positions
+								if match.positions.education
+									for education in match.positions.education
+										div(class="item")
+											div(class="title text-grey") #{education.title}
+											div(class="subtitle text-light-grey") #{education.school}
+			table(align="left" class="col-14")
+				tr
+					td(class="top-align")
+						h5(class="section-title text-orange") Interests
+						div(class="spacer-15")
+						div(id="interests-container text-grey")
+							if match.interests
+								for interest in match.interests
+									div interest

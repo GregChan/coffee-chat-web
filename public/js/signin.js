@@ -1,4 +1,5 @@
 (function() {
+	$('.modal-trigger').leanModal();
 	$('[data-submit]').click(function(e) {
 		$.ajax({
 			url: "/wild/user/login",

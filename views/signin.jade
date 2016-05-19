@@ -5,8 +5,6 @@ html
 		div(class="row")
 			include ./includes/home-header.jade
 		div(class="row valign-wrapper")
-			//-div(class="parallax")
-				//-img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")
 			div(class="container valign")
 				div(class="row text-orange" style="padding:50px")
 					h4 Sign in to your CoffeeChat account:
@@ -18,11 +16,11 @@ html
 										a(class="active" href="#admin") Admins
 					div(id="user" class="col s12 m12 l6 offset-l3 center" style="border-style:none solid solid solid; padding:15px")
 							a(class="waves btn sign-up-btn modal-trigger" href="#warning") Sign In With LinkedIn
-							div(id="warning" class="modal")
+							div(id="warning" class="modal text-orange")
 								div(class="modal-content center")
 									h5 Welcome to CoffeeChat!
 									a(class="waves btn linked-in-btn" href="/wild/oauth/auth")
-								div(class="modal-footer")
+								div(class="modal-footer center")
 									p **If you have trouble logging in to the site, please check our 
 										a(href="/faq" class="modal-action modal-close") FAQ page
 					div(id="admin" class="col s12 m12 l6 offset-l3 center" style="border-style:none solid solid solid; padding:15px")

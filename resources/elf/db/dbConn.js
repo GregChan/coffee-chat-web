@@ -16,6 +16,43 @@ var pool = mysql.createPool({
     database: process.env.DB_COFFEE_CHAT
 });
 
+exports.getMatchInfo = function(matchID)
+{
+    return new Promise(function(resolve, reject) {
+        var sql = 'SELECT * FROM coffeechat.user_match where id  = ?';
+        sql = mysql.format(sql, [matchID]);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query, in getMatchInfo function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    
+                    resolve({
+                            matchID: rows[0].id,
+                            userA: rows[0].userA,
+                            userB: rows[0].userB,
+                            communityID: rows[0].communityID,
+                            userAStatus: rows[0].userAStatus,
+                            userBStatus: rows[0].userBStatus,
+                            create_at: rows[0].create_at
+                    });
+                    return;
+                    
+                }        
+                reject({
+                    error: '401',
+                    message: 'invalid match id.'
+                });
+                
+            }
+        });
+    });
+}
+
 var getValueFromRating = function(str) {
     var value = 0;
     if (str == 'Very Poor') {
@@ -384,12 +421,10 @@ exports.insertUserIntoCommunity = function(data) {
                                 });
                             });
                         }
-
                         if (rows.length > 0) {
                             var communityID = rows[0].id;
-                            var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+                            sql = 'select * from user_community where userID = ? and communityID = ?';
                             sql = mysql.format(sql, [data.userID, communityID]);
-
                             pool.query(sql, function(err, rows, fields) {
                                 if (err) {
                                     logger.debug('Error in connection or query');
@@ -397,24 +432,44 @@ exports.insertUserIntoCommunity = function(data) {
                                         error: '500',
                                         message: 'DB error'
                                     });
-                                } else {
-                                    logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
-                                    connection.commit(function(err) {
-                                        if (err) {
-                                            connection.rollback(function() {
-                                                reject({
-                                                    'error': 500,
-                                                    'message': 'db error.'
-                                                });
-                                            });
-                                        }
-
-                                        resolve({
-                                            'success': '200'
-                                        });
-                                    });
                                 }
-                            });
+                                 if (rows.length == 0) {
+                                     var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+                                        sql = mysql.format(sql, [data.userID, communityID]);
+
+                                        pool.query(sql, function(err, rows, fields) {
+                                            if (err) {
+                                                logger.debug('Error in connection or query');
+                                                reject({
+                                                    error: '500',
+                                                    message: 'DB error'
+                                                });
+                                            } else {
+                                                logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
+                                                connection.commit(function(err) {
+                                                    if (err) {
+                                                        connection.rollback(function() {
+                                                            reject({
+                                                                'error': 500,
+                                                                'message': 'db error.'
+                                                            });
+                                                        });
+                                                    }
+
+                                                    resolve({
+                                                        'success': '200'
+                                                    });
+                                                });
+                                            }
+                                        });
+                                 }
+                                 else 
+                                 {
+                                    resolve({
+                                            'success': '200'
+                                    });
+                                 }
+                             });
                         } else {
                             reject({
                                 error: 404,
@@ -1759,7 +1814,7 @@ exports.getMatchHistory = function(userID, communityID) {
 
 exports.getCurrentMatches = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id, b.id as userID, b.firstName, b.email, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at from user_match as a inner join user_basic as b on (a.userA = b.id or a.userB = b.id) Where communityID = ? and ((userA = ? and userAStatus < 3) or (userB = ? and userBStatus < 3) ) and b.id != ? order by create_at';
+        var sql = 'select a.id, b.id as userID, b.firstName, b.email, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at from user_match as a inner join user_basic as b on (a.userA = b.id or a.userB = b.id) Where communityID = ? and ((userA = ? and userAStatus < 3 and userBStatus != 3) or (userB = ? and userBStatus < 3 and userAStatus != 3) ) and b.id != ? order by create_at';
 
         sql = mysql.format(sql, [communityID, userID, userID, userID]);
 

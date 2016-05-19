@@ -1,0 +1,9 @@
+html
+	head
+		include ./includes/styles.jade
+	body
+		h4(class="center text-grey" style="margin-bottom: 0px;") #{match.firstName} has Declined the Match with You!
+		include ./includes/email-profile-woHeader.jade
+		div(class="center")
+			div See more details at 
+				a(href="http://gocoffeechat.com") gocoffeechat.com

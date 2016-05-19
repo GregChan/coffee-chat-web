@@ -1,5 +1,6 @@
 var exports = module.exports = {};
 var dbConn = require("../../elf/db/dbConn.js");
+var notifications = require("../../elf/notifications/notifications.js");
 
 // var urlLinkedin='api.linkedin.com';
 // var urlBasicProfie='/v1/people/~?format=json';
@@ -19,6 +20,7 @@ function acceptMatch(userId, res, req) {
     return p1.then(
         function(val) {
             console.log("acceptMatch: done ");
+            sendNotification(userId, matchId);
             res.json({
                 status: 'success',
                 url: '/'
@@ -31,4 +33,31 @@ function acceptMatch(userId, res, req) {
         }
     );
     return;
+}
+
+function sendNotification(userId, matchID ) {
+    try{
+        console.log('match/acceptMatch/sendNotification: matchId: ' + matchID);
+        var p1 = dbConn.getMatchInfo(matchID);
+        return p1.then(
+            function(val) {
+                var uid = val.userA;
+                if(uid == userId)
+                {
+                    uid=val.userB;
+                }
+                notifications.sendMatchAcceptNotificationFromJade(userId, uid);
+               
+            }
+        ).catch(
+            function(reason) {
+                 console.log('match/acceptMatch/sendNotification: failed: ' + reason.message);
+            }
+        );
+        return;
+    }
+    catch(err)
+    {
+        console.log('match/acceptMatch/sendNotification - met error:  '+ err);
+    }
 }

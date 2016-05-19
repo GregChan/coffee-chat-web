@@ -26,7 +26,16 @@ div(class="section white #{match.userID}" id="match-accept")
                     i(class="material-icons large text-orange") done  
             div(class="col s6 m6 l6")
                 a(class="waves-effect left match-btn valign" id="decline-match")
-                    i(class="material-icons large text-grey") clear    
+                    i(class="material-icons large text-grey") clear  
+div(class="section white #{match.userID}" id="match-wait")
+    div(class="container center")
+        h4(class="section-title text-orange") CoffeeChat Accepted!
+        div(class="row center-align valign-wrapper")
+            div(class="center-align col s12 m12 l12")
+                i(class="material-icons large text-grey valign") date_range
+            //- div(class="left-align col s6 m6 s6")
+        h5(class="text-grey") 
+            div Waiting for the Response from #{match.firstName}.
 div(class="section white #{match.userID}" id="match-rate")
     div(class="container center")
         h4(class="section-title text-orange") CoffeeChat Accepted!
@@ -56,4 +65,5 @@ script.
     var matchId = !{match.userID}
     var matchNumber = !{match.id}
     var matchStatus = !{match.myStatus}
+    var matchStatusB = !{match.status}
 script(src="/public/js/match.js")

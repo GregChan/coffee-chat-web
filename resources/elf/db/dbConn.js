@@ -1814,7 +1814,7 @@ exports.getMatchHistory = function(userID, communityID) {
 
 exports.getCurrentMatches = function(userID, communityID) {
     return new Promise(function(resolve, reject) {
-        var sql = 'select a.id, b.id as userID, b.firstName, b.email, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at from user_match as a inner join user_basic as b on (a.userA = b.id or a.userB = b.id) Where communityID = ? and ((userA = ? and userAStatus < 3 and userBStatus < 3) or (userB = ? and userBStatus < 3 and userAStatus < 3) ) and b.id != ? order by create_at';
+        var sql = 'select a.id, b.id as userID, b.firstName, b.email, b.lastName, a.userAStatus, a.userBStatus, a.userA, a.userB, b.profilePicO, b.linkedInProfile, a.create_at from user_match as a inner join user_basic as b on (a.userA = b.id or a.userB = b.id) Where communityID = ? and ((userA = ? and userAStatus < 3 and userBStatus != 3) or (userB = ? and userBStatus < 3 and userAStatus != 3) ) and b.id != ? order by create_at';
 
         sql = mysql.format(sql, [communityID, userID, userID, userID]);
 

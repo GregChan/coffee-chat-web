@@ -2,7 +2,10 @@ html
 	head
 		include ./includes/styles.jade
 	body
-		include ./includes/home-header.jade
+		if (!curUser)
+			include ./includes/home-header.jade
+		else
+			include ./includes/landing-header.jade
 		div(class="parallax-container valign-wrapper")
 			div(class="parallax")
 				img(src="/public/images/background-pic.jpg" style="width:100%; min-width:1080px;")
@@ -27,7 +30,7 @@ html
 										a(href="/faq" class="modal-action modal-close") FAQ page
 							a(class="waves btn learn-more-btn clear" href="#About") Learn More
 						else
-							a(class="waves btn learn-more-btn clear" href="/survey") We'd like to know more about you.
+							a(class="waves btn  sign-up-btn" href="/") My CoffeeChat
 						//- if (!curUser)
 							div(class="row center-align")
 								div(class="col s12 m12 l4 offset-l4 white text-orange")

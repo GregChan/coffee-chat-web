@@ -39,7 +39,8 @@
         $('#submit-rating').hide();
         $('#match-accept').hide();
         $('#match-wait').hide();
-        $('#match-rate').hide();
+        $('#match-rate1').hide();
+        $('#match-rate2').hide();
         if (matchStatus < 2) {
             $('#match-accept').show();
         } else if (matchStatus == 2) {
@@ -49,7 +50,8 @@
             }
             else
             {
-                 $('#match-rate').show();
+                 $('#match-rate1').show();
+                 $('#match-rate2').show();
             }
         }
 

@@ -69,6 +69,17 @@ exports.getHandle = function(req, res) {
 					}, function(error, response, body) {
 						callback(error, JSON.parse(body));
 					});
+				},
+				function(callback) {
+					request({
+						url: process.env.BASE_URL + '/cat/community/' + req.communityID + '/name',
+						method: 'GET',
+						headers: {
+							'Cookie': 'userID=' + req.cookies.userID
+						}
+					}, function(error, response, body) {
+						callback(error, JSON.parse(body));
+					});
 				}
 			],
 			function(err, results) {
@@ -78,7 +89,8 @@ exports.getHandle = function(req, res) {
 						curUser: results[0],
 						curMatch: results[2],
 						matchHist: results[3],
-						metrics: results[4]
+						metrics: results[4],
+						commName: results[5]
 					});
 				} else {
 					res.render('index');

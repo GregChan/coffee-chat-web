@@ -393,6 +393,36 @@ exports.createCommunity = function(data) {
     });
 }
 
+exports.getCommunityName = function(commID) {
+    return new Promise(function(resolve, reject) {
+        var sql = 'select name from community_desc where id = ?';
+        sql = mysql.format(sql, commID);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('Error in connection or query, in getCommunityName function');
+                reject({
+                    error: '500',
+                    message: 'DB error'
+                });
+            } else {
+                if (rows.length > 0) {
+                    console.log('community id ' + commID);
+                    console.log('community name ' + rows[0].name);
+                        resolve({
+                            commName: rows[0].name
+                        });
+                        return;
+                }else{        
+                    reject({
+                        error: '401',
+                        message: 'not valid community id.'
+                    });
+                }
+            }
+        });
+    });
+}
+
 exports.insertUserIntoCommunity = function(data) {
     console.log(data);
     return new Promise(function(resolve, reject) {

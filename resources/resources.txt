@@ -56,3 +56,4 @@
 ./resources/wild/pages/admin/adminMatch.js
 ./resources/wild/pages/admin/adminMetrics.js
 ./resources/wild/pages/feedback.js
+./resources/wild/pages/landing.js

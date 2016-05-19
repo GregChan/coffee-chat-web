@@ -26,8 +26,7 @@ html
 			div(class="row center")
 				a(class="btn waves-effect waves-light coffee-chat-orange" data-submit data-save type="submit" name="action") Submit
 	include ./includes/footer.jade
-	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js")
+	include ./includes/js.jade
 	script(src="/public/js/survey.js")
 	script.
 		$('#company').openModal({

@@ -421,12 +421,10 @@ exports.insertUserIntoCommunity = function(data) {
                                 });
                             });
                         }
-
                         if (rows.length > 0) {
                             var communityID = rows[0].id;
-                            var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+                            sql = 'select * from user_community where userID = ? and communityID = ?';
                             sql = mysql.format(sql, [data.userID, communityID]);
-
                             pool.query(sql, function(err, rows, fields) {
                                 if (err) {
                                     logger.debug('Error in connection or query');
@@ -434,24 +432,44 @@ exports.insertUserIntoCommunity = function(data) {
                                         error: '500',
                                         message: 'DB error'
                                     });
-                                } else {
-                                    logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
-                                    connection.commit(function(err) {
-                                        if (err) {
-                                            connection.rollback(function() {
-                                                reject({
-                                                    'error': 500,
-                                                    'message': 'db error.'
-                                                });
-                                            });
-                                        }
-
-                                        resolve({
-                                            'success': '200'
-                                        });
-                                    });
                                 }
-                            });
+                                 if (rows.length == 0) {
+                                     var sql = 'insert into user_community (userID, communityID) values (?, ?)';
+                                        sql = mysql.format(sql, [data.userID, communityID]);
+
+                                        pool.query(sql, function(err, rows, fields) {
+                                            if (err) {
+                                                logger.debug('Error in connection or query');
+                                                reject({
+                                                    error: '500',
+                                                    message: 'DB error'
+                                                });
+                                            } else {
+                                                logger.debug('inserted new user ' + data.userID + ' into ' + data.communityID);
+                                                connection.commit(function(err) {
+                                                    if (err) {
+                                                        connection.rollback(function() {
+                                                            reject({
+                                                                'error': 500,
+                                                                'message': 'db error.'
+                                                            });
+                                                        });
+                                                    }
+
+                                                    resolve({
+                                                        'success': '200'
+                                                    });
+                                                });
+                                            }
+                                        });
+                                 }
+                                 else 
+                                 {
+                                    resolve({
+                                            'success': '200'
+                                    });
+                                 }
+                             });
                         } else {
                             reject({
                                 error: 404,

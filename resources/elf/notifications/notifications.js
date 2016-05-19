@@ -115,6 +115,42 @@ exports.sendMatchNotificationFromJade = function(userAId, userBId) {
 	});
 }
 
+exports.sendMatchAcceptNotificationFromJade = function(userAId, userBId) {
+	console.log("Something something soemthing...");
+	var formatData = function(match, to) {
+		return {
+			data: {
+				match: match
+			},
+			emails: [to]
+		};
+	};
+
+	console.log("Something something soemthing... 2");
+	getUserProfileForMatchForUsers(userAId, userBId, function(data) {
+		console.log("Something something soemthing... 3");
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email), 'match-notification-accept.jade', 'Your Match has been Accepted!');
+	});
+}
+
+exports.sendMatchDeclineNotificationFromJade = function(userAId, userBId) {
+	console.log("Something something soemthing...");
+	var formatData = function(match, to) {
+		return {
+			data: {
+				match: match
+			},
+			emails: [to]
+		};
+	};
+
+	console.log("Something something soemthing... 2");
+	getUserProfileForMatchForUsers(userAId, userBId, function(data) {
+		console.log("Something something soemthing... 3");
+		mail.sendNotificationEmailFromJadeTemplate(formatData(data.userA, data.userB.email), 'match-notification-decline.jade', 'Your Match has been Declined!');
+	});
+}
+
 exports.sendFeedbackNotification = function(matchId) {
 	console.log('send email notification');
 	getMatch(matchId, function(err, data) {

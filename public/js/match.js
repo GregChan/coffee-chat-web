@@ -38,11 +38,19 @@
 		});
         $('#submit-rating').hide();
         $('#match-accept').hide();
+        $('#match-wait').hide();
         $('#match-rate').hide();
         if (matchStatus < 2) {
             $('#match-accept').show();
         } else if (matchStatus == 2) {
-            $('#match-rate').show();
+            if(matchStatusB < 2)
+            {
+                 $('#match-wait').show();
+            }
+            else
+            {
+                 $('#match-rate').show();
+            }
         }
 
         $('#submit-rating').click(function(event){

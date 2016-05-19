@@ -13,27 +13,13 @@ html
                     div(class="row")
                         h5(class="center text-orange")=metrics.avgRating
                         h5(class="center text-orange") Average Rating
-                div(class="col s12 m12 l12 valign no-padding")
-                    if (curMatch.total > 0)
-                        each match in [curMatch.matches[0]]
-                            include ./includes/match.jade
-                    else
-                        //- br
-                        h3(class="center text-orange" id="match-announcement") CoffeeChats are Brewing!
-                        h4(class="center text-orange" id="match-announcement") Welcome to the CoffeeChat Community
-                        //- img(class="responsive-img center-block" src="/public/images/brewing.png")
-                        //- h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
-                        //- br
-                        div(class="section row profile-section valign-wrapper")
-                            div(class="container")
-                                div(class="col s6 offset-s3 m3 offset-m0 l3 offset-l0 profile-container")
-                                    a(href="#" id="match-link")
-                                        img(class="responsive-img circle coffee-chat-circle" id="match-pic" src="public/images/generic-profile.png" data-profile-pic)
-                                div(class="col s12 m9 l9")
-                                    div(style="font-size: 18px;") You currently have no CoffeeChat matches. You will be matched every week. Check back for your new CoffeeChat match soon!
-                    div(class="section row coffee-chat-grey-background")
+                div(class="section row")
                         div(class="container")
+                            h3(class="center text-orange" id="match-announcement") Welcome to the 
+                                =commName.commName + " CoffeeChat Community"
                             h4(class="center text-orange") How It Works
+                            div(class="center text-grey" style="padding-bottom: 15px") Studies have shown that more connected people prove to be more successful. As part of your CoffeeChat community, you will be matched each month for a virtual chat with the best and brightest in the 
+                                =commName.commName + " community network." 
                             div(class="col s12 m3 l3" style="margin-right: 12.5%")
                                 img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_1.jpg")
                                 div(class="text-grey center") Set aside convenient times to meet
@@ -44,11 +30,29 @@ html
                                 img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_3.jpg")
                                 div(class="text-grey center") Develop Professionally
                                 div(class="text-grey center") Meet mentors
+                div(class="col s12 m12 l12 valign no-padding")
+                    if (curMatch.total > 0)
+                        each match in [curMatch.matches[0]]
+                            include ./includes/match.jade
+                    else
+                        //- br
+                        h3(class="center text-orange" id="match-announcement") CoffeeChats are Brewing!
+                        //- img(class="responsive-img center-block" src="/public/images/brewing.png")
+                        //- h4(class="center text-orange" id="match-announcement") Please check back soon for new matches!
+                        //- br
+                        div(class="section row profile-section valign-wrapper")
+                            div(class="container")
+                                div(class="col s6 offset-s3 m3 offset-m0 l3 offset-l0 profile-container")
+                                    a(href="#" id="match-link")
+                                        img(class="responsive-img circle coffee-chat-circle" id="match-pic" src="public/images/generic-profile.png" data-profile-pic)
+                                div(class="col s12 m9 l9")
+                                    div(style="font-size: 18px;") You currently have no CoffeeChat matches. You will be matched every month. Check back for your new CoffeeChat match soon!
                     div(class="section row")
                         div(class="container")
                             h4(class="center text-orange") Track Your Progress
                             div(class="col s12 m3 l3")
-                                div(id="donutchart" style="width:100%; height: auto")
+                                h6(class="text-grey center") Your Matching Data
+                                div(class="center" id="donutchart" style="width:100%; height: auto")
                             div(class="col s12 m3 l3")
                                 h6(class="text-grey center") Goal Setting
                                 div(class="center") Plan the next steps for your career. Are there people in your community you want to meet? Let us know and we’ll put in a request 

@@ -22,12 +22,17 @@
 
 			var options = {
 				legend: 'bottom',
-				title: 'Your charts',
+				title: 'Your Matching Data',
 				pieHole: 0.4
 			};
 
 			var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-			chart.draw(data, options);
+			if(data.length > 0){
+				chart.draw(data, options);
+			}
+			else{
+				$('#donutchart').html("You have not had a CoffeeChat yet. Scheduling a CoffeeChat is the first step in getting more connected!")
+			}
 		}
 	});
 })();

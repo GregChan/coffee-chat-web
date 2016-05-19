@@ -1,4 +1,4 @@
-div(class="section white profile-section match#{match.userID}" id="match-profile")
+div(class="section coffee-chat-grey-background profile-section match#{match.userID}" id="match-profile")
     h4(class="center text-orange") CoffeeChat Connected!
     div(class="container")
         include ./profile.jade
@@ -36,18 +36,19 @@ div(class="section white #{match.userID}" id="match-wait")
             //- div(class="left-align col s6 m6 s6")
         h5(class="text-grey") 
             div Waiting for the Response from #{match.firstName}.
-div(class="section white #{match.userID}" id="match-rate")
+div(class="section white #{match.userID}" id="match-rate1")
     div(class="container center")
         h4(class="section-title text-orange") CoffeeChat Accepted!
         div(class="row center-align valign-wrapper")
             div(class="center-align col s12 m12 l12")
                 i(class="material-icons large text-grey valign") date_range
             //- div(class="left-align col s6 m6 s6")
-        h5(class="text-grey") 
-            div Contact #{match.firstName} at 
-                a(href="mailto:#{match.email}") #{match.email} 
-                and schedule a time to chat!
-        h5(class="text-grey") Come back and tell us how was your chat?
+        h5(class="text-grey") You can contact #{match.firstName} to schedule a time to chat at 
+                a(href="mailto:#{match.email}") #{match.email}
+div(class="section coffee-chat-grey-background #{match.userID}" id="match-rate2")
+    div(class="container center")
+        h4(class="section-title text-orange") Already Met?
+        h5(class="text-grey") How was your chat?
         div(class="rating text-orange")
             a(class="text-orange" id="one") &#9675;
             a(class="text-orange" id="two") &#9675;

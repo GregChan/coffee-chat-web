@@ -17,6 +17,7 @@
 ./resources/cat/community/getCommunityGroupUsers.js
 ./resources/cat/community/getCommunityAnalytics.js
 ./resources/cat/community/getCommunityAdmin.js
+./resources/cat/community/getCommunityName.js
 ./resources/cat/community/updateCommunityGroup.js
 ./resources/cat/community/deleteCommunityGroup.js
 ./resources/cat/community/insertUserIntoGroup.js

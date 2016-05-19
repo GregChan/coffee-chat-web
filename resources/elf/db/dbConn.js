@@ -396,7 +396,7 @@ exports.insertUserIntoCommunity = function(data) {
                                         message: 'DB error'
                                     });
                                 }
-                                 if (rows.length = 0) {
+                                 if (rows.length == 0) {
                                      var sql = 'insert into user_community (userID, communityID) values (?, ?)';
                                         sql = mysql.format(sql, [data.userID, communityID]);
 

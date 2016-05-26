@@ -2,18 +2,18 @@ html
 	head
 		include ./includes/styles.jade
 	body(class="admin-talent")
-		header
-			include ./includes/admin-header.jade
-			ul(class="side-nav fixed z-depth-0" id="slide-out")
-				li
-					h5(class="text-orange") Groups
-				li
-					div(style="display:inline-block")
-						a(class="admin-list-element" href="#all" data-all) All
-				div(data-groups)
-				li
-					a(data-add-group data-modal-trigger data-target="new-group" href="#new-group" class="admin-list-element center" style="display:block !important;") 
-						i(class="material-icons" style="margin-top:10px;") add_circle_outline
+		//-header
+		include ./includes/admin-header.jade
+		ul(class="side-nav fixed z-depth-0" id="slide-out")
+			li
+				h5(class="text-orange") Groups
+			li
+				div(style="display:inline-block")
+					a(class="admin-list-element" href="#all" data-all) All
+			div(data-groups)
+			li
+				a(data-add-group data-modal-trigger data-target="new-group" href="#new-group" class="admin-list-element center" style="display:block !important;") 
+					i(class="material-icons" style="margin-top:10px;") add_circle_outline
 		div(data-templates style="display: none;")
 			div(class="col m4 l4" data-past-match-template data-past-match)
 				a(data-past-match-link)

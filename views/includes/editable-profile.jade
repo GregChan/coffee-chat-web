@@ -44,7 +44,7 @@ div(class="section white profile-section profile-edit")
 						div(class="valign-wrapper text-grey" data-add-icon="data-education-container" data-type="data-education")
 							span(class="icon")
 								i(class="material-icons") add_circle_outline
-							span(class="valign") ADD POSITION
+							span(class="valign") ADD EDUCATION
 		div(class="col s12 m3 l3" data-interests)
 			h5(class="section-title text-orange") Interests
 			if interests && interests.fields
@@ -52,4 +52,4 @@ div(class="section white profile-section profile-edit")
 					for item in field.values
 						div ##{item.name}
 			else
-				div Please answer the questions below to complete your profile!
+				div Open the "Show more settings" tab to complete your profile!

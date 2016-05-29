@@ -2,6 +2,7 @@ var exports = module.exports = {};
 var dbConn = require("../../elf/db/dbConn.js");
 var logger = require("../../../logger.js").getLogger();
 var request = require('request');
+var notifications = require("../../elf/notifications/notifications.js");
 
 var urlLinkedin = 'api.linkedin.com';
 var urlBasicProfie = '/v1/people/~:(id,first-name,last-name,picture-urls::(original),email-address,industry,headline,specialties,positions,picture-url,public-profile-url)?format=json';
@@ -65,9 +66,16 @@ function createUserIfNotExist(parsed, accessToken, res) {
 	return p1.then(
 		function(val) {
 
-			logger.debug("getUserID: get user id: " + val);
+			logger.debug("getUserID: get user id: " + val.userID);
+			if(val.firstName === undefined || val.email === undefined)
+			{
+			}
+			else 
+			{
+  				notifications.sendSignupConfirmationFromJade(val.firstName, val.email);
+			}
 			res.json({
-				user: val
+				user: val.userID
 			});
 		}
 	).catch(

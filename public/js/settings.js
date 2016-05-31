@@ -68,6 +68,9 @@
 
 
 		console.log(pastMatches);
+		if(pastMatches.matches.length == 0){
+			$('#cy').html('Start matching today to view your connections!');
+		}
 
 		for (var i = 0; i < pastMatches.matches.length; i++) {
 			console.log(pastMatches.matches[i]);

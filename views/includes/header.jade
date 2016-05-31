@@ -1,11 +1,11 @@
 nav(class="white z-depth-0 clear")
-	div(class="nav-wrapper coffee-chat-grey-bottom-border")
+	div(class="nav-wrapper sticky-nav coffee-chat-grey-bottom-border")
 		div(class="")
 			a(href="/coffeeChat")
 				img(class="coffee-chat-logo coffee-chat-home-logo left brand-logo" src="/public/images/USETHISLOGO.png")
-			div(class="right")
+			div(class="right sticky-contents")
 				a(class="dropdown-button" data-activates="dropdown")
-					img(class="account-pic circle" src=curUser.profilePic)
+					img(class="account-pic circle" style="border: 2px solid #ff7050" src=curUser.profilePic)
 				ul(id="dropdown" class="dropdown-content")
 					li
 						a(class="coffee-chat-grey" href="/") Home

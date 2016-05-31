@@ -1,0 +1,23 @@
+html
+	head
+		include ./includes/styles.jade
+	body(class="coffee-chat-grey-background")
+		div(class="mailHeader mailBody")
+			img(class="coffee-chat-logo center" src="http://www.gocoffeechat.com/public/images/logo.png")
+		div(class="mailBody text-grey")
+			h1 Welcome to CoffeeChat!
+			div Nice to meet you, #{user.firstName}!
+			div
+				span(class="text-orange bold") CoffeeChat  
+				span  is a platform that helps organizations make connections, manage development, and improve performance through encouraging connectivity in the workplace. The simplicity of the platform allows for minimal planning effort but high-level results.
+			div Through CoffeeChat, you're automatically set up with one-on-one meetings with people from all over your network to create connections and opportunity.
+			div Complete your profile for a better match today!
+			div
+				a(class="sign-up-btn" href="http://www.goCoffeeChat.com/") goCoffeeChat.com
+			div 
+			div
+				span Happy Connecting!  
+				span(class="text-light-grey")  - Team CoffeeChat
+		div(class="mailFooter") 
+			div Make Connections - Manage Development - Improve Performance
+			div © 2016 CoffeeChat 

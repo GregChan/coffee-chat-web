@@ -151,6 +151,21 @@ exports.sendMatchDeclineNotificationFromJade = function(userAId, userBId) {
 	});
 }
 
+exports.sendSignupConfirmationFromJade = function(firstName, email) {
+	console.log("Going to send signup confirmation email to "+firstName);
+	var formatData = function(firstName, to) {
+		return {
+			data: {
+				user: {
+					firstName:firstName
+				}
+			},
+			emails: [to]
+		};
+	};
+	mail.sendNotificationEmailFromJadeTemplate(formatData(firstName, email), 'signup-confirmation.jade', 'Hey there!');
+}
+
 exports.sendFeedbackNotification = function(matchId) {
 	console.log('send email notification');
 	getMatch(matchId, function(err, data) {

@@ -156,5 +156,17 @@
 				}
 			});
 		}
+		$('[data-search]').click(function(e) {
+			console.log("Searching: " + $("#search").val());
+				for (var i = 0; i < users.length; i++) {
+					if(users[i].firstName + " " + users[i].lastName == $("#search").val() 
+						|| users[i].firstName == $("#search").val() 
+						|| users[i].lastName == $("#search").val()){
+						window.location.href = '/admin/talent/#' + users[i].id;
+					}
+				}
+		});
+		
+		
 	});
 })();

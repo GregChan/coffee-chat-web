@@ -10,10 +10,18 @@ html
 				a(class='dropdown-button btn coffee-chat-orange' href='#' data-activates='dropdown1') Select Timeframe
 				ul(id='dropdown1' class='dropdown-content')
 					li()
+						a(href="javascript:showJoins('day')") Day
+					li()
+						a(href="javascript:showJoins('month')") Month
+			div(class="col s12 m12 l12" id="joins_chart" style="height:80%")
+			div(class="col" style="padding:0px 20px")
+				a(class='dropdown-button btn coffee-chat-orange' href='#' data-activates='dropdown2') Select Timeframe
+				ul(id='dropdown2' class='dropdown-content')
+					li()
 						a(href="javascript:displayDay()") Day
 					li()
 						a(href="javascript:displayMonth()") Month
-			div(class="col s12 m12 l12" id="curve_chart" style="height:80%")
+			div(class="col s12 m12 l12" id="match_chart" style="height:80%")
 		div(class="row coffee-chat-grey-background text-orange")
 			div(class="container")
 				div(class="row valign-wrapper ")
@@ -48,5 +56,8 @@ html
 	include ./includes/js.jade
 	script var metrics = !{JSON.stringify(metrics)}
 	script var matches = !{JSON.stringify(matches.matches)}
+	script var joinsDay = !{JSON.stringify(joinsDay)}
+	script var joinsMonth = !{JSON.stringify(joinsMonth)}
+	script console.log(joinsMonth)
 	script(src="/public/js/admin-metrics.js")
 	

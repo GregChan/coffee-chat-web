@@ -495,6 +495,9 @@ nav {
 /* materialize overrides */
 .dropdown-content {
   color: #565a56;
+}
+
+.dd-120 {
   width: 120px !important;
 }
 

@@ -1,15 +1,19 @@
 nav(class="white z-depth-0 clear nav-absolute nav-fade")
-	div(class="nav-wrapper sticky-nav ")
-		div(class="")
+	div(class="nav-wrapper sticky-nav")
+		div(class="nav-fade")
 			a(href="/coffeeChat")
 				img(class="coffee-chat-logo coffee-chat-home-logo left brand-logo" src="/public/images/USETHISLOGO.png")
-			div(class="right")
-				a(class="dropdown-button" data-activates="dropdown")
-					img(class="account-pic circle" style="border: 2px solid white" src=curUser.profilePic)
-				ul(id="dropdown" class="dropdown-content")
+			div(class="right sticky-contents")
+				a(class="dropdown-button home-header" data-activates="dropdown")
+					div(class="home-header")
+						img(class="account-pic circle" style="vertical-align: middle; border: 1px solid white" src=curUser.profilePic)
+						i(class="material-icons" id="#dropdown-arrow" style="vertical-align: middle; display: inline-block; margin-right: 5px; -webkit-text-stroke: 1px white;") arrow_drop_down
+				ul(id="dropdown" class="dd-120 dropdown-content")
 					li
 						a(class="coffee-chat-grey" href="/") Home
 					li
 						a(class="coffee-chat-grey" href="/settings") Settings
 					li
 						a(class="coffee-chat-grey" href="/wild/user/signout") Signout
+	script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+	script(src="/public/js/nav.js")

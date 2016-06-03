@@ -36,6 +36,20 @@
                 }
 			}
 		});
+        $.ajax({
+			type: 'GET',
+			url: '/cat/user/community/1/match/' + matchId + '/commonalities',
+            success: function(commonalities) {
+                console.log(Object.keys(commonalities).length);
+                if (commonalities && Object.keys(commonalities).length > 0) {
+                    for (var key in commonalities) {
+                        $("#commonalities").append("<div><h6>"+key+":</h6> "+commonalities[key]+"</div>");
+                    }
+                } else {
+                    $('#commonalities').hide();
+                }
+			}
+		});
         $('#submit-rating').hide();
         $('#match-accept').hide();
         $('#match-wait').hide();

@@ -1707,7 +1707,7 @@ exports.getCommunityAdmin = function(userID) {
         var sql = 'select id from community_desc where adminUserID = ?';
 
         sql = mysql.format(sql, [userID]);
-        logger.debug('getAllMatches: going to query db with sql: ' + sql);
+        logger.debug('getCommunityAdmin: going to query db with sql: ' + sql);
         pool.query(sql, function(err, rows, fields) {
             if (err) {
                 logger.debug('DB connection error');
@@ -1721,6 +1721,44 @@ exports.getCommunityAdmin = function(userID) {
             if (rows.length > 0) {
                 logger.debug('getCommunityAdmin for ' + userID + ': ' + rows[0].id);
                 resolve(rows);
+            } else {
+                resolve({});
+            }
+        });
+    });
+}
+
+exports.getCommonalities = function(userID, matchUserID) {
+    /* Description:
+     * returns the commonalities of two users
+     */
+
+    return new Promise(function(resolve, reject) {
+        var sql = 'select (select fieldName from survey_field_desc where fieldID = c.fieldID) as Category, c.name as Commonality   from (select a.fieldID, a.name    from ((select * from survey_field_items where id in (select itemID from user_survey where userID = ?)) a    join (select * from survey_field_items where id in (select itemID from user_survey where userID = ?)) b    on a.name = b.name)) c LIMIT 0, 1000';
+
+        sql = mysql.format(sql, [userID, matchUserID]);
+        logger.debug('getCommonalities: going to query db with sql: ' + sql);
+        pool.query(sql, function(err, rows, fields) {
+            if (err) {
+                logger.debug('DB connection error');
+                logger.debug(err);
+                reject({
+                    'error': '500',
+                    'message': 'DB Error'
+                });
+                return;
+            }
+            if (rows.length > 0) {
+                var commonalities = {};
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (!commonalities[row.Category]) {
+                        commonalities[row.Category] = "#" + row.Commonality;
+                    } else {
+                        commonalities[row.Category] = commonalities[row.Category].concat(", #", row.Commonality);
+                    }
+                }
+        resolve(commonalities);
             } else {
                 resolve({});
             }

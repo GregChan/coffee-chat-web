@@ -32,6 +32,7 @@
 ./resources/cat/match/acceptMatch.js
 ./resources/cat/match/rejectMatch.js
 ./resources/cat/match/feedbackMatch.js
+./resources/cat/match/getCommonalities.js
 ./resources/cat/match/updateUserFeedbackForMatch.js
 ./resources/cat/match/getUserFeedbackForMatch.js
 ./resources/cat/match/generateRandMatch.js

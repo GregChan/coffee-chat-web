@@ -8,7 +8,7 @@ exports.getHandle = function(req, res) {
 	async.parallel([
 			function(callback) {
 				request({
-					url: process.env.BASE_URL + '/cat/community/1/users',
+					url: process.env.BASE_URL + '/cat/community/' + req.communityID + '/users',
 					method: 'GET',
 					headers: {
 						'Cookie': 'userID=' + req.cookies.userID

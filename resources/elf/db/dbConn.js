@@ -2329,7 +2329,9 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                     userId += rows[0].id;
                     logger.debug("createUserIfNotExist: found user: " + userId);
                     connection.release();
-                    resolve(userId);
+                    resolve({
+                            'userID': userId
+                    });
                     return;
                 }
 
@@ -2388,7 +2390,11 @@ exports.createUserIfNotExist = function(obj, accessToken) {
                                 userId = result.insertId;
                                 logger.debug("createUserIfNotExist: created user: " + userId);
                                 addPositions(userId, obj.positions, connection);
-                                resolve(userId);
+                                resolve({
+                                    'userID': userId,
+                                    'firstName':firstName,
+                                    'email':email
+                                });
                             } else {
                                 logger.debug('Error in connection database');
                                 connection.release();

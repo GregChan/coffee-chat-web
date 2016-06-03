@@ -10,10 +10,10 @@ html
 				a(class='dropdown-button btn coffee-chat-orange' href='#' data-activates='dropdown1') Select Timeframe
 				ul(id='dropdown1' class='dropdown-content')
 					li()
-						a(href="javascript:displayDay()") Day
+						a(href="javascript:showJoins('day')") Day
 					li()
-						a(href="javascript:displayMonth()") Month
-			div(class="col s12 m12 l12" id="curve_chart" style="height:80%")
+						a(href="javascript:showJoins('month')") Month
+			div(class="col s12 m12 l12" id="joins_chart" style="height:80%")
 		div(class="row coffee-chat-grey-background text-orange")
 			div(class="container")
 				div(class="row valign-wrapper ")
@@ -48,5 +48,18 @@ html
 	include ./includes/js.jade
 	script var metrics = !{JSON.stringify(metrics)}
 	script var matches = !{JSON.stringify(matches.matches)}
+	script var joinsDay = !{JSON.stringify(joinsDay)}
+	script var joinsMonth = !{JSON.stringify(joinsMonth)}
+	script var acceptDay = !{JSON.stringify(acceptDay)}
+	script var acceptMonth = !{JSON.stringify(acceptMonth)}
+	script var rejectDay = !{JSON.stringify(rejectDay)}
+	script var rejectMonth = !{JSON.stringify(rejectMonth)}
+	script var feedDay = !{JSON.stringify(feedDay)}
+	script var feedMonth = !{JSON.stringify(feedMonth)}
+	script var savesDay = !{JSON.stringify(savesDay)}
+	script var savesMonth = !{JSON.stringify(savesMonth)}
+	script var savepDay = !{JSON.stringify(savepDay)}
+	script var savepMonth = !{JSON.stringify(savepMonth)}
+	script console.log(joinsMonth)
 	script(src="/public/js/admin-metrics.js")
 	

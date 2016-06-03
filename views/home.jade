@@ -2,7 +2,10 @@ html
     head
         include ./includes/styles.jade
     body
-        include ./includes/header.jade
+        if (isAdmin)
+            include ./includes/header-admin.jade
+        else
+            include ./includes/header.jade
         div(class="current-matches") 
             div(class="row")
                 //- div(class="center col s12 m2 l2 valign")
@@ -14,22 +17,22 @@ html
                         h5(class="center text-orange")=metrics.avgRating
                         h5(class="center text-orange") Average Rating
                 div(class="section row")
-                        div(class="container")
-                            h3(class="center text-orange" id="match-announcement") Welcome to the 
-                                =commName.commName + " CoffeeChat Community"
-                            h4(class="center text-orange") How It Works
-                            div(class="center text-grey" style="padding-bottom: 15px") Studies have shown that more connected people prove to be more successful. As part of your CoffeeChat community, you will be matched each month for a virtual chat with the best and brightest in the 
-                                =commName.commName + " community network." 
-                            div(class="col s12 m3 l3" style="margin-right: 12.5%")
-                                img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_1.jpg")
-                                div(class="text-grey center") Set aside convenient times to meet
-                            div(class="col s12 m3 l3" style="margin-right: 12.5%")
-                                img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_2.jpg")
-                                div(class="text-grey center") Connect with similar people at all levels of your company
-                            div(class="col s12 m3 l3")
-                                img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_3.jpg")
-                                div(class="text-grey center") Develop Professionally
-                                div(class="text-grey center") Meet mentors
+                    div(class="container")
+                        h3(class="center text-orange" id="match-announcement") Welcome to the 
+                            =commName.commName + " CoffeeChat Community"
+                        h4(class="center text-orange") How It Works
+                        div(class="center text-grey" style="padding-bottom: 15px") Studies have shown that more connected people prove to be more successful. As part of your CoffeeChat community, you will be matched each month for a virtual chat with the best and brightest in the 
+                            =commName.commName + " community network." 
+                        div(class="col s12 m3 l3" style="margin-right: 12.5%")
+                            img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_1.jpg")
+                            div(class="text-grey center") Set aside convenient times to meet
+                        div(class="col s12 m3 l3" style="margin-right: 12.5%")
+                            img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_2.jpg")
+                            div(class="text-grey center") Connect with similar people at all levels of your company
+                        div(class="col s12 m3 l3")
+                            img(class="responsive-img circle coffee-chat-circle match-pic" style="margin-bottom: 10px;" src="public/images/circle_3.jpg")
+                            div(class="text-grey center") Develop Professionally
+                            div(class="text-grey center") Meet mentors
                 div(class="col s12 m12 l12 valign no-padding")
                     if (curMatch.total > 0)
                         each match in [curMatch.matches[0]]

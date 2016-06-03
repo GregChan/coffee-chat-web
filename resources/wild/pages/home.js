@@ -80,6 +80,18 @@ exports.getHandle = function(req, res) {
 					}, function(error, response, body) {
 						callback(error, JSON.parse(body));
 					});
+				},
+				function(callback) {
+					request({
+						method: 'GET',
+						json: true,
+						url: process.env.BASE_URL + '/cat/user/' + req.loginUserID + '/admin',
+						headers: {
+							'Cookie': 'userID=' + req.cookies.userID
+						}
+					}, function(error, response, body) {
+						callback(error, body.length);
+					});
 				}
 			],
 			function(err, results) {
@@ -90,7 +102,8 @@ exports.getHandle = function(req, res) {
 						curMatch: results[2],
 						matchHist: results[3],
 						metrics: results[4],
-						commName: results[5]
+						commName: results[5],
+						isAdmin: results[6]
 					});
 				} else {
 					res.render('index');

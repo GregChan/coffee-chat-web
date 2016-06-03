@@ -1707,7 +1707,7 @@ exports.getCommunityAdmin = function(userID) {
         var sql = 'select id from community_desc where adminUserID = ?';
 
         sql = mysql.format(sql, [userID]);
-
+        logger.debug('getAllMatches: going to query db with sql: ' + sql);
         pool.query(sql, function(err, rows, fields) {
             if (err) {
                 logger.debug('DB connection error');
@@ -1718,7 +1718,6 @@ exports.getCommunityAdmin = function(userID) {
                 });
                 return;
             }
-
             if (rows.length > 0) {
                 logger.debug('getCommunityAdmin for ' + userID + ': ' + rows[0].id);
                 resolve(rows);
@@ -1795,7 +1794,7 @@ exports.getMatchHistory = function(userID, communityID) {
 
         sql = mysql.format(sql, [communityID, userID, userID, userID]);
 
-        console.log('getCurrentMatches: going to query db with sql: ' + sql);
+        console.log('getMatchHistory: going to query db with sql: ' + sql);
 
         pool.query(sql, function(err, rows, fields) {
             if (err) {
@@ -1805,7 +1804,7 @@ exports.getMatchHistory = function(userID, communityID) {
                     message: 'DB error'
                 });
             } else {
-                logger.debug('getCurrentMatches for ' + userID + ' with community ' + communityID);
+                logger.debug('getMatchHistory for ' + userID + ' with community ' + communityID);
                 var result = {};
                 result["community"] = communityID;
                 result["total"] = rows.length;

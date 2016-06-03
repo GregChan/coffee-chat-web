@@ -18,6 +18,21 @@
   border-bottom-color: rgba(170,165,165,0.0);
 } 
 
+.sticky-nav-white {
+  position: fixed !important;
+  width: 100%;
+  height: 62px !important;
+  top: 0;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  background-color: #fff;
+  border-bottom-color: rgba(170,165,165,1.0);
+} 
+
+.admin-nav {
+  font-size: 16px !important;
+} 
+
 .sticky-contents {
   position: relative !important;
   right: 0;
@@ -126,7 +141,8 @@ h6 {
 
 .account-pic {
   height: 84%;
-  margin: 5px !important;
+  margin-top: 3px !important;
+  margin-right: 3px !important;
 }
 
 .parallax-container {
@@ -287,6 +303,11 @@ textarea {
   font-weight: 500;
 }
 
+.home-header {
+  display: inline-block;
+  color: #565a56;
+}
+
 .profile-edit .editable i {
   color: #565a56;
   font-size: 15px;
@@ -437,7 +458,7 @@ textarea {
 }
 
 .nav-btn {
-  margin-top: 13px !important;
+  margin-top: 11px !important;
   border: 1px solid !important;
   border-radius: 10px !important;
   height: 40px;
@@ -445,10 +466,10 @@ textarea {
   background: #ff7050;
   color: #fff;
   font-family: lato;
-  font-size: 20px !important;
+  font-size: 16px !important;
   font-weight: 500 !important;
   /*padding-top: 5px !important;*/
-  margin-right: 5px !important;
+  margin-right: 10px !important;
   /*padding-left: 5px !important;*/
   text-shadow:none;
   text-transform: none !important;
@@ -457,6 +478,10 @@ textarea {
 
 .navbar-fixed {
   height: 62px;
+}
+
+.admin-logo {
+  height: 28px;
 }
 
 .nav-wrapper {
@@ -470,6 +495,7 @@ nav {
 /* materialize overrides */
 .dropdown-content {
   color: #565a56;
+  width: 120px !important;
 }
 
 .btn-outline:hover {

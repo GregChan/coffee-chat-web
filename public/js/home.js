@@ -16,8 +16,6 @@
 				pieData.push([group.groupName, group.totalConnections])
 			}
 
-			console.log(pieData);
-
 			var data = google.visualization.arrayToDataTable(pieData);
 
 			var options = {

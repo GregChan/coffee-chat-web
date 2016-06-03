@@ -12,9 +12,9 @@ exports.path = 'admin/metrics';
 
 
 exports.getHandle = function(req, res) {
-	var action;
-	var joinsDay;
-	var joinsMonth;
+	var action, joinsDay, joinsMonth, acceptDay, 
+	acceptMonth, rejectDay, rejectMonth, feedDay, 
+	feedMonth, savepDay, savepMonth, savesDay, savesMonth;
 	if(req.communityID == '41'){
 		action = "join-community Deloitte";
 	}
@@ -26,21 +26,99 @@ exports.getHandle = function(req, res) {
 	}
 	panel.segmentation({
 		event: action,
-		from_date: "2016-03-01",
+		from_date: "2016-05-01",
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
 		joinsDay = data;
-	  	console.log(data);
 	});
 	panel.segmentation({
 		event: action,
-		from_date: "2016-03-01",
+		from_date: "2016-05-01",
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
 		joinsMonth = data;
-	  	console.log(data);
+	});
+	panel.segmentation({
+		event: "accept-match",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "month"
+	}).then(function(data) {
+		acceptMonth = data;
+	});
+	panel.segmentation({
+		event: "accept-match",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "day"
+	}).then(function(data) {
+		acceptDay = data;
+	});
+	panel.segmentation({
+		event: "reject-match",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "month"
+	}).then(function(data) {
+		rejectMonth = data;
+	});
+	panel.segmentation({
+		event: "reject-match",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "day"
+	}).then(function(data) {
+		rejectDay = data;
+	});
+	panel.segmentation({
+		event: "feedback-rating 1",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "month"
+	}).then(function(data) {
+		feedMonth = data;
+	});
+	panel.segmentation({
+		event: "feedback-rating 1",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "day"
+	}).then(function(data) {
+		feedDay = data;
+	});
+	panel.segmentation({
+		event: "save-profile",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "day"
+	}).then(function(data) {
+		savepDay = data;
+	});
+	panel.segmentation({
+		event: "save-profile",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "month"
+	}).then(function(data) {
+		savepMonth = data;
+	});
+	panel.segmentation({
+		event: "save-survey",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "day"
+	}).then(function(data) {
+		savesDay = data;
+	});
+	panel.segmentation({
+		event: "save-survey",
+		from_date: "2016-05-01",
+		to_date: "2016-06-01",
+		unit: "month"
+	}).then(function(data) {
+		savesMonth = data;
 	});
 	async.parallel([
 			function(callback) {
@@ -90,7 +168,17 @@ exports.getHandle = function(req, res) {
 					metrics: results[1],
 					matches: results[2],
 					joinsDay: joinsDay["data"].values[action],
-					joinsMonth: joinsMonth["data"].values[action]
+					joinsMonth: joinsMonth["data"].values[action],
+					acceptDay: acceptDay["data"].values["accept-match"],
+					acceptMonth: acceptMonth["data"].values["accept-match"],
+					rejectDay: rejectDay["data"].values["reject-match"],
+					rejectMonth: rejectMonth["data"].values["reject-match"],
+					feedDay: feedDay["data"].values["feedback-rating 1"],
+					feedMonth: feedMonth["data"].values["feedback-rating 1"],
+					savepDay: savepDay["data"].values["save-profile"],
+					savepMonth: savepMonth["data"].values["save-profile"],
+					savesDay: savesDay["data"].values["save-survey"],
+					savesMonth: savesMonth["data"].values["save-survey"]
 				}
 
 				res.render('admin-metrics', data);

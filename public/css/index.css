@@ -141,7 +141,7 @@ h6 {
 
 .account-pic {
   height: 84%;
-  margin-top: 3px !important;
+  margin-bottom: 1px !important;
   margin-right: 3px !important;
 }
 
@@ -566,6 +566,9 @@ nav {
 @media(max-width: 600px) {
   .past-match {
     height: 320px;
+  }
+  .account-pic {
+    margin-top: 5px !important;
   }
 }
 

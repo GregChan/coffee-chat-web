@@ -21,6 +21,7 @@
     "jade": "^1.11.0",
     "juice": "^1.10.0",
     "log4js": "^0.6.30",
+    "mixpanel-data-export": "^1.8.2",
     "mysql": "^2.10.2",
     "nib": "^1.1.0",
     "node-mysql": "^0.4.2",

@@ -51,7 +51,8 @@ html
 				div(class="talent collection")
 					for user in users
 						a(name="#{user.id}")
-						div(href="#" class="#{user.id} collection-item" data-user)
+						div(class="anchor-fix-2")
+						div(href="#" class="#{user.id} collection-item " data-user)
 							div(class="row valign-wrapper no-padding")
 								a(href="#{user.linkedInProfile}")
 									img(class="profile-pic circle" src=user.profilePic || '/public/images/generic-profile.png')

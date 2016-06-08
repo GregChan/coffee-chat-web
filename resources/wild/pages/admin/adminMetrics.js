@@ -146,19 +146,19 @@ exports.getHandle = function(req, res) {
 				}, function(error, response, body) {
 					callback(error, JSON.parse(body));
 				});
-			},
-
-			function(callback) {
-				request({
-					url: process.env.BASE_URL + '/cat/user/community/1/match/all',
-					method: 'GET',
-					headers: {
-						'Cookie': 'userID=' + req.cookies.userID
-					}
-				}, function(error, response, body) {
-					callback(error, JSON.parse(body));
-				});
 			}
+
+			// function(callback) {
+			// 	request({
+			// 		url: process.env.BASE_URL + '/cat/user/community/1/match/all',
+			// 		method: 'GET',
+			// 		headers: {
+			// 			'Cookie': 'userID=' + req.cookies.userID
+			// 		}
+			// 	}, function(error, response, body) {
+			// 		callback(error, JSON.parse(body));
+			// 	});
+			// }
 		],
 		function(err, results) {
 			if (!err) {
@@ -166,7 +166,7 @@ exports.getHandle = function(req, res) {
 				var data = {
 					users: results[0],
 					metrics: results[1],
-					matches: results[2],
+					// matches: results[2],
 					joinsDay: joinsDay["data"].values[action],
 					joinsMonth: joinsMonth["data"].values[action],
 					acceptDay: acceptDay["data"].values["accept-match"],

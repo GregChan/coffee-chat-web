@@ -163,10 +163,10 @@ exports.validatePassword = function(email, pw)
                         return;
                     }
                 }        
-                reject({
-                    error: '401',
-                    message: 'not valid user.'
-                });
+                // reject({
+                //     error: '401',
+                //     message: 'not valid user.'
+                // });
                 
             }
         });

@@ -30,7 +30,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
-		joinsDay = data;
+		joinsDay = data["data"].values[action];
 	});
 	panel.segmentation({
 		event: action,
@@ -38,7 +38,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
-		joinsMonth = data;
+		joinsMonth = data["data"].values[action];
 	});
 	panel.segmentation({
 		event: "accept-match",
@@ -46,7 +46,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
-		acceptMonth = data;
+		acceptMonth = data["data"].values["accept-match"];
 	});
 	panel.segmentation({
 		event: "accept-match",
@@ -54,7 +54,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
-		acceptDay = data;
+		acceptDay = data["data"].values["accept-match"];
 	});
 	panel.segmentation({
 		event: "reject-match",
@@ -62,7 +62,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
-		rejectMonth = data;
+		rejectMonth = data["data"].values["reject-match"];
 	});
 	panel.segmentation({
 		event: "reject-match",
@@ -70,7 +70,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
-		rejectDay = data;
+		rejectDay = data["data"].values["reject-match"];
 	});
 	panel.segmentation({
 		event: "feedback-rating 1",
@@ -78,7 +78,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
-		feedMonth = data;
+		feedMonth = data["data"].values["feedback-rating 1"];
 	});
 	panel.segmentation({
 		event: "feedback-rating 1",
@@ -86,7 +86,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
-		feedDay = data;
+		feedDay = data["data"].values["feedback-rating 1"];
 	});
 	panel.segmentation({
 		event: "save-profile",
@@ -94,7 +94,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
-		savepDay = data;
+		savepDay = data["data"].values["save-profile"];
 	});
 	panel.segmentation({
 		event: "save-profile",
@@ -102,7 +102,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
-		savepMonth = data;
+		savepMonth = data["data"].values["save-profile"];
 	});
 	panel.segmentation({
 		event: "save-survey",
@@ -110,7 +110,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "day"
 	}).then(function(data) {
-		savesDay = data;
+		savesDay = data["data"].values["save-survey"];
 	});
 	panel.segmentation({
 		event: "save-survey",
@@ -118,7 +118,7 @@ exports.getHandle = function(req, res) {
 		to_date: "2016-06-01",
 		unit: "month"
 	}).then(function(data) {
-		savesMonth = data;
+		savesMonth = data["data"].values["save-survey"];
 	});
 	async.parallel([
 			function(callback) {
@@ -163,22 +163,23 @@ exports.getHandle = function(req, res) {
 		function(err, results) {
 			if (!err) {
 				console.log(results[0]);
+				// if(joinsDay joinsMonth)
 				var data = {
 					users: results[0],
 					metrics: results[1],
 					matches: results[2],
-					joinsDay: joinsDay["data"].values[action],
-					joinsMonth: joinsMonth["data"].values[action],
-					acceptDay: acceptDay["data"].values["accept-match"],
-					acceptMonth: acceptMonth["data"].values["accept-match"],
-					rejectDay: rejectDay["data"].values["reject-match"],
-					rejectMonth: rejectMonth["data"].values["reject-match"],
-					feedDay: feedDay["data"].values["feedback-rating 1"],
-					feedMonth: feedMonth["data"].values["feedback-rating 1"],
-					savepDay: savepDay["data"].values["save-profile"],
-					savepMonth: savepMonth["data"].values["save-profile"],
-					savesDay: savesDay["data"].values["save-survey"],
-					savesMonth: savesMonth["data"].values["save-survey"]
+					joinsDay: joinsDay,
+					joinsMonth: joinsMonth,
+					acceptDay: acceptDay,
+					acceptMonth: acceptMonth,
+					rejectDay: rejectDay,
+					rejectMonth: rejectMonth,
+					feedDay: feedDay,
+					feedMonth: feedMonth,
+					savepDay: savepDay,
+					savepMonth: savepMonth,
+					savesDay: savesDay,
+					savesMonth: savesMonth
 				}
 
 				res.render('admin-metrics', data);

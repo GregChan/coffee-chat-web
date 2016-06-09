@@ -11,7 +11,8 @@
 			success: function(data) {
 				window.location = '/admin/talent';
 			}
+			$('#error').html('Invalid username or password');
 		});
-		$('#error').html('Invalid username or password');
+		
 	});
 })();

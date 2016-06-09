@@ -9,13 +9,9 @@
 				pw: $('#password').val()
 			},
 			success: function(data) {
-				Materialize.toast('Success!', 2000);
 				window.location = '/admin/talent';
-			}, 
-            error: function(data) {
-            	console.log('Invalid username or password');
-                $('#error').html('Invalid username or password');
-            }
+			}
 		});
+		$('#error').html('Invalid username or password');
 	});
 })();

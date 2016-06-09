@@ -26,21 +26,18 @@ function loginUser(email,pw, res) {
         }
     }, function(error, response, body) {
         if (error) {
-            console.log('server.js: createOAuthUser met error ' + error);
+            console.log('server.js: createOAuthUser met error ' + e);
             res.redirect('/');
             res.end();
         } else {
             var userID = body.userID;
             console.log('server.js: got userID ' + userID);
-            if(userID != undefined){
-                var encryptedID = cypher.encrypt(userID.toString() + '&' + Date.now().toString());
-                console.log('server.js: encryptedID ' + encryptedID);
-                res.cookie('userID', encryptedID, {
-                    maxAge: 9000000,
-                    httpOnly: false
-                });
-            }
-           
+            var encryptedID = cypher.encrypt(userID.toString() + '&' + Date.now().toString());
+            console.log('server.js: encryptedID ' + encryptedID);
+            res.cookie('userID', encryptedID, {
+                maxAge: 9000000,
+                httpOnly: false
+            });
 
             request({
                 method: 'GET',
